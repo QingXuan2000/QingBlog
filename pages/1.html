@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
+    <title>QingBlog - Hello World!</title>
 
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
-    
+
     <link rel="stylesheet" href="../css/font-awesome.css" />
     <link rel="stylesheet" href="../css/QBLOG.css" />
     <link rel="stylesheet" href="../css/blogArticle.css" />
-    
+
     <script src="../js/QBLOG.js"></script>
 </head>
 
@@ -93,15 +93,24 @@
 
     <div class="card">
         <div class="card-header">
-            <h1>标题示例</h1>
-            <p>作者：QingXuanJun</p>
-            <p>发布日期：2000年01月01日 00:00</p>
+            <h1>Hello World!</h1>
+            <p>作者：QingXuan2000</p>
+            <p>发布日期：2026年03月27日 13:52</p>
         </div>
 
         <div class="divider" style="height: 1px; width: 100%; margin: 1rem 0 1rem 0;"></div>
 
         <div class="card-content">
-            示例文本
+            <p>Hello World!</p>
+<p><br /></p>
+<p>My name is QingXuanJun!</p>
+        </div>
+
+        <div class="article-footer">
+            <div class="article-tag">
+                <span>文章标签：</span>
+                <div class="tag"><span>个人</span></div>
+            </div>
         </div>
     </div>
 
@@ -121,6 +130,26 @@
     <link rel="stylesheet" href="../css/font-awesome.min.css" />
 
     <!-- ------------------------------------------------------------ -->
+
+    <style>
+        .card-header {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .card-header p {
+            justify-content: center;
+        }
+
+        .card-content {
+            min-height: calc(100dvh - (var(--nav-height) + 26rem));
+        }
+    </style>
+
+    <!-- ------------------------------------------------------------ -->
+
 </body>
 
 </html>

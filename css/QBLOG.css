@@ -106,8 +106,30 @@
     from {
         transform: translateY(0);
     }
+
     to {
         transform: translateY(10px);
+    }
+}
+
+/* SVG描边动画 */
+@keyframes strokeAnimation {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* LoadingUp动画 */
+@keyframes loadingUpAnimation {
+    to {
+        transform: translateY(-110%);
+    }
+}
+
+/* LoadingDown动画 */
+@keyframes loadingDownAnimation {
+    to {
+        transform: translateY(110%);
     }
 }
 
@@ -645,6 +667,72 @@ footer {
     #sidebar-toggle {
         display: grid;
     }
+}
+
+/* ------------------------------------------------------------- */
+/* SVG Logo动画 */
+/* ------------------------------------------------------------- */
+
+.qingblog-logo {
+    stroke-dasharray: 480;
+    stroke-dashoffset: 480;
+
+    animation: strokeAnimation 1.2s ease-in-out forwards;
+}
+
+.qingblog-logo-block {
+    stroke-dasharray: 1845;
+    stroke-dashoffset: 1845;
+
+    animation: strokeAnimation 1.5s ease-in-out forwards;
+}
+
+/* ------------------------------------------------------------- */
+/* Loading动画 */
+/* ------------------------------------------------------------- */
+
+.loading {
+    display: flex;
+
+    height: 100vh;
+    width: 100vw;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+}
+
+.loading-div {
+    flex: 1;
+
+    /* background: #0b151a; */
+    background: var(--bg-color);
+
+    transition: 0.5s ease-in-out;
+}
+
+.loading-icon {
+    height: 100vh;
+    width: 100vw;
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    
+    display: grid;
+    place-items: center;
+}
+
+.loading-icon svg {
+    height: 20vh;
+    width: 20vw;
+}
+
+.loading-icon h4 {
+    font-size: 1.5rem;
 }
 
 /* ------------------------------------------------------------- */

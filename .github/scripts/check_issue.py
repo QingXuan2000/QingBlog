@@ -170,7 +170,7 @@ def generate_article_page(issue_id, title, author, publish_time, content, labels
 
     <header>
         <nav id="navbar">
-            <img src="../img/logo.png" alt="Logo" />
+            <img src="../img/logo.png" alt="Logo" class="logo" />
             <h1>QingBlog</h1>
 
             <div class="divider" style="width: 2px; margin: 0 0.5rem 0 1rem; border-radius: 100em;"></div>
