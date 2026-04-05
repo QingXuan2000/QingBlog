@@ -615,8 +615,8 @@ nav li {
     width: 25%;
     border-radius: 0 0 0.3em 0;
     
-    border-bottom: 12px solid var(--text-color);
-    border-right: 12px solid var(--text-color);
+    border-bottom: 14px solid var(--text-color);
+    border-right: 14px solid var(--text-color);
 
     position: absolute;
     top: 50%;
@@ -630,13 +630,13 @@ nav li {
     width: 30%;
     border-radius: 0.3em 0 0 0;
 
-    border-top: 12px dashed var(--text-color);
-    border-left: 12px dashed var(--text-color);
+    border-top: 14px dashed var(--text-color);
+    border-left: 14px dashed var(--text-color);
 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-180%, -70%);
+    transform: translate(-180%, -65%);
 }
 
 .hero-div-user-down-text {
@@ -952,13 +952,13 @@ body.light-theme .loading-div {
     }
 
     .hero-div-content h1::after {
-        border-bottom: 8px solid var(--text-color);
-        border-right: 8px solid var(--text-color);
+        border-bottom: 10px solid var(--text-color);
+        border-right: 10px solid var(--text-color);
     }
 
     .hero-div-content h1::before {
-        border-top: 8px dashed var(--text-color);
-        border-left: 8px dashed var(--text-color);
+        border-top: 10px dashed var(--text-color);
+        border-left: 10px dashed var(--text-color);
     }
 }
 
@@ -1001,13 +1001,13 @@ body.light-theme .loading-div {
     }
 
     .hero-div-content h1::after {
-        border-bottom: 6px solid var(--text-color);
-        border-right: 6px solid var(--text-color);
+        border-bottom: 5px solid var(--text-color);
+        border-right: 5px solid var(--text-color);
     }
 
     .hero-div-content h1::before {
-        border-top: 6px dashed var(--text-color);
-        border-left: 6px dashed var(--text-color);
+        border-top: 5px dashed var(--text-color);
+        border-left: 5px dashed var(--text-color);
     }
 }
 
