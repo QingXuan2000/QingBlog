@@ -1,9 +1,13 @@
-/* ------------------------------------------------------------- */
-/* CSS 变量定义 */
-/* ------------------------------------------------------------- */
+/* =============================================================
+   文章样式表 - Article Stylesheet
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   1. CSS 变量定义 (Variables)
+   ------------------------------------------------------------- */
 
 :root {
-    /* 间距 */
+    /* 间距系统 */
     --article-spacing-xs: 0.2em;
     --article-spacing-sm: 0.3em;
     --article-spacing-md: 0.5em;
@@ -13,7 +17,7 @@
     --article-spacing-3xl: 1.5em;
     --article-spacing-4xl: 2em;
 
-    /* 内边距 */
+    /* 内边距系统 */
     --article-padding-xs: 0.15em;
     --article-padding-sm: 0.2em;
     --article-padding-md: 0.4em;
@@ -23,7 +27,7 @@
     --article-padding-3xl: 1.2em;
     --article-padding-4xl: 1.5em;
 
-    /* 外边距 */
+    /* 外边距系统 */
     --article-margin-xs: 0.3em;
     --article-margin-sm: 0.5em;
     --article-margin-md: 0.8em;
@@ -32,14 +36,14 @@
     --article-margin-2xl: 1.5em;
     --article-margin-3xl: 2em;
 
-    /* 圆角 */
+    /* 圆角系统 */
     --article-radius-sm: 3px;
     --article-radius-md: 4px;
     --article-radius-lg: 8px;
     --article-radius-xl: 10px;
     --article-radius-2xl: 12px;
 
-    /* 字体大小 */
+    /* 字体大小系统 */
     --article-font-xs: 0.75em;
     --article-font-sm: 0.8em;
     --article-font-md: 0.85em;
@@ -52,28 +56,24 @@
     --article-font-5xl: 1.75em;
     --article-font-6xl: 2em;
 
-    /* 行高 */
+    /* 行高系统 */
     --article-line-height-sm: 1.4;
     --article-line-height-base: 1.6;
     --article-line-height-lg: 1.8;
 
-    /* 边框宽度 */
+    /* 边框系统 */
     --article-border-width-sm: 1px;
     --article-border-width-md: 2px;
     --article-border-width-lg: 4px;
 
-    /* 字间距 */
+    /* 特效系统 */
     --article-letter-spacing-sm: 0.5px;
-
-    /* 阴影 */
     --article-shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
     --article-shadow-md: 0 4px 20px rgba(0, 0, 0, 0.15);
     --article-shadow-lg: 0 10px 30px var(--box-shadow);
-
-    /* 过渡 */
     --article-transition-fast: all 0.2s ease;
 
-    /* 代码块特定变量 */
+    /* 代码块主题色 */
     --article-code-bg: #1e1e1e;
     --article-code-border: #333;
     --article-code-text: #d4d4d4;
@@ -83,32 +83,17 @@
     --article-scrollbar-thumb: #4a4a4a;
     --article-scrollbar-thumb-hover: #5a5a5a;
 
-    /* 提示框颜色 */
-    --article-alert-info-border: #3498db;
-    --article-alert-info-bg: rgba(52, 152, 219, 0.1);
-    --article-alert-warning-border: #f39c12;
-    --article-alert-warning-bg: rgba(243, 156, 18, 0.1);
-    --article-alert-danger-border: #e74c3c;
-    --article-alert-danger-bg: rgba(231, 76, 60, 0.1);
-
-    /* 代码高亮颜色 */
-    --article-syntax-keyword: #c586c0;
-    --article-syntax-string: #ce9178;
-    --article-syntax-comment: #6a9955;
-    --article-syntax-function: #dcdcaa;
-    --article-syntax-number: #b5cea8;
-    --article-syntax-operator: #d4d4d4;
-
-    /* 终端按钮颜色 */
+    /* 终端按钮色 */
     --article-terminal-btn-close: #ff5f56;
     --article-terminal-btn-minimize: #ffbd2e;
     --article-terminal-btn-maximize: #27c93f;
 }
 
-/* ------------------------------------------------------------- */
-/* 卡片样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   2. 布局组件 (Layout Components)
+   ------------------------------------------------------------- */
 
+/* 卡片容器 */
 .card-box {
     display: flex;
     justify-content: center;
@@ -129,22 +114,22 @@
     min-height: calc(100dvh - (var(--nav-height) + 26rem));
 }
 
-/* ------------------------------------------------------------- */
-/* 文章基础样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   3. 文章基础 (Article Base)
+   ------------------------------------------------------------- */
 
 .article-content {
     line-height: var(--article-line-height-lg);
     font-size: var(--article-font-xl);
 }
 
-.article-content>*:first-child {
+.article-content > *:first-child {
     margin-top: 0;
 }
 
-/* ------------------------------------------------------------- */
-/* 标题样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   4. 标题系统 (Headings)
+   ------------------------------------------------------------- */
 
 .article-content h1,
 .article-content h2,
@@ -157,6 +142,7 @@
     margin-top: var(--article-margin-3xl);
     margin-bottom: var(--article-margin-lg);
     line-height: var(--article-line-height-sm);
+    scroll-margin-top: calc(var(--nav-height) + 2em);
 }
 
 .article-content h1 {
@@ -188,16 +174,16 @@
     color: var(--text-secondary-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 段落样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   5. 段落与文本 (Paragraphs & Text)
+   ------------------------------------------------------------- */
 
 .article-content p {
     margin-bottom: var(--article-margin-xl);
-    text-indent: 2em;
     color: var(--text-color);
 }
 
+/* 重置特定容器内的段落缩进 */
 .article-content blockquote p,
 .article-content li p,
 .article-content table p,
@@ -205,10 +191,7 @@
     text-indent: 0;
 }
 
-/* ------------------------------------------------------------- */
-/* 文字样式 */
-/* ------------------------------------------------------------- */
-
+/* 文本样式 */
 .article-content strong {
     color: var(--text-color);
     font-weight: 600;
@@ -239,9 +222,9 @@
     font-size: var(--article-font-xs);
 }
 
-/* ------------------------------------------------------------- */
-/* 链接样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   6. 链接 (Links)
+   ------------------------------------------------------------- */
 
 .article-content a {
     color: var(--primary-color);
@@ -254,9 +237,9 @@
     border-bottom-color: var(--primary-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 列表样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   7. 列表 (Lists)
+   ------------------------------------------------------------- */
 
 .article-content ul,
 .article-content ol {
@@ -288,32 +271,9 @@
     color: var(--primary-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 任务列表 */
-/* ------------------------------------------------------------- */
-
-.article-content .task-list {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.article-content .task-list li {
-    display: flex;
-    align-items: center;
-    gap: var(--article-spacing-md);
-}
-
-.article-content .task-list input[type="checkbox"] {
-    width: 1.2em;
-    height: 1.2em;
-    accent-color: var(--primary-color);
-    cursor: default;
-    pointer-events: none;
-}
-
-/* ------------------------------------------------------------- */
-/* 引用块样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   8. 引用块 (Blockquotes)
+   ------------------------------------------------------------- */
 
 .article-content blockquote {
     margin: var(--article-margin-2xl) 0;
@@ -333,91 +293,79 @@
     margin-bottom: 0;
 }
 
-/* ------------------------------------------------------------- */
 /* 嵌套引用 */
-/* ------------------------------------------------------------- */
-
 .article-content blockquote blockquote {
     margin: var(--article-spacing-md) 0 0 0;
     border-left-color: var(--text-secondary-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 提示框样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   9. 代码 (Code)
+   ------------------------------------------------------------- */
 
-.article-content .alert {
-    border-left-width: var(--article-border-width-lg);
-    border-left-style: solid;
-    border-radius: var(--article-radius-lg);
-    padding: var(--article-padding-2xl) var(--article-padding-4xl);
-}
-
-.article-content .alert-info {
-    border-left-color: var(--article-alert-info-border);
-    background: var(--article-alert-info-bg);
-}
-
-.article-content .alert-warning {
-    border-left-color: var(--article-alert-warning-border);
-    background: var(--article-alert-warning-bg);
-}
-
-.article-content .alert-danger {
-    border-left-color: var(--article-alert-danger-border);
-    background: var(--article-alert-danger-bg);
-}
-
-/* ------------------------------------------------------------- */
-/* 代码样式 */
-/* ------------------------------------------------------------- */
-
+/* 行内代码 */
 .article-content code {
     font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    background: var(--surface-color);
-    padding: var(--article-padding-sm) var(--article-padding-md);
-    border-radius: var(--article-radius-md);
     font-size: var(--article-font-base);
     color: var(--primary-color);
     border: var(--article-border-width-sm) solid var(--border-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 代码块 */
-/* ------------------------------------------------------------- */
-
+/* 代码块容器 */
 .article-content pre {
-    background: var(--article-code-bg);
-    border-radius: var(--article-radius-xl);
     padding: 0;
     margin: var(--article-margin-2xl) 0;
+    box-shadow: var(--article-shadow-lg);
+    display: flex;
+    flex-direction: column;
+    container-type: inline-size;
+}
+
+/* 代码块复制按钮 */
+.article-content pre .copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    z-index: 10;
+    font-family: inherit !important;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8em;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0;
+    transition: var(--article-transition-fast);
+}
+
+.article-content .codehilite:hover .copy-btn {
+    opacity: 1;
+}
+
+/* 代码块表格布局（带行号） */
+.article-content .codehilitetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--article-margin-2xl) 0;
+    border-radius: var(--article-radius-xl);
+    overflow: hidden;
+    background: var(--article-code-bg);
     border: var(--article-border-width-sm) solid var(--article-code-border);
     box-shadow: var(--article-shadow-lg);
     position: relative;
-    display: flex;
-    flex-direction: column;
+    display: block;
 }
 
-/* ------------------------------------------------------------- */
-/* 终端标题栏 */
-/* ------------------------------------------------------------- */
-
-.article-content pre::before {
+/* 终端窗口装饰 - 标题栏 */
+.article-content .codehilitetable::before {
     content: '';
     display: block;
     height: 32px;
     background: var(--article-terminal-header-bg);
     border-radius: var(--article-radius-xl) var(--article-radius-xl) 0 0;
     border-bottom: var(--article-border-width-sm) solid var(--article-terminal-header-border);
-    flex-shrink: 0;
-    position: relative;
 }
 
-/* ------------------------------------------------------------- */
-/* 窗口控制按钮 */
-/* ------------------------------------------------------------- */
-
-.article-content pre::after {
+/* 终端窗口装饰 - 控制按钮 */
+.article-content .codehilitetable::after {
     content: '';
     position: absolute;
     top: 10px;
@@ -429,52 +377,39 @@
     box-shadow:
         20px 0 0 var(--article-terminal-btn-minimize),
         40px 0 0 var(--article-terminal-btn-maximize);
-    flex-shrink: 0;
 }
 
-/* ------------------------------------------------------------- */
-/* 复制按钮 */
-/* ------------------------------------------------------------- */
-
-.article-content pre {
-    container-type: inline-size;
+.article-content .codehilitetable td {
+    padding: 0;
+    border: none;
+    vertical-align: top;
 }
 
-.article-content pre .copy-btn {
-    position: absolute;
-    top: 6px;
-    right: 12px;
-    z-index: 10;
-    
-    font-family: inherit !important;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.8em;
-    cursor: pointer;
+/* 行号列 */
+.article-content .codehilitetable .linenos {
+    background: rgba(255, 255, 255, 0.03);
+    border-right: var(--article-border-width-sm) solid var(--article-code-border);
+    width: 1%;
+    min-width: 3em;
+    text-align: center;
     user-select: none;
-    opacity: 0;
-    transition: var(--article-transition-fast);
 }
 
-.article-content pre:hover .copy-btn {
-    opacity: 1;
+.article-content .codehilitetable .linenos .linenodiv {
+    padding: var(--article-padding-3xl) var(--article-padding-md);
+    color: var(--text-secondary-color);
+    font-size: var(--article-font-base);
+    line-height: var(--article-line-height-base);
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
-.article-content pre .copy-btn.copied {
-    background: rgba(39, 201, 63, 0.2);
-    border-color: rgba(39, 201, 63, 0.4);
-    color: #27c93f;
+.article-content .codehilitetable .linenos .linenodiv pre {
+    margin: 0;
+    padding: 0.4em;
 }
 
-.article-content pre .copy-btn.copied::before {
-    content: '✓';
-}
-
-/* ------------------------------------------------------------- */
-/* 代码内容区域 - 单独滚动 */
-/* ------------------------------------------------------------- */
-
+/* 代码内容区域 */
 .article-content pre code {
-    background: transparent;
     padding: var(--article-padding-3xl);
     border: none;
     color: var(--article-code-text);
@@ -483,49 +418,9 @@
     display: block;
     font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
     overflow-x: auto;
-    flex: 1;
 }
 
-.article-content pre code[class*="language-"] {
-    display: block;
-}
-
-/* ------------------------------------------------------------- */
-/* 代码高亮颜色 */
-/* ------------------------------------------------------------- */
-
-.article-content pre .keyword {
-    color: var(--article-syntax-keyword);
-}
-
-.article-content pre .string {
-    color: var(--article-syntax-string);
-}
-
-.article-content pre .comment {
-    color: var(--article-syntax-comment);
-}
-
-.article-content pre .function {
-    color: var(--article-syntax-function);
-}
-
-.article-content pre .number {
-    color: var(--article-syntax-number);
-}
-
-.article-content pre .operator {
-    color: var(--article-syntax-operator);
-}
-
-.article-content pre::selection {
-    background-color: var(--primary-color);
-}
-
-/* ------------------------------------------------------------- */
-/* 代码内容区域滚动条 */
-/* ------------------------------------------------------------- */
-
+/* 代码块滚动条 */
 .article-content pre code::-webkit-scrollbar {
     height: 6px;
 }
@@ -544,9 +439,83 @@
     background: var(--article-scrollbar-thumb-hover);
 }
 
-/* ------------------------------------------------------------- */
-/* 表格样式 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   10. 语法高亮 (Syntax Highlighting - Pygments)
+   ------------------------------------------------------------- */
+
+/* 关键字 */
+.article-content pre .k,
+.article-content pre .kd {
+    color: #c586c0;
+}
+
+/* 函数名 */
+.article-content pre .nf,
+.article-content pre .nb {
+    color: #dcdcaa;
+}
+
+/* 类名 */
+.article-content pre .nc {
+    color: #4ec9b0;
+}
+
+/* 字符串 */
+.article-content pre .s,
+.article-content pre .s2,
+.article-content pre .sb,
+.article-content pre .si {
+    color: #ce9178;
+}
+
+/* 注释 */
+.article-content pre .c1,
+.article-content pre .cm,
+.article-content pre .sd {
+    color: #6a9955;
+}
+
+/* 常量 */
+.article-content pre .kc {
+    color: #569cd6;
+}
+
+/* 变量名 */
+.article-content pre .n,
+.article-content pre .nx,
+.article-content pre .na {
+    color: #9cdcfe;
+}
+
+/* 操作符与标点 */
+.article-content pre .o,
+.article-content pre .p {
+    color: #d4d4d4;
+}
+
+/* 空白符 */
+.article-content pre .w {
+    color: transparent;
+}
+
+/* HTML/XML 标签 */
+.article-content pre .nt {
+    color: #569cd6;
+}
+
+/* self/this */
+.article-content pre .bp {
+    color: #569cd6;
+}
+
+/* 行号 */
+.article-content pre .normal {
+    color: #858585;
+}
+
+/* -------------------------------------------------------------
+   11. 表格 (Tables)
+   ------------------------------------------------------------- */
 
 .article-content table {
     width: 100%;
@@ -561,12 +530,9 @@
     backdrop-filter: var(--backdrop-blur);
 }
 
-/* ------------------------------------------------------------- */
-/* 表头样式 */
-/* ------------------------------------------------------------- */
-
+/* 表头 */
 .article-content thead {
-    background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
 }
 
 .article-content th {
@@ -580,10 +546,7 @@
     text-transform: uppercase;
 }
 
-/* ------------------------------------------------------------- */
-/* 表格单元格 */
-/* ------------------------------------------------------------- */
-
+/* 单元格 */
 .article-content td {
     padding: var(--article-padding-lg) var(--article-padding-4xl);
     text-align: left;
@@ -592,23 +555,14 @@
     transition: var(--article-transition-fast);
 }
 
-/* ------------------------------------------------------------- */
 /* 隔行变色 */
-/* ------------------------------------------------------------- */
-
 .article-content tbody tr:nth-child(even) {
     background: rgba(255, 255, 255, 0.02);
 }
 
-/* ------------------------------------------------------------- */
 /* 悬停效果 */
-/* ------------------------------------------------------------- */
-
-.article-content tbody tr:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.article-content tbody tr:hover td {
+.article-content tbody tr:hover td:not(.codehilitetable td) {
+    background: var(--surface-color);
     color: var(--text-color);
 }
 
@@ -616,28 +570,21 @@
     border-bottom: none;
 }
 
-/* ------------------------------------------------------------- */
-/* 第一列加粗 */
-/* ------------------------------------------------------------- */
-
+/* 首列加粗 */
 .article-content td:first-child {
     font-weight: 500;
     color: var(--text-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 表格中的代码 */
-/* ------------------------------------------------------------- */
-
+/* 表格内代码 */
 .article-content table code {
-    background: rgba(0, 0, 0, 0.2);
     padding: var(--article-padding-xs) var(--article-padding-md);
     font-size: var(--article-font-md);
 }
 
-/* ------------------------------------------------------------- */
-/* 图片和图表 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   12. 媒体元素 (Media)
+   ------------------------------------------------------------- */
 
 .article-content figure {
     margin: var(--article-margin-2xl) 0;
@@ -658,10 +605,11 @@
     font-style: italic;
 }
 
-/* ------------------------------------------------------------- */
-/* 水平线 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   13. 分隔线与定义列表 (Dividers & Definition Lists)
+   ------------------------------------------------------------- */
 
+/* 水平分割线 */
 .article-content hr {
     border: none;
     height: var(--article-border-width-md);
@@ -669,10 +617,7 @@
     margin: var(--article-margin-3xl) 0;
 }
 
-/* ------------------------------------------------------------- */
 /* 定义列表 */
-/* ------------------------------------------------------------- */
-
 .article-content dl {
     margin: var(--article-margin-2xl) 0;
 }
@@ -689,9 +634,9 @@
     margin-top: var(--article-spacing-xs);
 }
 
-/* ------------------------------------------------------------- */
-/* 脚注 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   14. 脚注 (Footnotes)
+   ------------------------------------------------------------- */
 
 .article-content .footnote-ref {
     font-size: var(--article-font-sm);
@@ -717,29 +662,430 @@
     color: var(--text-secondary-color);
 }
 
-/* ------------------------------------------------------------- */
-/* 页脚 */
-/* ------------------------------------------------------------- */
+/* -------------------------------------------------------------
+   15. 提示框/警告框 (Admonitions)
+   ------------------------------------------------------------- */
+
+.article-content .admonition {
+    margin: var(--article-margin-2xl) 0;
+    padding: var(--article-padding-xl) var(--article-padding-4xl);
+    border-radius: var(--article-radius-lg);
+    border-left: var(--article-border-width-lg) solid;
+    background: var(--surface-color);
+    backdrop-filter: var(--backdrop-blur);
+    box-shadow: var(--article-shadow-md);
+}
+
+.article-content .admonition p {
+    text-indent: 0;
+    margin-bottom: var(--article-spacing-md);
+}
+
+.article-content .admonition p:last-child {
+    margin-bottom: 0;
+}
+
+.article-content .admonition-title {
+    font-weight: 600;
+    font-size: var(--article-font-lg);
+    margin-bottom: var(--article-spacing-md);
+    display: flex;
+    align-items: center;
+    gap: var(--article-spacing-sm);
+}
+
+/* Note - 注意 */
+.article-content .admonition.note {
+    border-left-color: #448aff;
+    background: rgba(68, 138, 255, 0.05);
+}
+
+.article-content .admonition.note .admonition-title {
+    color: #448aff;
+}
+
+.article-content .admonition.note .admonition-title::before {
+    content: '\f05a';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Warning - 警告 */
+.article-content .admonition.warning {
+    border-left-color: #ff9100;
+    background: rgba(255, 145, 0, 0.05);
+}
+
+.article-content .admonition.warning .admonition-title {
+    color: #ff9100;
+}
+
+.article-content .admonition.warning .admonition-title::before {
+    content: '\f071';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Tip - 提示 */
+.article-content .admonition.tip {
+    border-left-color: #00c853;
+    background: rgba(0, 200, 83, 0.05);
+}
+
+.article-content .admonition.tip .admonition-title {
+    color: #00c853;
+}
+
+.article-content .admonition.tip .admonition-title::before {
+    content: '\f0eb';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Danger - 危险 */
+.article-content .admonition.danger {
+    border-left-color: #ff1744;
+    background: rgba(255, 23, 68, 0.05);
+}
+
+.article-content .admonition.danger .admonition-title {
+    color: #ff1744;
+}
+
+.article-content .admonition.danger .admonition-title::before {
+    content: '\f06a';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* Info - 信息 */
+.article-content .admonition.info {
+    border-left-color: #00b8d4;
+    background: rgba(0, 184, 212, 0.05);
+}
+
+.article-content .admonition.info .admonition-title {
+    color: #00b8d4;
+}
+
+.article-content .admonition.info .admonition-title::before {
+    content: '\f129';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+}
+
+/* -------------------------------------------------------------
+   16. 标签页 (Tabbed - pymdownx.tabbed)
+   ------------------------------------------------------------- */
+
+.article-content .tabbed-set {
+    margin: var(--article-margin-2xl) 0;
+    border-radius: var(--article-radius-lg);
+    background: var(--surface-color);
+    border: var(--article-border-width-sm) solid var(--border-color);
+    overflow: hidden;
+}
+
+/* 隐藏单选按钮 */
+.article-content .tabbed-set > input {
+    display: none;
+}
+
+/* 标签导航栏 */
+.article-content .tabbed-labels {
+    display: flex;
+    background: var(--surface-color);
+    border-bottom: var(--article-border-width-sm) solid var(--border-color);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.article-content .tabbed-labels::-webkit-scrollbar {
+    display: none;
+}
+
+/* 标签按钮 */
+.article-content .tabbed-labels label {
+    padding: var(--article-padding-lg) var(--article-padding-2xl);
+    font-weight: 500;
+    color: var(--text-secondary-color);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.article-content .tabbed-labels label:hover {
+    color: var(--text-color);
+    background: var(--hover-color);
+}
+
+/* 选中状态标签 - 使用 :has() 选择器 */
+.article-content .tabbed-set:has(> input:nth-of-type(1):checked) .tabbed-labels label:nth-of-type(1),
+.article-content .tabbed-set:has(> input:nth-of-type(2):checked) .tabbed-labels label:nth-of-type(2),
+.article-content .tabbed-set:has(> input:nth-of-type(3):checked) .tabbed-labels label:nth-of-type(3),
+.article-content .tabbed-set:has(> input:nth-of-type(4):checked) .tabbed-labels label:nth-of-type(4),
+.article-content .tabbed-set:has(> input:nth-of-type(5):checked) .tabbed-labels label:nth-of-type(5) {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* 默认选中第一个标签 */
+.article-content .tabbed-set:not(:has(> input:checked)) .tabbed-labels label:nth-of-type(1) {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+/* 标签内容区域 */
+.article-content .tabbed-content {
+    padding: var(--article-padding-xl);
+}
+
+.article-content .tabbed-block {
+    display: none;
+}
+
+/* 显示选中内容块 */
+.article-content .tabbed-set:has(> input:nth-of-type(1):checked) .tabbed-content .tabbed-block:nth-of-type(1),
+.article-content .tabbed-set:has(> input:nth-of-type(2):checked) .tabbed-content .tabbed-block:nth-of-type(2),
+.article-content .tabbed-set:has(> input:nth-of-type(3):checked) .tabbed-content .tabbed-block:nth-of-type(3),
+.article-content .tabbed-set:has(> input:nth-of-type(4):checked) .tabbed-content .tabbed-block:nth-of-type(4),
+.article-content .tabbed-set:has(> input:nth-of-type(5):checked) .tabbed-content .tabbed-block:nth-of-type(5) {
+    display: block;
+}
+
+/* 默认显示第一个内容块 */
+.article-content .tabbed-set:not(:has(> input:checked)) .tabbed-content .tabbed-block:nth-of-type(1) {
+    display: block;
+}
+
+/* 标签页内代码块调整 */
+.article-content .tabbed-block .codehilite,
+.article-content .tabbed-block .codehilitetable {
+    margin: var(--article-margin-md) 0;
+}
+
+/* -------------------------------------------------------------
+   17. 数学公式 (MathJax)
+   ------------------------------------------------------------- */
+
+.article-content mjx-container {
+    display: inline-block;
+    margin: 0 0.2em;
+    vertical-align: middle;
+}
+
+/* 块级公式 */
+.article-content mjx-container[display="true"] {
+    display: block;
+    margin: var(--article-margin-xl) 0;
+    text-align: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* 行内公式 */
+.article-content mjx-container:not([display="true"]) {
+    font-size: 0.95em;
+}
+
+/* 公式滚动条 */
+.article-content mjx-container[display="true"]::-webkit-scrollbar {
+    height: 4px;
+}
+
+.article-content mjx-container[display="true"]::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.article-content mjx-container[display="true"]::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+/* 公式颜色适配 */
+.article-content mjx-container svg {
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+/* 公式选中样式 */
+.article-content mjx-container::selection {
+    background: var(--primary-color);
+    color: var(--on-primary-color);
+}
+
+/* -------------------------------------------------------------
+   18. Pymdownx 扩展 (Extensions)
+   ------------------------------------------------------------- */
+
+/* 删除线 */
+.article-content del {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* 上下标 */
+.article-content sub {
+    font-size: var(--article-font-xs);
+    vertical-align: sub;
+}
+
+.article-content sup {
+    font-size: var(--article-font-xs);
+    vertical-align: super;
+}
+
+/* 高亮标记 */
+.article-content mark,
+.article-content .mark {
+    color: var(--text-color);
+    background: rgba(255, 217, 0, 0.397);
+    padding: var(--article-padding-sm) var(--article-padding-md);
+    border-radius: var(--article-radius-sm);
+}
+
+/* 键盘按键 */
+.article-content .keys kbd {
+    display: inline-block;
+    padding: 0.15em 0.6em;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: #e0e0e0;
+    background: linear-gradient(180deg, #4a4a4a 0%, #3a3a3a 100%);
+    border: 1px solid #555;
+    border-radius: 4px;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        0 1px 3px rgba(0, 0, 0, 0.3),
+        0 2px 0 #222;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    margin: 0 0.15em;
+    vertical-align: middle;
+    line-height: 1.4;
+}
+
+/* 任务列表 */
+.article-content .task-list {
+   list-style: none;
+   padding: 0;
+   margin: 0;
+}
+
+.article-content .task-list-item {
+   display: flex;
+   align-items: flex-start;
+   gap: var(--article-spacing-sm);
+   margin-bottom: var(--article-spacing-sm);
+   position: relative;
+   padding-left: 1.5em;
+}
+
+.article-content .task-list-item input[type="checkbox"] {
+   display: none;
+   position: relative;
+}
+
+.article-content .task-list-item::before {
+   content: "";
+   position: absolute;
+   left: 0;
+   top: 0.2rem;
+   width: 1.3rem;
+   height: 1.3rem;
+   border-radius: 50%;
+   background: var(--hero-bg-color);
+   border: 2px solid var(--border-color, #ccc);
+   box-sizing: border-box;
+}
+
+.article-content .task-list-item:has(input[checked])::before {
+   background: var(--hero-bg-color);
+   border-color: var(--text-color);
+}
+
+.article-content .task-list-item:has(input[checked])::after {
+   content: "\f00c";
+   font-family: "Font Awesome 6 Free";
+
+   position: absolute;
+   left: 0.65rem;
+   top: 0.15rem;
+   transform: translate(-50%, 0);
+   color: var(--text-color);
+   font-size: 0.9rem;
+   font-weight: bold;
+}
+
+/* 折叠详情 */
+.article-content details {
+    margin: var(--article-margin-xl) 0;
+    padding: var(--article-padding-xl);
+    background: var(--surface-color);
+    border-radius: var(--article-radius-lg);
+    border: var(--article-border-width-sm) solid var(--border-color);
+}
+
+.article-content details summary {
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.article-content details summary:hover {
+    color: var(--primary-color);
+}
+
+.article-content details[open] summary {
+    margin-bottom: var(--article-spacing-md);
+}
+
+/* 表情符号 */
+.article-content .emoji {
+    font-size: 1.2em;
+    vertical-align: middle;
+}
+
+/* 智能链接 */
+.article-content .magiclink {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.article-content .magiclink:hover {
+    text-decoration: underline;
+}
+
+/* -------------------------------------------------------------
+   19. 页脚 (Footer)
+   ------------------------------------------------------------- */
 
 .article-footer {
     margin-top: 5rem;
 }
 
-/* ------------------------------------------------------------- */
-/* 响应式适配 */
-/* ------------------------------------------------------------- */
+/* =============================================================
+   20. 响应式设计 (Responsive Design)
+   ============================================================= */
 
+/* 平板设备 */
 @media (max-width: 1024px) {
     .card {
         width: 100%;
     }
 }
 
+/* 移动设备 */
 @media (max-width: 768px) {
+    /* 基础字体 */
     .article-content {
         font-size: var(--article-font-lg);
     }
 
+    /* 标题尺寸调整 */
     .article-content h1 {
         font-size: var(--article-font-5xl);
     }
@@ -752,26 +1098,97 @@
         font-size: var(--article-font-3xl);
     }
 
+    /* 列表缩进 */
     .article-content ul,
     .article-content ol {
         padding-left: var(--article-padding-4xl);
     }
 
+    /* 表格单元格 */
     .article-content th,
     .article-content td {
         padding: var(--article-padding-lg) var(--article-padding-xl);
     }
-}
 
-/* 响应式表格 */
-
-@media (max-width: 768px) {
+    /* 表格字体 */
     .article-content table {
         font-size: var(--article-font-base);
     }
 
-    .article-content th,
-    .article-content td {
-        padding: var(--article-padding-lg) var(--article-padding-xl);
+    /* 标签页 */
+    .article-content .tabbed-labels label {
+        padding: var(--article-padding-md) var(--article-padding-lg);
+        font-size: var(--article-font-sm);
     }
+
+    /* 公式 */
+    .article-content mjx-container[display="true"] {
+        margin: var(--article-margin-lg) 0;
+        font-size: 0.9em;
+    }
+
+    /* 进度条 */
+    .article-content .progress {
+        margin: var(--article-margin-md) 0;
+    }
+}
+
+/* ------------------------------------------------------------- */
+/* Progressbar 进度条样式 (pymdownx.progressbar)
+/* ------------------------------------------------------------- */
+
+.article-content .progress {
+    display: flex;
+    height: 0.75rem;
+    overflow: hidden;
+    font-size: var(--article-font-xs);
+    background: var(--surface-border-color);
+    border-radius: 100em;
+    margin: var(--article-margin-lg) 0;
+}
+
+.article-content .progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background: var(--primary-color);
+    transition: width 0.6s ease;
+    border-radius: 9999px;
+}
+
+.article-content .progress-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 500;
+    line-height: 0.75rem;
+}
+
+/* 条纹动画效果 */
+.article-content .progress-bar-striped {
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.15) 25%,
+        transparent 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.15) 50%,
+        rgba(255, 255, 255, 0.15) 75%,
+        transparent 75%,
+        transparent
+    );
+    background-size: 0.5rem 0.5rem;
+}
+
+.article-content .progress-bar-animated {
+    animation: progress-bar-stripes 1s linear infinite;
+}
+
+@keyframes progress-bar-stripes {
+    0% { background-position: 0.5rem 0; }
+    100% { background-position: 0 0; }
 }

@@ -2,7 +2,7 @@
 const themes = {
   dark: {
     '--primary-color': '#d9d9deb8',
-    '--text-color': 'rgba(255, 255, 255, 1)',
+    '--text-color': 'rgba(197, 197, 197, 1)',
     '--text-shadow-color': 'rgba(32, 67, 80, 1)',
     '--text-secondary-color': 'rgba(161, 161, 161, 1)',
     '--bg-color': 'linear-gradient(180deg, rgba(10, 18, 28, 1), rgba(11, 21, 26, 1), rgba(8, 16, 24, 1), rgba(4, 7, 12, 1))',
@@ -12,7 +12,7 @@ const themes = {
     '--border-color': 'rgba(245, 245, 245, 0.1)',
     '--box-shadow-color': 'rgba(0, 0, 0, 0.4)',
     '--divider-color': 'rgba(255, 255, 255, 0.3)',
-    '--backdrop-blur': 'blur(0.7em)',
+    '--backdrop-blur': 'blur(0.6em)',
   },
   light: {
     '--primary-color': '#2c2c2db8',
@@ -26,7 +26,7 @@ const themes = {
     '--border-color': 'rgba(255, 255, 255, 0.1)',
     '--box-shadow-color': 'rgba(0, 0, 0, 0.2)',
     '--divider-color': 'rgba(0, 0, 0, 0.3)',
-    '--backdrop-blur': 'blur(0.7em)',
+    '--backdrop-blur': 'blur(0.6em)',
   },
 }
 
@@ -520,13 +520,25 @@ function removeHeaderBackground() {
 // -------------------------------------------------------------
 
 function contextMenu(option) {
+  function showContextMenu() {
+    menu.style.display = "block";
+    menu.classList.add('show');
+  }
+
+  function hideContextMenu() {
+    menu.classList.remove('show');
+    setTimeout(function () {
+      menu.style.display = "none";
+    }, 200)
+  }
+
   const menu = document.getElementById('context-menu');
 
   // 监听右键
   document.addEventListener('contextmenu', function (e) {
     e.preventDefault();
 
-    menu.classList.add('show');
+    showContextMenu();
 
     const menuWidth = menu.offsetWidth;
     const menuHeight = menu.offsetHeight;
@@ -554,12 +566,13 @@ function contextMenu(option) {
   })
 
   document.addEventListener('click', function () {
-    menu.classList.remove('show');
+    hideContextMenu();
   })
 
   if (option === "copy") {
     const userSelectText = window.getSelection().toString();
     navigator.clipboard.writeText(userSelectText);
+    hideContextMenu();
     showAlert('green', '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;复制成功！');
   } else if (option === "refresh") {
     location.reload(true);
