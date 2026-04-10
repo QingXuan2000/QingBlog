@@ -107,7 +107,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--article-spacing-xs);
+    gap: var(--article-spacing-xl);
 }
 
 .card-content {
@@ -123,7 +123,7 @@
     font-size: var(--article-font-xl);
 }
 
-.article-content > *:first-child {
+.article-content>*:first-child {
     margin-top: 0;
 }
 
@@ -305,7 +305,7 @@
 
 /* 行内代码 */
 .article-content code {
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
     font-size: var(--article-font-base);
     color: var(--primary-color);
     border: var(--article-border-width-sm) solid var(--border-color);
@@ -356,7 +356,7 @@
 
 /* 终端窗口装饰 - 标题栏 */
 .article-content .codehilitetable::before {
-    content: '';
+    content: "";
     display: block;
     height: 32px;
     background: var(--article-terminal-header-bg);
@@ -366,7 +366,7 @@
 
 /* 终端窗口装饰 - 控制按钮 */
 .article-content .codehilitetable::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 10px;
     left: 12px;
@@ -400,7 +400,7 @@
     color: var(--text-secondary-color);
     font-size: var(--article-font-base);
     line-height: var(--article-line-height-base);
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
 }
 
 .article-content .codehilitetable .linenos .linenodiv pre {
@@ -416,7 +416,7 @@
     font-size: var(--article-font-base);
     line-height: var(--article-line-height-base);
     display: block;
-    font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Consolas', monospace;
+    font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", "Consolas", monospace;
     overflow-x: auto;
 }
 
@@ -705,8 +705,8 @@
 }
 
 .article-content .admonition.note .admonition-title::before {
-    content: '\f05a';
-    font-family: 'Font Awesome 6 Free';
+    content: "\f05a";
+    font-family: "Font Awesome 6 Free";
     font-weight: 900;
 }
 
@@ -721,8 +721,8 @@
 }
 
 .article-content .admonition.warning .admonition-title::before {
-    content: '\f071';
-    font-family: 'Font Awesome 6 Free';
+    content: "\f071";
+    font-family: "Font Awesome 6 Free";
     font-weight: 900;
 }
 
@@ -737,8 +737,8 @@
 }
 
 .article-content .admonition.tip .admonition-title::before {
-    content: '\f0eb';
-    font-family: 'Font Awesome 6 Free';
+    content: "\f0eb";
+    font-family: "Font Awesome 6 Free";
     font-weight: 900;
 }
 
@@ -753,8 +753,8 @@
 }
 
 .article-content .admonition.danger .admonition-title::before {
-    content: '\f06a';
-    font-family: 'Font Awesome 6 Free';
+    content: "\f06a";
+    font-family: "Font Awesome 6 Free";
     font-weight: 900;
 }
 
@@ -769,8 +769,8 @@
 }
 
 .article-content .admonition.info .admonition-title::before {
-    content: '\f129';
-    font-family: 'Font Awesome 6 Free';
+    content: "\f129";
+    font-family: "Font Awesome 6 Free";
     font-weight: 900;
 }
 
@@ -787,7 +787,7 @@
 }
 
 /* 隐藏单选按钮 */
-.article-content .tabbed-set > input {
+.article-content .tabbed-set>input {
     display: none;
 }
 
@@ -821,7 +821,7 @@
     background: var(--hover-color);
 }
 
-/* 选中状态标签 - 使用 :has() 选择器 */
+/* 选中状态标签 */
 .article-content .tabbed-set:has(> input:nth-of-type(1):checked) .tabbed-labels label:nth-of-type(1),
 .article-content .tabbed-set:has(> input:nth-of-type(2):checked) .tabbed-labels label:nth-of-type(2),
 .article-content .tabbed-set:has(> input:nth-of-type(3):checked) .tabbed-labels label:nth-of-type(3),
@@ -950,7 +950,7 @@
 .article-content .keys kbd {
     display: inline-block;
     padding: 0.15em 0.6em;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-size: 0.85em;
     font-weight: 500;
     color: #e0e0e0;
@@ -969,54 +969,54 @@
 
 /* 任务列表 */
 .article-content .task-list {
-   list-style: none;
-   padding: 0;
-   margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .article-content .task-list-item {
-   display: flex;
-   align-items: flex-start;
-   gap: var(--article-spacing-sm);
-   margin-bottom: var(--article-spacing-sm);
-   position: relative;
-   padding-left: 1.5em;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--article-spacing-sm);
+    margin-bottom: var(--article-spacing-sm);
+    position: relative;
+    padding-left: 1.5em;
 }
 
 .article-content .task-list-item input[type="checkbox"] {
-   display: none;
-   position: relative;
+    display: none;
+    position: relative;
 }
 
 .article-content .task-list-item::before {
-   content: "";
-   position: absolute;
-   left: 0;
-   top: 0.2rem;
-   width: 1.3rem;
-   height: 1.3rem;
-   border-radius: 50%;
-   background: var(--hero-bg-color);
-   border: 2px solid var(--border-color, #ccc);
-   box-sizing: border-box;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--hero-bg-color);
+    border: 2px solid var(--border-color, #ccc);
+    box-sizing: border-box;
 }
 
 .article-content .task-list-item:has(input[checked])::before {
-   background: var(--hero-bg-color);
-   border-color: var(--text-color);
+    background: var(--hero-bg-color);
+    border-color: var(--text-color);
 }
 
 .article-content .task-list-item:has(input[checked])::after {
-   content: "\f00c";
-   font-family: "Font Awesome 6 Free";
+    content: "\f00c";
+    font-family: "Font Awesome 6 Free";
 
-   position: absolute;
-   left: 0.65rem;
-   top: 0.15rem;
-   transform: translate(-50%, 0);
-   color: var(--text-color);
-   font-size: 0.9rem;
-   font-weight: bold;
+    position: absolute;
+    left: 0.65rem;
+    top: 0.15rem;
+    transform: translate(-50%, 0);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    font-weight: bold;
 }
 
 /* 折叠详情 */
@@ -1079,7 +1079,8 @@
 }
 
 /* 移动设备 */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
+
     /* 基础字体 */
     .article-content {
         font-size: var(--article-font-lg);
@@ -1157,7 +1158,7 @@
     white-space: nowrap;
     background: var(--primary-color);
     transition: width 0.6s ease;
-    border-radius: 9999px;
+    border-radius: 100rem;
 }
 
 .article-content .progress-label {
@@ -1171,24 +1172,13 @@
 
 /* 条纹动画效果 */
 .article-content .progress-bar-striped {
-    background: linear-gradient(
-        45deg,
-        rgba(255, 255, 255, 0.15) 25%,
-        transparent 25%,
-        transparent 50%,
-        rgba(255, 255, 255, 0.15) 50%,
-        rgba(255, 255, 255, 0.15) 75%,
-        transparent 75%,
-        transparent
-    );
+    background: linear-gradient(45deg,
+            rgba(255, 255, 255, 0.15) 25%,
+            transparent 25%,
+            transparent 50%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.15) 75%,
+            transparent 75%,
+            transparent);
     background-size: 0.5rem 0.5rem;
-}
-
-.article-content .progress-bar-animated {
-    animation: progress-bar-stripes 1s linear infinite;
-}
-
-@keyframes progress-bar-stripes {
-    0% { background-position: 0.5rem 0; }
-    100% { background-position: 0 0; }
 }

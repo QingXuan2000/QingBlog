@@ -37,6 +37,7 @@ jobs:
           ISSUE_ACTION: ${{ github.event.action }}
           TARGET_AUTHOR: "QingXuan2000"
           UTC_OFFSET: "8"
+          BLOG_ARTICLES_PER_PAGE: "20"
         run: python .github/scripts/check_issue.py
 
       - name: 💾 提交更改

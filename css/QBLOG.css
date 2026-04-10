@@ -142,22 +142,78 @@
 
 @font-face {
     font-family: "Font Awesome 6 Free";
-    src: url(../fonts/fontawesome-webfont.ttf);
-}
+    src: url("../fonts/fontawesome-webfont.woff2");
 
-@font-face {
-    font-family: "SmileySans-Oblique";
-    src: url("../fonts/SmileySans-Oblique.ttf");
-}
-
-@font-face {
-    font-family: "AlimamaFangYuanTiVF-Thin";
-    src: url(../fonts/AlimamaFangYuanTiVF-Thin.ttf);
+    font-display: swap;
 }
 
 @font-face {
     font-family: "This-July";
     src: url("../fonts/This-July.ttf");
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "阿里妈妈方圆体";
+    src: url("../fonts/阿里妈妈方圆体.ttf");
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "得意黑";
+    src: url("../fonts/得意黑.ttf");
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "江城圆体";
+    src: url("../fonts/江城圆体/江城圆体 200W.ttf");
+    font-weight: 200;
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "江城圆体";
+    src: url("../fonts/江城圆体/江城圆体 300W.ttf");
+    font-weight: 300;
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "江城圆体";
+    src: url("../fonts/江城圆体/江城圆体 400W.ttf");
+    font-weight: 400;
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "江城圆体";
+    src: url("../fonts/江城圆体/江城圆体 500W.ttf");
+    font-weight: 500;
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "江城圆体";
+    src: url("../fonts/江城圆体/江城圆体 600W.ttf");
+    font-weight: 600;
+
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "江城圆体";
+    src: url("../fonts/江城圆体/江城圆体 700W.ttf");
+    font-weight: 700;
+
+    font-display: swap;
 }
 
 /* ------------------------------------------------------------- */
@@ -169,8 +225,9 @@
     margin: 0;
     box-sizing: border-box;
 
-    font-display: swap;
-    font-family: "AlimamaFangYuanTiVF-Thin";
+    font-family: "江城圆体", "阿里妈妈方圆体", sans-serif;
+
+    scroll-behavior: smooth;
 }
 
 *:not(.article-content pre):not(.article-content pre code)::-webkit-scrollbar {
@@ -212,13 +269,13 @@
 /* ------------------------------------------------------------- */
 
 .btn-active:hover {
-    transform: translateY(-2px);
     box-shadow:
         0 6px 12px var(--box-shadow-color),
         0 2px 4px var(--box-shadow-color);
 }
 
 .btn-active:active {
+    transform: translateY(2px);
     box-shadow:
         inset 0 3px 6px var(--box-shadow-color),
         inset 0 -1px 3px var(--box-shadow-color);
@@ -246,8 +303,11 @@
 #sidebar-close:hover,
 #sidebar-toggle:hover,
 #theme-toggle:hover,
-#card-list-box #card-list .card:hover,
-.article-tag .tag:hover {
+#card-list-wrapper #card-list .card:hover,
+.article-tag .tag:hover,
+#pagination-controls #prev-trigger:hover,
+#pagination-controls #next-trigger:hover,
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:hover {
     box-shadow:
         0 6px 12px var(--box-shadow-color),
         0 2px 4px var(--box-shadow-color);
@@ -257,11 +317,15 @@
 #sidebar-close:active,
 #sidebar-toggle:active,
 #theme-toggle:active,
-#card-list-box #card-list .card:active,
+#card-list-wrapper #card-list .card:active,
 #navbar li:active,
 #sidebar nav ul li:active,
 #context-menu li:active,
-.tag-item:active {
+.tag-item:active,
+#pagination-controls #prev-trigger:active,
+#pagination-controls #next-trigger:active,
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:active {
+    transform: translateY(2px);
     box-shadow:
         inset 0 3px 6px var(--box-shadow-color),
         inset 0 -1px 3px var(--box-shadow-color);
@@ -489,8 +553,11 @@ nav li {
     align-items: center;
 }
 
+.card-header h1,
 .card-header h2 {
     flex-grow: 1;
+
+    font-family: "得意黑";
 }
 
 .card-header p {
@@ -519,9 +586,9 @@ nav li {
 
 .card-footer p {
     position: absolute;
-    bottom: -1.5em;
-    right: -1.3em;
-    font-size: 0.6em;
+    bottom: -1.5rem;
+    right: -1rem;
+    font-size: 0.5em;
 }
 
 .article-tag {
@@ -592,7 +659,7 @@ nav li {
     align-items: center;
     flex-direction: column;
     background: var(--hero-bg-color);
-    height: calc(100dvh - (var(--nav-height) + 2rem));
+    height: calc(100vh - (var(--nav-height) + 2rem));
 }
 
 .hero-div-content {
@@ -621,7 +688,7 @@ nav li {
     height: 110%;
     width: 25%;
     border-radius: 0 0 0.3em 0;
-    
+
     border-bottom: 14px solid var(--text-color);
     border-right: 14px solid var(--text-color);
 
@@ -663,19 +730,19 @@ nav li {
 /* 卡片列表样式 */
 /* ------------------------------------------------------------- */
 
-#card-list-box {
+#card-list-wrapper {
     display: flex;
     justify-content: center;
 
     border-top: 2px solid var(--divider-color);
 }
 
-#card-list-box #card-list {
+#card-list-wrapper #card-list {
     min-height: calc(100vh - (2.4em));
     width: 794px;
 }
 
-#card-list-box #card-list li {
+#card-list-wrapper #card-list li {
     list-style: none;
 }
 
@@ -688,8 +755,8 @@ footer {
     flex: 1;
     justify-content: center;
     align-items: flex-end;
-    padding: 1em;
-    font-size: 0.7em;
+    padding: 1rem;
+    font-size: 0.5em;
 }
 
 /* ------------------------------------------------------------- */
@@ -852,7 +919,7 @@ body.light-theme .loading-div {
 }
 
 #title h1::after {
-    content: '';
+    content: "";
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -935,11 +1002,97 @@ body.light-theme .loading-div {
 }
 
 /* ------------------------------------------------------------- */
+/* 翻页按钮 */
+/* ------------------------------------------------------------- */
+
+#pagination-controls-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+#pagination-controls {
+    width: 794px;
+
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 1rem 5rem 1rem;
+}
+
+#pagination-controls #input-page-num-wrapper #go-to-page-btn,
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:hover,
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:active {
+    transform: rotateZ(90deg);
+}
+
+#pagination-controls #prev-trigger,
+#pagination-controls #next-trigger,
+#pagination-controls #input-page-num-wrapper {
+    display: flex;
+    flex-grow: 1;
+    text-wrap: nowrap;
+
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    height: var(--nav-height);
+
+    box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
+
+    border-radius: 1rem;
+
+    user-select: none;
+
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#pagination-controls #prev-trigger,
+#pagination-controls #next-trigger,
+#pagination-controls #input-page-num-wrapper {
+    padding: 0 1rem;
+}
+
+#pagination-controls #input-page-num-wrapper {
+    display: flex;
+    gap: 1rem;
+}
+
+#pagination-controls #input-page-num-wrapper input,
+#pagination-controls #input-page-num-wrapper input:focus {
+    box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
+    outline: none;
+    padding: 0 1rem;
+
+    color: var(--text-color);
+
+    height: calc(var(--nav-height) - 1rem);
+    max-width: 6.5em;
+
+    border-radius: 0.6rem;
+}
+
+#pagination-controls #input-page-num-wrapper #go-to-page-btn {
+    height: calc(var(--nav-height) - 1rem);
+    width: calc(var(--nav-height) - 1rem);
+
+    display: grid;
+    place-content: center;
+
+    box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
+
+    border-radius: 0.6rem;
+
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ------------------------------------------------------------- */
 /* 媒体查询 */
 /* ------------------------------------------------------------- */
 
 @media (max-width: 1024px) {
-    #card-list-box #card-list {
+
+    #card-list-wrapper #card-list,
+    #pagination-controls {
         width: 100%;
     }
 
@@ -958,7 +1111,7 @@ body.light-theme .loading-div {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     #sidebar-toggle {
         display: grid;
     }
@@ -1004,6 +1157,15 @@ body.light-theme .loading-div {
     .hero-div-content h1::before {
         border-top: 5px dashed var(--text-color);
         border-left: 5px dashed var(--text-color);
+    }
+
+    #pagination-controls {
+        flex-direction: column;
+    }
+
+    #pagination-controls #input-page-num-wrapper input,
+    #pagination-controls #input-page-num-wrapper input:focus {
+        padding: 0 1rem;
     }
 }
 

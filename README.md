@@ -65,7 +65,7 @@ QingBlog/
 ├── js/
 │   └── QBLOG.js                  # 前端交互脚本
 │
-├── pages/                        # 文章页面目录
+├── article/                      # 文章页面目录
 │   ├── blogArticle.html          # 文章页模板
 │   └── index.html                # 文章列表页
 │
@@ -115,6 +115,7 @@ Fork 本仓库到你的 GitHub 账号下。
 env:
   TARGET_AUTHOR: "你的GitHub用户名"    # 指定允许发布博客的GitHub用户名
   UTC_OFFSET: "8"                    # 时区偏移（默认东八区北京时间）
+  BLOG_ARTICLES_PER_PAGE: "20"       # 分页大小
 ```
 
 > **时区说明**：`UTC_OFFSET` 用于将 GitHub 的 UTC 时间转换为本地时间显示，默认为 `8`（东八区）。如需其他时区，请修改为对应偏移值，如 `-5`（美东）、`0`（伦敦）等。
@@ -142,7 +143,7 @@ env:
             ▼
    ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
    │  验证作者身份    │────▶│ Markdown 转 HTML │────▶│ 生成文章页面    │
-   │ (TARGET_AUTHOR) │     │  (含代码高亮)    │     │ pages/{id}.html │
+   │ (TARGET_AUTHOR) │     │  (含代码高亮)    │     │ article/{id}.html │
    └─────────────────┘     └─────────────────┘     └────────┬────────┘
                                                              │
    ┌─────────────────────────────────────────────────────────┘
@@ -167,8 +168,8 @@ env:
    - 表格、脚注、目录
    - 代码高亮（带复制按钮）
    - 自动换行
-5. **生成**：创建文章页面 `pages/{id}.html`
-6. **更新**：在 `index.html` 和 `pages/index.html` 中添加/更新文章卡片
+5. **生成**：创建文章页面 `article/{id}.html`
+6. **更新**：在 `index.html` 和 `article/index.html` 中添加/更新文章卡片
 7. **标签处理**：
    - 自动为每个标签创建独立页面 `tags/{标签名}.html`
    - 更新标签云 `tags/index.html`，显示标签使用统计
@@ -255,7 +256,3 @@ const themes = {
 - [Font Awesome](https://fontawesome.com/) - 图标库
 - [GitHub](https://github.com/) - 托管和 CI/CD 服务
 - [Python Markdown](https://python-markdown.github.io/) - Markdown 转换库
-
-<div align="center" style="margin-top: 5rem;">
-  本README使用了AI进行文本润色😉
-</div>

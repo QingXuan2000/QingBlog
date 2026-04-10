@@ -1,34 +1,38 @@
+// 变量设置
+
+const maxPageNum = 1;
+
 // 主题设置
 const themes = {
   dark: {
-    '--primary-color': '#d9d9deb8',
-    '--text-color': 'rgba(197, 197, 197, 1)',
-    '--text-shadow-color': 'rgba(32, 67, 80, 1)',
-    '--text-secondary-color': 'rgba(161, 161, 161, 1)',
-    '--bg-color': 'linear-gradient(180deg, rgba(10, 18, 28, 1), rgba(11, 21, 26, 1), rgba(8, 16, 24, 1), rgba(4, 7, 12, 1))',
-    '--hero-bg-color': 'rgba(8, 16, 24, 1)',
-    '--surface-color': 'linear-gradient(rgba(25, 45, 55, 0.4), transparent)',
-    '--surface-border-color': 'rgba(245, 245, 245, 0.1)',
-    '--border-color': 'rgba(245, 245, 245, 0.1)',
-    '--box-shadow-color': 'rgba(0, 0, 0, 0.4)',
-    '--divider-color': 'rgba(255, 255, 255, 0.3)',
-    '--backdrop-blur': 'blur(0.6em)',
+    "--primary-color": "#d9d9deb8",
+    "--text-color": "rgba(200, 200, 200, 1)",
+    "--text-shadow-color": "rgba(0, 0, 0, 0.5)",
+    "--text-secondary-color": "rgba(160, 160, 160, 1)",
+    "--bg-color": "linear-gradient(180deg, rgba(20, 20, 20, 1), rgba(15, 15, 15, 1), rgba(10, 10, 10, 1), rgba(5, 5, 5, 1))",
+    "--hero-bg-color": "rgba(10, 10, 10, 1)",
+    "--surface-color": "linear-gradient(rgba(40, 40, 40, 0.6), transparent)",
+    "--surface-border-color": "rgba(255, 255, 255, 0.1)",
+    "--border-color": "rgba(255, 255, 255, 0.1)",
+    "--box-shadow-color": "rgba(0, 0, 0, 0.5)",
+    "--divider-color": "rgba(255, 255, 255, 0.15)",
+    "--backdrop-blur": "blur(0.6em)",
   },
   light: {
-    '--primary-color': '#2c2c2db8',
-    '--text-color': 'rgba(44, 44, 44, 1)',
-    '--text-shadow-color': 'rgba(144, 144, 144, 1)',
-    '--text-secondary-color': 'rgba(85, 85, 85, 1)',
-    '--bg-color': 'linear-gradient(180deg, rgba(233, 233, 237, 1), rgba(224, 225, 228, 1), rgba(220, 220, 220, 1), rgba(215, 213, 213, 1))',
-    '--hero-bg-color': 'rgba(217, 218, 220, 1)',
-    '--surface-color': 'linear-gradient(rgba(240, 240, 240, 0.4), transparent)',
-    '--surface-border-color': 'rgba(255, 255, 255, 0.1)',
-    '--border-color': 'rgba(255, 255, 255, 0.1)',
-    '--box-shadow-color': 'rgba(0, 0, 0, 0.2)',
-    '--divider-color': 'rgba(0, 0, 0, 0.3)',
-    '--backdrop-blur': 'blur(0.6em)',
+    "--primary-color": "#2c2c2db8",
+    "--text-color": "rgba(44, 44, 44, 1)",
+    "--text-shadow-color": "rgba(144, 144, 144, 1)",
+    "--text-secondary-color": "rgba(85, 85, 85, 1)",
+    "--bg-color": "linear-gradient(180deg, rgba(233, 233, 237, 1), rgba(224, 225, 228, 1), rgba(220, 220, 220, 1), rgba(215, 213, 213, 1))",
+    "--hero-bg-color": "rgba(217, 218, 220, 1)",
+    "--surface-color": "linear-gradient(rgba(240, 240, 240, 0.4), transparent)",
+    "--surface-border-color": "rgba(255, 255, 255, 0.1)",
+    "--border-color": "rgba(255, 255, 255, 0.1)",
+    "--box-shadow-color": "rgba(0, 0, 0, 0.2)",
+    "--divider-color": "rgba(0, 0, 0, 0.3)",
+    "--backdrop-blur": "blur(0.6em)",
   },
-}
+};
 
 // 组件库
 const componentBox = `
@@ -75,11 +79,11 @@ const componentBox = `
 
     <div id="context-menu" class="context-menu">
         <ul>
-            <li onclick="contextMenu('copy')">
+            <li onclick="initContextMenu('copy')">
                 <i class="fa fa-copy"></i> 复制
             </li>
             <li class="divider"></li>
-            <li onclick="contextMenu('refresh')">
+            <li onclick="initContextMenu('refresh')">
                 <i class="fa fa-refresh"></i>&nbsp;<span>刷新</span>
             </li>
         </ul>
@@ -122,7 +126,7 @@ const componentBox = `
                 </li>
 
                 <li>
-                    <a href="../pages/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
+                    <a href="../article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
                 </li>
 
                 <li>
@@ -166,7 +170,7 @@ const componentBox = `
                 <div class="divider" style="width: 100%; height: 1px;"></div>
 
                 <li>
-                    <a href="../pages/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
+                    <a href="../article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
                 </li>
 
                 <div class="divider" style="width: 100%; height: 1px;"></div>
@@ -186,11 +190,11 @@ const componentBox = `
     </div>
 `;
 
-document.querySelector('body').insertAdjacentHTML('afterbegin', componentBox);
+document.querySelector("body").insertAdjacentHTML("afterbegin", componentBox);
 
 // 标题切换
 function initWebTitle() {
-  const webTitleTextList = [
+  const webTitleNormalList = [
     "QingBlog - QingXuanJun的个人博客 💻",
     "QingBlog - 欢迎来到QingXuanJun的个人博客哦~ 🎉",
     "QingBlog - 欢迎来到一位技术宅的Blog 🤓",
@@ -203,20 +207,20 @@ function initWebTitle() {
     "QingBlog - 探索技术，也探索生活 🔍🌿"
   ];
 
-  const webTitleLeaveList = [
+  const webTitleAwayList = [
     "QingBlog - (｡•́︿•̀｡) 你怎么走掉了啦~",
     "QingBlog - 哼！再不回来看我就不理你了！💢",
     "QingBlog - 快回来嘛，我一个人好无聊QAQ 🥺",
     "QingBlog - 去忙吧，记得回来看看我哦 👋💕",
     "QingBlog - while(true) { await you.comeBack(); } ⏳",
-    "QingBlog - console.log('用户离开了，悲伤.jpg') 😭",
+    "QingBlog - console.log(\"用户离开了，悲伤.jpg\") 😭",
     "QingBlog - 404 Not Found: 用户已离线 🔌",
     "QingBlog - // TODO: 用户快回来继续逛博客 📝",
     "QingBlog - 无论你走多远，这里永远亮着灯 💡🏠",
     "QingBlog - 累了就回来歇歇脚吧~ ☕🛋️"
   ];
 
-  const webTitleWelcomeBackList = [
+  const webTitleWelcomeList = [
     "QingBlog - 你终于回来啦！✨",
     "QingBlog - 欢迎回来！等你好久了~ 🎉",
     "QingBlog - 呀！你回来啦！(◕‿◕)♡",
@@ -226,7 +230,7 @@ function initWebTitle() {
     "QingBlog - 欢迎回家！我乖不乖~ 🐱",
     "QingBlog - 你不在的时候我有好好看家哦！⭐",
     "QingBlog - 200 OK: 用户已回归 🟢",
-    "QingBlog - console.log('用户回来了，开心！')",
+    "QingBlog - console.log(\"用户回来了，开心！\")",
     "QingBlog - await user.comeBack() // resolved ✓",
     "QingBlog - git pull origin user-back 🎊",
     "QingBlog - 回来就好，休息一下吧~ ☕",
@@ -235,42 +239,42 @@ function initWebTitle() {
     "QingBlog - 累了就歇会儿，我陪你 🛋️"
   ];
 
-  const webTitleSwitchIntervalSec = 5000;
+  const webTitleSwitchInterval = 5000;
 
-  document.title = webTitleTextList[0];
+  document.title = webTitleNormalList[0];
 
-  let webTitleSwitchIntervalId;
-  function webTitleSwitch(list) {
-    clearInterval(webTitleSwitchIntervalId);
+  let webTitleIntervalId;
+  function switchWebTitle(list) {
+    clearInterval(webTitleIntervalId);
 
     const listLength = list.length;
     document.title = list[Math.floor(Math.random() * listLength)];
 
-    webTitleSwitchIntervalId = setInterval(function () {
+    webTitleIntervalId = setInterval(function () {
       const random = Math.floor(Math.random() * listLength);
       document.title = list[random];
-    }, webTitleSwitchIntervalSec);
+    }, webTitleSwitchInterval);
   }
 
   // 监听页面可见性变化
   document.addEventListener("visibilitychange", function () {
     if (document.hidden) {
-      webTitleSwitch(webTitleLeaveList);
+      switchWebTitle(webTitleAwayList);
     } else {
-      webTitleSwitch(webTitleWelcomeBackList);
+      switchWebTitle(webTitleWelcomeList);
       setTimeout(function () {
-        webTitleSwitch(webTitleTextList);
-      }, webTitleSwitchIntervalSec);
+        switchWebTitle(webTitleNormalList);
+      }, webTitleSwitchInterval);
     }
   });
 
-  webTitleSwitch(webTitleTextList);
+  switchWebTitle(webTitleNormalList);
 }
 
 // -------------------------------------------------------------
 
 // 弹窗相关功能
-function alertAnimation() {
+function playAlertAnimation() {
   const alertMessage = document.getElementById("alert-message");
 
   if (!alertMessage) return;
@@ -291,22 +295,22 @@ function showAlert(color, message) {
     alertMessage.style.background = "rgba(34, 197, 94, 0.3)";
     alertMessage.style.border = "1px solid rgba(34, 197, 94, 0.4)";
     alertMessage.style.boxShadow = "0 0 20px rgba(34, 197, 94, 0.2), inset 0 0 10px rgba(34, 197, 94, 0.05)";
-    alertAnimation();
+    playAlertAnimation();
   } else if (color === "red") {
     alertMessage.style.background = "rgba(239, 68, 68, 0.3)";
     alertMessage.style.border = "1px solid rgba(239, 68, 68, 0.4)";
     alertMessage.style.boxShadow = "0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 10px rgba(239, 68, 68, 0.05)";
-    alertAnimation();
+    playAlertAnimation();
   } else if (color === "orange") {
     alertMessage.style.background = "rgba(249, 115, 22, 0.3)";
     alertMessage.style.border = "1px solid rgba(249, 115, 22, 0.4)";
     alertMessage.style.boxShadow = "0 0 20px rgba(249, 115, 22, 0.2), inset 0 0 10px rgba(249, 115, 22, 0.05)";
-    alertAnimation();
+    playAlertAnimation();
   } else if (color === "yellow") {
     alertMessage.style.background = "rgba(234, 179, 8, 0.3)";
     alertMessage.style.border = "1px solid rgba(234, 179, 8, 0.4)";
     alertMessage.style.boxShadow = "0 0 20px rgba(234, 179, 8, 0.2), inset 0 0 10px rgba(234, 179, 8, 0.05)";
-    alertAnimation();
+    playAlertAnimation();
   }
 }
 
@@ -317,9 +321,9 @@ function initBackToTop() {
   const backToTopBtn = document.getElementById("back-to-top");
   if (!backToTopBtn) return;
 
-  backToTopBtn.addEventListener('click', function () {
+  backToTopBtn.addEventListener("click", function () {
     showAlert("green", "<i class=\"fa fa-hand-pointer-o\" aria-hidden=\"true\"></i>&nbsp;Go! Go! Go! 正在返回顶部！");
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
   // 监听滚动事件
@@ -395,27 +399,27 @@ function initSidebar() {
 // -------------------------------------------------------------
 
 // 设置高度变量
-function setNavHeightVar() {
-  const nav = document.getElementById('navbar');
+function setNavHeightVariable() {
+  const nav = document.getElementById("navbar");
   if (nav) {
     const height = nav.offsetHeight;
-    document.documentElement.style.setProperty('--nav-height', `${height}px`);
+    document.documentElement.style.setProperty("--nav-height", `${height}px`);
     return height;
   }
 }
 
 // -------------------------------------------------------------
 
-function loading() {
-  const firstLoading = localStorage.getItem('firstLoading') || "true";
+function initLoadingAnimation() {
+  const firstLoading = localStorage.getItem("firstLoading") || "true";
 
   if (firstLoading !== "false") {
     const body = document.body;
-    const qingBlogIcon = document.querySelector('.loading-icon');
-    const loading = document.querySelector('.loading');
-    const loadingDivs = document.querySelectorAll('.loading-div');
+    const qingBlogIcon = document.querySelector(".loading-icon");
+    const loadingContainer = document.querySelector(".loading");
+    const loadingDivs = document.querySelectorAll(".loading-div");
 
-    if (loading) {
+    if (loadingContainer) {
       body.style.overflow = "hidden";
 
       setTimeout(function () {
@@ -433,25 +437,25 @@ function loading() {
       }, 1600);
 
       setTimeout(function () {
-        loading.style.display = "none";
+        loadingContainer.style.display = "none";
         body.style.overflow = "auto";
 
-        localStorage.setItem('firstLoading', 'false');
+        localStorage.setItem("firstLoading", "false");
       }, 3000);
     }
   } else {
-    const loading = document.querySelector('.loading');
-    if (loading) loading.style.display = "none";
+    const loadingContainer = document.querySelector(".loading");
+    if (loadingContainer) loadingContainer.style.display = "none";
   }
 }
 
 // -------------------------------------------------------------
 
 // 主题切换
-function themesToggle() {
-  const body = document.querySelector('body');
-  const toggle = document.getElementById('theme-toggle');
-  const prefersColorScheme = matchMedia('(prefers-color-scheme: dark)').matches
+function toggleTheme() {
+  const body = document.querySelector("body");
+  const toggleBtn = document.getElementById("theme-toggle");
+  const prefersColorScheme = matchMedia("(prefers-color-scheme: dark)").matches;
 
   const root = document.documentElement;
 
@@ -463,53 +467,53 @@ function themesToggle() {
     });
   }
 
-  if (!localStorage.getItem('theme')) {
-    applyTheme(prefersColorScheme === true ? 'dark' : 'light');
-    toggle.innerHTML = `<i class="fa fa-${prefersColorScheme === true ? 'moon' : 'sun'}-o"></i>`
+  if (!localStorage.getItem("theme")) {
+    applyTheme(prefersColorScheme === true ? "dark" : "light");
+    toggleBtn.innerHTML = `<i class="fa fa-${prefersColorScheme === true ? "moon" : "sun"}-o"></i>`;
   } else {
-    applyTheme(localStorage.getItem('theme'));
-    toggle.innerHTML = `<i class="fa fa-${localStorage.getItem('theme') === 'dark' ? 'moon' : 'sun'}-o"></i>`
+    applyTheme(localStorage.getItem("theme"));
+    toggleBtn.innerHTML = `<i class="fa fa-${localStorage.getItem("theme") === "dark" ? "moon" : "sun"}-o"></i>`;
   };
 
-  toggle.addEventListener('click', () => {
-    const newTheme = (localStorage.getItem('theme')) === 'dark' ? 'light' : 'dark';
+  toggleBtn.addEventListener("click", () => {
+    const newTheme = (localStorage.getItem("theme")) === "dark" ? "light" : "dark";
     applyTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
+    localStorage.setItem("theme", newTheme);
 
-    toggle.innerHTML = `<i class="fa fa-${newTheme === 'light' ? 'sun' : 'moon'}-o"></i>`
-    showAlert('green', `<i class="fa fa-${newTheme === 'light' ? 'sun' : 'moon'}-o"></i>&nbsp;已切换到${newTheme === 'light' ? '浅色' : '深色'}主题！`);
+    toggleBtn.innerHTML = `<i class="fa fa-${newTheme === "light" ? "sun" : "moon"}-o"></i>`;
+    showAlert("green", `<i class="fa fa-${newTheme === "light" ? "sun" : "moon"}-o"></i>&nbsp;已切换到${newTheme === "light" ? "浅色" : "深色"}主题！`);
   });
 }
 
 // -------------------------------------------------------------
 
-function preCopy() {
-  document.querySelectorAll('.copy-btn').forEach(function (copyBtn) {
-    copyBtn.addEventListener('click', function () {
-      const parents = this.parentElement;
+function initCopyButtons() {
+  document.querySelectorAll(".copy-btn").forEach(function (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      const parentElement = this.parentElement;
 
-      const code = parents.querySelector('code').textContent;
+      const code = parentElement.querySelector("code").textContent;
 
       navigator.clipboard.writeText(code);
 
-      showAlert('green', '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;复制成功！');
-    })
-  })
+      showAlert("green", "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i>&nbsp;复制成功！");
+    });
+  });
 }
 
 // -------------------------------------------------------------
 
-function removeHeaderBackground() {
-  const heroDiv = document.getElementById('hero-div');
+function initHeaderBackground() {
+  const heroDiv = document.getElementById("hero-div");
 
-  if (!heroDiv) return
+  if (!heroDiv) return;
 
-  const header = document.querySelector('header');
+  const header = document.querySelector("header");
 
   // 监听滚动事件
   window.addEventListener("scroll", function () {
     const scrollTop = window.scrollY;
-    if (scrollTop > (setNavHeightVar() + setNavHeightVar())) {
+    if (scrollTop > (setNavHeightVariable() + setNavHeightVariable())) {
       header.style.background = "none";
     } else {
       header.style.background = "var(--hero-bg-color)";
@@ -519,23 +523,23 @@ function removeHeaderBackground() {
 
 // -------------------------------------------------------------
 
-function contextMenu(option) {
+function initContextMenu(option) {
   function showContextMenu() {
     menu.style.display = "block";
-    menu.classList.add('show');
+    menu.classList.add("show");
   }
 
   function hideContextMenu() {
-    menu.classList.remove('show');
+    menu.classList.remove("show");
     setTimeout(function () {
       menu.style.display = "none";
-    }, 200)
+    }, 200);
   }
 
-  const menu = document.getElementById('context-menu');
+  const menu = document.getElementById("context-menu");
 
   // 监听右键
-  document.addEventListener('contextmenu', function (e) {
+  document.addEventListener("contextmenu", function (e) {
     e.preventDefault();
 
     showContextMenu();
@@ -556,24 +560,24 @@ function contextMenu(option) {
       y = viewportHeight - menuHeight - 10;
     }
 
-    menu.style.left = x + 'px';
-    menu.style.top = y + 'px';
-    menu.style.visibility = 'visible';
+    menu.style.left = x + "px";
+    menu.style.top = y + "px";
+    menu.style.visibility = "visible";
   });
 
-  menu.addEventListener('click', function (e) {
+  menu.addEventListener("click", function (e) {
     e.stopPropagation();
-  })
+  });
 
-  document.addEventListener('click', function () {
+  document.addEventListener("click", function () {
     hideContextMenu();
-  })
+  });
 
   if (option === "copy") {
-    const userSelectText = window.getSelection().toString();
-    navigator.clipboard.writeText(userSelectText);
+    const userSelectedText = window.getSelection().toString();
+    navigator.clipboard.writeText(userSelectedText);
     hideContextMenu();
-    showAlert('green', '<i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;复制成功！');
+    showAlert("green", "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i>&nbsp;复制成功！");
   } else if (option === "refresh") {
     location.reload(true);
   }
@@ -581,35 +585,120 @@ function contextMenu(option) {
 
 // -------------------------------------------------------------
 
-function clickTagToTagPage() {
-  document.querySelectorAll('.tag').forEach(function (tag) {
-    tag.addEventListener('click', function (clickTag) {
-      clickTag.preventDefault();
+// 标签处理模块
+const TagManager = {
+  // 初始化标签功能
+  init: function () {
+    this.setupTagClickHandler();
+  },
 
-      const clickTagText = tag.querySelector('span').textContent;
+  // 设置标签点击处理（使用事件委托）
+  setupTagClickHandler: function () {
+    document.addEventListener("click", function (e) {
+      if (e.target.closest(".tag")) {
+        e.preventDefault();
+        const tagElement = e.target.closest(".tag");
+        const tagText = tagElement.querySelector("span").textContent;
+        TagManager.navigateToTagPage(tagText);
+      }
+    });
+  },
 
-      location.href = `../tags/${clickTagText}.html`
-    })
-  })
+  // 跳转到标签页面
+  navigateToTagPage: function (tagText) {
+    const basePath = window.location.pathname.includes("article") || window.location.pathname.includes("tags") ? "../" : "";
+    location.href = `${basePath}tags/${tagText}.html`;
+  },
+
+  // 获取所有标签
+  getAllTags: function () {
+    const tags = [];
+    document.querySelectorAll(".tag span").forEach(function (tag) {
+      const tagText = tag.textContent;
+      if (!tags.includes(tagText)) {
+        tags.push(tagText);
+      }
+    });
+    return tags;
+  }
+};
+
+function initTagNavigation() {
+  TagManager.init();
+}
+
+// -------------------------------------------------------------
+
+function initPagination() {
+  const prevTrigger = document.getElementById("prev-trigger");
+  const nextTrigger = document.getElementById("next-trigger");
+  const goToPageBtn = document.getElementById("go-to-page-btn");
+  const pageNum = document.getElementById("page-num");
+
+  if (!prevTrigger || !nextTrigger) return;
+
+  // 获取当前页码
+  const getCurrentPage = () => {
+    const match = window.location.pathname.match(/\/pages\/(\d+)(?:\.html)?$/);
+    return match ? parseInt(match[1]) : 1;
+  };
+
+  // 跳转页面
+  const goToPage = (page) => {
+    window.location.href = page === 1 ? "/index.html" : `/pages/${page}.html`;
+  };
+
+  const current = getCurrentPage();
+  pageNum.textContent = `${current} / ${maxPageNum}`;
+
+  // 上一页
+  prevTrigger.addEventListener("click", () => {
+    if (current <= 1) {
+      return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;已经到第一页了！");
+    }
+    goToPage(current - 1);
+  });
+
+  // 下一页
+  nextTrigger.addEventListener("click", () => {
+    if (current >= maxPageNum) {
+      return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;已经到最后一页了！");
+    }
+    goToPage(current + 1);
+  });
+
+  // 跳转指定页
+  goToPageBtn.addEventListener("click", () => {
+    const target = parseInt(document.getElementById("input-page-num").value.trim());
+
+    if (!target) {
+      return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;请输入有效的页码！");
+    }
+    if (target < 1 || target > maxPageNum) {
+      return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;页码超出范围！");
+    }
+    goToPage(target);
+  });
 }
 
 // -------------------------------------------------------------
 
 // DOM加载完成后初始化所有功能
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener("DOMContentLoaded", function () {
   initBackToTop();
   initSidebar();
   initWebTitle();
-  setNavHeightVar();
-  themesToggle();
-  loading();
-  preCopy();
-  removeHeaderBackground();
-  contextMenu();
-  clickTagToTagPage();
+  setNavHeightVariable();
+  toggleTheme();
+  initLoadingAnimation();
+  initCopyButtons();
+  initHeaderBackground();
+  initContextMenu();
+  initTagNavigation();
+  initPagination();
 });
 
 // 监听窗口大小变化
-window.addEventListener('resize', setNavHeightVar);
+window.addEventListener("resize", setNavHeightVariable);
 
 // -------------------------------------------------------------
