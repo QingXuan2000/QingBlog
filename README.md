@@ -8,6 +8,8 @@
 ![GitHub issues](https://img.shields.io/github/issues/QingXuan2000/QingBlog?style=for-the-badge)
 ![GitHub Workflow](https://img.shields.io/github/actions/workflow/status/QingXuan2000/QingBlog/qingblog-build.yml?style=for-the-badge)
 
+[![Star History Chart](https://api.star-history.com/svg?repos=QingXuan2000/QingBlog&type=Date)](https://star-history.com/#QingXuan2000/QingBlog&Date)
+
 🌐 **在线演示**: [https://qingxuan2000.github.io/](https://qingxuan2000.github.io/)
 📖 **QingBlog Wiki**: [https://github.com/QingXuan2000/QingBlog/wiki/](https://github.com/QingXuan2000/QingBlog/wiki/)
 
