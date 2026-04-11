@@ -9,6 +9,7 @@
 ![GitHub Workflow](https://img.shields.io/github/actions/workflow/status/QingXuan2000/QingBlog/qingblog-build.yml?style=for-the-badge)
 
 🌐 **在线演示**: [https://qingxuan2000.github.io/](https://qingxuan2000.github.io/)
+📖 **QingBlog Wiki**: [https://github.com/QingXuan2000/QingBlog/wiki/](https://github.com/QingXuan2000/QingBlog/wiki/)
 
 </div>
 

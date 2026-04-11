@@ -1,6 +1,9 @@
 // 变量设置
 
 const blogConfig = {
+  blogInfo: {
+    author: "请输入你的 GitHub 用户名"
+  },
   maxPageNum: {
     maxArticlePageNum: 1,
     maxTagPageNums: {
@@ -42,7 +45,7 @@ const themes = {
 };
 
 // 组件库
-const componentBox = `
+const componentBoxHeader = `
     <!-- -------------------- 加载动画 -------------------- -->
 
     <div class="loading">
@@ -165,7 +168,7 @@ const componentBox = `
 
         <div class="user-info">
             <img src="/img/Avatar.png" alt="Avatar" />
-            <h1>QingXuanJun</h1>
+            <h1>${blogConfig.blogInfo.author}</h1>
         </div>
 
         <nav>
@@ -197,15 +200,22 @@ const componentBox = `
     </div>
 `;
 
-document.querySelector("body").insertAdjacentHTML("afterbegin", componentBox);
+const componentBoxFooter = `
+  <!-- -------------------- 页脚 -------------------- -->
+  <footer>
+    <p>© 2025-2026 ${blogConfig.blogInfo.author}. All rights reserved.</p>
+  </footer>
+`;
+
+document.querySelector("body").insertAdjacentHTML("afterbegin", componentBoxHeader);
+document.querySelector("body").insertAdjacentHTML("beforeend", componentBoxFooter);
 
 // 标题切换
 function initWebTitle() {
   const webTitleNormalList = [
-    "QingBlog - QingXuanJun的个人博客 💻",
-    "QingBlog - 欢迎来到QingXuanJun的个人博客哦~ 🎉",
+    "QingBlog - 这是一个程序员的个人博客 💻",
+    "QingBlog - 欢迎来到me的博客哦~ 🎉",
     "QingBlog - 欢迎来到一位技术宅的Blog 🤓",
-    "QingBlog - 这里是QingXuanJun独一无二的小站哦！⭐",
     "QingBlog - 代码、生活与碎碎念 ✨📝",
     "QingBlog - 一个喜欢折腾的极客空间 🛠️⚡",
     "QingBlog - 记录成长，分享热爱 📖❤️",
