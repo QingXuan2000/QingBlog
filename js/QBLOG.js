@@ -235,7 +235,7 @@ const paginationControls = `
 function DynamicComponentBox() {
   const pageName = window.location.pathname.split("/").filter(Boolean)[0];
 
-  if (pageName === undefined || pageName === "article" || pageName === "pages" || pageName === "tags") {
+  if (pageName === "index.html" || pageName === undefined || pageName === "article" || pageName === "pages" || pageName === "tags") {
     document.querySelector("body").insertAdjacentHTML("beforeend", paginationControls);
   }
 
