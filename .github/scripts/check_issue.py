@@ -619,8 +619,9 @@ def md_to_html(md: str) -> str:
 
 
 class ArticleManager:
-    def __init__(self, workspace: str):
+    def __init__(self, workspace: str, cfg: Config = None):
         self.pages_dir = os.path.join(workspace, "article")
+        self.cfg = cfg
         os.makedirs(self.pages_dir, exist_ok=True)
 
     def _path(self, issue_id: str) -> str:
@@ -668,7 +669,7 @@ class ArticleManager:
 
         with open(self._path(issue_id), "w", encoding="utf-8") as f:
             f.write(
-                f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width, initial-scale=1.0"/><title></title></head><body><div class="card-box"><div class="card"><div class="card-header"><h1>{title}</h1><p>作者：{author}</p><p>发布日期：{date}</p></div><div class="divider"style="height:1px;width:100%;margin:1rem 0"></div><div class="card-content article-content">{md_to_html(content)}</div><div class="article-footer"><div class="article-tag"><span>文章标签：</span>{tags}</div></div></div></div><footer><p>© 2025-2026 {self.cfg.ISSUE_AUTHOR}. All rights reserved.</p></footer><link rel="stylesheet"href="/css/blogArticle.css"><link rel="stylesheet"href="/css/QBLOG.css"/><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"/><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script"async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>window.MathJax={{tex:{{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}},svg:{{fontCache:'global'}}}};</script></body></html>"""
+                f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width, initial-scale=1.0"/><title></title></head><body><div class="card-box"><div class="card"><div class="card-header"><h1>{title}</h1><p>作者：{author}</p><p>发布日期：{date}</p></div><div class="divider"style="height:1px;width:100%;margin:1rem 0"></div><div class="card-content article-content">{md_to_html(content)}</div><div class="article-footer"><div class="article-tag"><span>文章标签：</span>{tags}</div></div></div></div><link rel="stylesheet"href="/css/blogArticle.css"><link rel="stylesheet"href="/css/QBLOG.css"/><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"/><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script"async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>window.MathJax={{tex:{{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}},svg:{{fontCache:'global'}}}};</script></body></html>"""
             )
 
         print(f"✅ 文章已{'更新' if is_update else '生成'}：{self._path(issue_id)}")
@@ -680,7 +681,7 @@ class ArticleManager:
 class BlogGenerator:
     def __init__(self):
         self.cfg = Config()
-        self.article = ArticleManager(self.cfg.WORKSPACE)
+        self.article = ArticleManager(self.cfg.WORKSPACE, self.cfg)
         self.tag = TagManager(self.cfg.WORKSPACE)
         self.page = PageManager(self.cfg.WORKSPACE)
 
