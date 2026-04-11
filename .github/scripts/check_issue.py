@@ -61,19 +61,13 @@ class HTMLProcessor:
             f.write(self.html)
 
     def find_card(self, issue_id: str) -> Optional[Tuple[int, int]]:
-        link = get_link(self.path)
-        for pattern in [
-            link,
-            f"../article/{issue_id}.html",
-            f"./article/{issue_id}.html",
-            f"./{issue_id}.html",
-        ]:
-            start = self.html.find(f'<a href="{pattern}">')
-            if start != -1:
-                li_start = self.html.rfind("<li>", 0, start)
-                li_end = self.html.find("</li>", start)
-                if li_end != -1:
-                    return li_start, li_end + 5
+        link = get_link(issue_id)
+        start = self.html.find(f'<a href="{link}">')
+        if start != -1:
+            li_start = self.html.rfind("<li>", 0, start)
+            li_end = self.html.find("</li>", start)
+            if li_end != -1:
+                return li_start, li_end + 5
         return None
 
     def remove_card(self, issue_id: str) -> bool:
@@ -89,8 +83,8 @@ class HTMLProcessor:
     def _gen_tags(labels: List[str]) -> str:
         return "".join(f'<div class="tag"><span>{l}</span></div>' for l in labels[:3])
 
-    def _gen_card(self, title: str, date: str, content: str, labels: List[str]) -> str:
-        link, tags = get_link(self.path), self._gen_tags(labels)
+    def _gen_card(self, title: str, date: str, content: str, issue_id: str, labels: List[str]) -> str:
+        link, tags = get_link(issue_id), self._gen_tags(labels)
         return f"""<li><a href="{link}"><div class="card"><div class="card-header"><h2>{title}</h2></div><div class="divider"style="height:1px;width:100%;margin:1rem 0"></div><p>{content}</p><div class="divider"style="height:1px;width:100%;margin:1rem 0"></div><div class="card-footer"><div class="article-tag">{tags}</div><p>发布日期：{date}</p></div></div></a></li>"""
 
     def count_cards(self) -> int:
@@ -109,7 +103,7 @@ class HTMLProcessor:
         """
         添加或更新卡片，返回是否需要创建新页面
         """
-        card = self._gen_card(title, date, content, labels)
+        card = self._gen_card(title, date, content, issue_id, labels)
         pos = self.find_card(issue_id)
 
         if pos:

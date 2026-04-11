@@ -2,12 +2,12 @@
 
 const blogConfig = {
   blogInfo: {
-    author: "您的 GitHub 用户名"
+    author: "您的GitHub用户名"
   },
   maxPageNum: {
     maxArticlePageNum: 1,
     maxTagPageNums: {
-      
+    
     }
   }
 };
@@ -232,14 +232,16 @@ const paginationControls = `
   </div>
 `
 
-const pageName = window.location.pathname.split("/").filter(Boolean)[0];
+function DynamicComponentBox() {
+  const pageName = window.location.pathname.split("/").filter(Boolean)[0];
 
-if (pageName === undefined || pageName === "article" || pageName === "pages" || pageName === "tags") {
-  document.querySelector("body").insertAdjacentHTML("beforeend", paginationControls);
+  if (pageName === undefined || pageName === "article" || pageName === "pages" || pageName === "tags") {
+    document.querySelector("body").insertAdjacentHTML("beforeend", paginationControls);
+  }
+
+  document.querySelector("body").insertAdjacentHTML("afterbegin", componentBoxHeader);
+  document.querySelector("body").insertAdjacentHTML("beforeend", componentBoxFooter);
 }
-
-document.querySelector("body").insertAdjacentHTML("afterbegin", componentBoxHeader);
-document.querySelector("body").insertAdjacentHTML("beforeend", componentBoxFooter);
 
 // 标题切换
 function initWebTitle() {
@@ -710,6 +712,7 @@ function initPagination() {
 
 // DOM加载完成后初始化所有功能
 window.addEventListener("DOMContentLoaded", () => {
+  DynamicComponentBox();
   initBackToTop();
   initSidebar();
   initWebTitle();
