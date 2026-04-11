@@ -247,43 +247,33 @@ function initWebTitle() {
   ];
 
   const webTitleSwitchInterval = 5000;
-
-  document.title = webTitleNormalList[0];
-
   let webTitleIntervalId;
-  function switchWebTitle(list) {
+
+  const getRandomTitle = (list) => list[Math.floor(Math.random() * list.length)];
+
+  const switchWebTitle = (list) => {
     clearInterval(webTitleIntervalId);
-
-    const listLength = list.length;
-    document.title = list[Math.floor(Math.random() * listLength)];
-
-    webTitleIntervalId = setInterval(function () {
-      const random = Math.floor(Math.random() * listLength);
-      document.title = list[random];
+    document.title = getRandomTitle(list);
+    webTitleIntervalId = setInterval(() => {
+      document.title = getRandomTitle(list);
     }, webTitleSwitchInterval);
-  }
+  };
 
-  // 监听页面可见性变化
-  document.addEventListener("visibilitychange", function () {
+  document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       switchWebTitle(webTitleAwayList);
     } else {
       switchWebTitle(webTitleWelcomeList);
-      setTimeout(function () {
-        switchWebTitle(webTitleNormalList);
-      }, webTitleSwitchInterval);
+      setTimeout(() => switchWebTitle(webTitleNormalList), webTitleSwitchInterval);
     }
   });
 
   switchWebTitle(webTitleNormalList);
 }
 
-// -------------------------------------------------------------
-
 // 弹窗相关功能
 function playAlertAnimation() {
   const alertMessage = document.getElementById("alert-message");
-
   if (!alertMessage) return;
 
   alertMessage.style.animation = "none";
@@ -291,60 +281,57 @@ function playAlertAnimation() {
   alertMessage.style.animation = "alertAnimation 2.2s normal forwards";
 }
 
+const alertColors = {
+  green: {
+    bg: "rgba(34, 197, 94, 0.3)",
+    border: "1px solid rgba(34, 197, 94, 0.4)",
+    shadow: "0 0 20px rgba(34, 197, 94, 0.2), inset 0 0 10px rgba(34, 197, 94, 0.05)"
+  },
+  red: {
+    bg: "rgba(239, 68, 68, 0.3)",
+    border: "1px solid rgba(239, 68, 68, 0.4)",
+    shadow: "0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 10px rgba(239, 68, 68, 0.05)"
+  },
+  orange: {
+    bg: "rgba(249, 115, 22, 0.3)",
+    border: "1px solid rgba(249, 115, 22, 0.4)",
+    shadow: "0 0 20px rgba(249, 115, 22, 0.2), inset 0 0 10px rgba(249, 115, 22, 0.05)"
+  },
+  yellow: {
+    bg: "rgba(234, 179, 8, 0.3)",
+    border: "1px solid rgba(234, 179, 8, 0.4)",
+    shadow: "0 0 20px rgba(234, 179, 8, 0.2), inset 0 0 10px rgba(234, 179, 8, 0.05)"
+  }
+};
+
 function showAlert(color, message) {
   const alertMessage = document.getElementById("alert-message");
-
   if (!alertMessage) return;
 
   alertMessage.querySelector("span").innerHTML = message;
-
-  if (color === "green") {
-    alertMessage.style.background = "rgba(34, 197, 94, 0.3)";
-    alertMessage.style.border = "1px solid rgba(34, 197, 94, 0.4)";
-    alertMessage.style.boxShadow = "0 0 20px rgba(34, 197, 94, 0.2), inset 0 0 10px rgba(34, 197, 94, 0.05)";
-    playAlertAnimation();
-  } else if (color === "red") {
-    alertMessage.style.background = "rgba(239, 68, 68, 0.3)";
-    alertMessage.style.border = "1px solid rgba(239, 68, 68, 0.4)";
-    alertMessage.style.boxShadow = "0 0 20px rgba(239, 68, 68, 0.2), inset 0 0 10px rgba(239, 68, 68, 0.05)";
-    playAlertAnimation();
-  } else if (color === "orange") {
-    alertMessage.style.background = "rgba(249, 115, 22, 0.3)";
-    alertMessage.style.border = "1px solid rgba(249, 115, 22, 0.4)";
-    alertMessage.style.boxShadow = "0 0 20px rgba(249, 115, 22, 0.2), inset 0 0 10px rgba(249, 115, 22, 0.05)";
-    playAlertAnimation();
-  } else if (color === "yellow") {
-    alertMessage.style.background = "rgba(234, 179, 8, 0.3)";
-    alertMessage.style.border = "1px solid rgba(234, 179, 8, 0.4)";
-    alertMessage.style.boxShadow = "0 0 20px rgba(234, 179, 8, 0.2), inset 0 0 10px rgba(234, 179, 8, 0.05)";
+  const style = alertColors[color];
+  if (style) {
+    alertMessage.style.background = style.bg;
+    alertMessage.style.border = style.border;
+    alertMessage.style.boxShadow = style.shadow;
     playAlertAnimation();
   }
 }
-
-// -------------------------------------------------------------
 
 // 初始化返回顶部按钮
 function initBackToTop() {
   const backToTopBtn = document.getElementById("back-to-top");
   if (!backToTopBtn) return;
 
-  backToTopBtn.addEventListener("click", function () {
+  backToTopBtn.addEventListener("click", () => {
     showAlert("green", "<i class=\"fa fa-hand-pointer-o\" aria-hidden=\"true\"></i>&nbsp;Go! Go! Go! 正在返回顶部！");
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  // 监听滚动事件
-  window.addEventListener("scroll", function () {
-    const scrollTop = window.scrollY;
-    if (scrollTop > 0) {
-      backToTopBtn.style.visibility = "visible";
-    } else {
-      backToTopBtn.style.visibility = "hidden";
-    }
+  window.addEventListener("scroll", () => {
+    backToTopBtn.style.visibility = window.scrollY > 0 ? "visible" : "hidden";
   });
 }
-
-// -------------------------------------------------------------
 
 // 侧边栏相关功能
 function initSidebar() {
@@ -356,54 +343,34 @@ function initSidebar() {
 
   if (!overlay || !sidebar || !sidebarToggle || !sidebarClose) return;
 
-  // 点击遮罩关闭侧边栏
-  overlay.addEventListener("click", hideSidebar);
-
-  // 阻止侧边栏点击事件冒泡
-  sidebar.addEventListener("click", function (e) {
-    e.stopPropagation();
-  });
-
-  // 点击按钮显示侧边栏
-  sidebarToggle.addEventListener("click", showSidebar);
-
-  // 点击按钮关闭侧边栏
-  sidebarClose.addEventListener("click", hideSidebar);
-
-  // 显示侧边栏
-  function showSidebar() {
+  const showSidebar = () => {
     sidebar.style.animation = "none";
     overlay.style.animation = "none";
-
     overlay.offsetHeight;
-
     sidebar.style.animation = "showSidebarAnimation 0.5s forwards";
     overlay.style.animation = "showOverlayAnimation 0.5s forwards";
-
     overlay.style.display = "block";
     sidebar.style.display = "flex";
-
     body.style.overflow = "hidden";
-  }
+  };
 
-  // 隐藏侧边栏
-  function hideSidebar() {
+  const hideSidebar = () => {
     sidebar.style.animation = "none";
     overlay.style.animation = "none";
-
     overlay.offsetHeight;
-
     sidebar.style.animation = "hideSidebarAnimation 0.5s forwards";
     overlay.style.animation = "hideOverlayAnimation 0.5s forwards";
-
-    setTimeout(function () {
+    setTimeout(() => {
       overlay.style.display = "none";
       body.style.overflow = "auto";
     }, 500);
-  }
-}
+  };
 
-// -------------------------------------------------------------
+  overlay.addEventListener("click", hideSidebar);
+  sidebar.addEventListener("click", (e) => e.stopPropagation());
+  sidebarToggle.addEventListener("click", showSidebar);
+  sidebarClose.addEventListener("click", hideSidebar);
+}
 
 // 设置高度变量
 function setNavHeightVariable() {
@@ -415,140 +382,124 @@ function setNavHeightVariable() {
   }
 }
 
-// -------------------------------------------------------------
-
+// 初始化加载动画
 function initLoadingAnimation() {
   const firstLoading = localStorage.getItem("firstLoading") || "true";
+  const loadingContainer = document.querySelector(".loading");
+
+  if (!loadingContainer) return;
 
   if (firstLoading !== "false") {
     const body = document.body;
     const qingBlogIcon = document.querySelector(".loading-icon");
-    const loadingContainer = document.querySelector(".loading");
     const loadingDivs = document.querySelectorAll(".loading-div");
 
-    if (loadingContainer) {
-      body.style.overflow = "hidden";
+    body.style.overflow = "hidden";
 
-      setTimeout(function () {
-        loadingDivs.forEach(function (div, index) {
-          index += 1;
+    setTimeout(() => {
+      loadingDivs.forEach((div, index) => {
+        div.style.animation = (index + 1) % 2 === 0
+          ? "loadingRightAnimation 1.5s ease-out forwards"
+          : "loadingLeftAnimation 1.5s ease-out forwards";
+      });
+      qingBlogIcon.style.animation = "hideOverlayAnimation 0.5s ease-in-out forwards";
+    }, 1600);
 
-          if (index % 2 === 0) {
-            div.style.animation = "loadingRightAnimation 1.5s ease-out forwards";
-          } else {
-            div.style.animation = "loadingLeftAnimation 1.5s ease-out forwards";
-          };
-        });
-
-        qingBlogIcon.style.animation = "hideOverlayAnimation 0.5s ease-in-out forwards";
-      }, 1600);
-
-      setTimeout(function () {
-        loadingContainer.style.display = "none";
-        body.style.overflow = "auto";
-
-        localStorage.setItem("firstLoading", "false");
-      }, 3000);
-    }
+    setTimeout(() => {
+      loadingContainer.style.display = "none";
+      body.style.overflow = "auto";
+      localStorage.setItem("firstLoading", "false");
+    }, 3000);
   } else {
-    const loadingContainer = document.querySelector(".loading");
-    if (loadingContainer) loadingContainer.style.display = "none";
+    loadingContainer.style.display = "none";
   }
 }
-
-// -------------------------------------------------------------
 
 // 主题切换
 function toggleTheme() {
-  const body = document.querySelector("body");
   const toggleBtn = document.getElementById("theme-toggle");
   const prefersColorScheme = matchMedia("(prefers-color-scheme: dark)").matches;
-
   const root = document.documentElement;
 
-  function applyTheme(theme) {
+  const applyTheme = (theme) => {
     const themeConfig = themes[theme];
-
-    Object.entries(themeConfig).forEach(function ([key, value]) {
+    Object.entries(themeConfig).forEach(([key, value]) => {
       root.style.setProperty(key, value);
     });
-  }
-
-  if (!localStorage.getItem("theme")) {
-    applyTheme(prefersColorScheme === true ? "dark" : "light");
-    toggleBtn.innerHTML = `<i class="fa fa-${prefersColorScheme === true ? "moon" : "sun"}-o"></i>`;
-  } else {
-    applyTheme(localStorage.getItem("theme"));
-    toggleBtn.innerHTML = `<i class="fa fa-${localStorage.getItem("theme") === "dark" ? "moon" : "sun"}-o"></i>`;
   };
 
-  toggleBtn.addEventListener("click", () => {
-    const newTheme = (localStorage.getItem("theme")) === "dark" ? "light" : "dark";
-    applyTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
+  const getThemeIcon = (theme) => theme === "dark" ? "moon" : "sun";
 
-    toggleBtn.innerHTML = `<i class="fa fa-${newTheme === "light" ? "sun" : "moon"}-o"></i>`;
-    showAlert("green", `<i class="fa fa-${newTheme === "light" ? "sun" : "moon"}-o"></i>&nbsp;已切换到${newTheme === "light" ? "浅色" : "深色"}主题！`);
+  const setTheme = (theme) => {
+    applyTheme(theme);
+    localStorage.setItem("theme", theme);
+    toggleBtn.innerHTML = `<i class="fa fa-${getThemeIcon(theme)}-o"></i>`;
+  };
+
+  const initTheme = () => {
+    const savedTheme = localStorage.getItem("theme");
+    if (!savedTheme) {
+      const defaultTheme = prefersColorScheme ? "dark" : "light";
+      applyTheme(defaultTheme);
+      toggleBtn.innerHTML = `<i class="fa fa-${getThemeIcon(defaultTheme)}-o"></i>`;
+    } else {
+      applyTheme(savedTheme);
+      toggleBtn.innerHTML = `<i class="fa fa-${getThemeIcon(savedTheme)}-o"></i>`;
+    }
+  };
+
+  initTheme();
+
+  toggleBtn.addEventListener("click", () => {
+    const currentTheme = localStorage.getItem("theme") || (prefersColorScheme ? "dark" : "light");
+    const newTheme = currentTheme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    showAlert("green", `<i class="fa fa-${getThemeIcon(newTheme)}-o"></i>&nbsp;已切换到${newTheme === "light" ? "浅色" : "深色"}主题！`);
   });
 }
 
-// -------------------------------------------------------------
-
+// 初始化复制按钮
 function initCopyButtons() {
-  document.querySelectorAll(".copy-btn").forEach(function (copyBtn) {
-    copyBtn.addEventListener("click", function () {
-      const parentElement = this.parentElement;
-
+  document.querySelectorAll(".copy-btn").forEach((copyBtn) => {
+    copyBtn.addEventListener("click", async () => {
+      const parentElement = copyBtn.parentElement;
       const code = parentElement.querySelector("code").textContent;
-
-      navigator.clipboard.writeText(code);
-
+      await navigator.clipboard.writeText(code);
       showAlert("green", "<i class=\"fa fa-check-square-o\" aria-hidden=\"true\"></i>&nbsp;复制成功！");
     });
   });
 }
 
-// -------------------------------------------------------------
-
+// 初始化头部背景
 function initHeaderBackground() {
   const heroDiv = document.getElementById("hero-div");
-
   if (!heroDiv) return;
 
   const header = document.querySelector("header");
-
-  // 监听滚动事件
-  window.addEventListener("scroll", function () {
-    const scrollTop = window.scrollY;
-    if (scrollTop > (setNavHeightVariable() + setNavHeightVariable())) {
-      header.style.background = "none";
-    } else {
-      header.style.background = "var(--hero-bg-color)";
-    }
+  window.addEventListener("scroll", () => {
+    const navHeight = setNavHeightVariable();
+    header.style.background = window.scrollY > (navHeight + navHeight) ? "none" : "var(--hero-bg-color)";
   });
 }
 
-// -------------------------------------------------------------
-
+// 右键菜单
 function initContextMenu(option) {
-  function showContextMenu() {
-    menu.style.display = "block";
-    menu.classList.add("show");
-  }
-
-  function hideContextMenu() {
-    menu.classList.remove("show");
-    setTimeout(function () {
-      menu.style.display = "none";
-    }, 200);
-  }
-
   const menu = document.getElementById("context-menu");
 
-  // 监听右键
-  document.addEventListener("contextmenu", function (e) {
-    e.preventDefault();
+  const showContextMenu = () => {
+    menu.style.display = "block";
+    menu.classList.add("show");
+  };
 
+  const hideContextMenu = () => {
+    menu.classList.remove("show");
+    setTimeout(() => {
+      menu.style.display = "none";
+    }, 200);
+  };
+
+  document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
     showContextMenu();
 
     const menuWidth = menu.offsetWidth;
@@ -572,13 +523,8 @@ function initContextMenu(option) {
     menu.style.visibility = "visible";
   });
 
-  menu.addEventListener("click", function (e) {
-    e.stopPropagation();
-  });
-
-  document.addEventListener("click", function () {
-    hideContextMenu();
-  });
+  menu.addEventListener("click", (e) => e.stopPropagation());
+  document.addEventListener("click", hideContextMenu);
 
   if (option === "copy") {
     const userSelectedText = window.getSelection().toString();
@@ -590,42 +536,33 @@ function initContextMenu(option) {
   }
 }
 
-// -------------------------------------------------------------
-
 // 标签处理模块
 const TagManager = {
-  // 初始化标签功能
-  init: function () {
+  init() {
     this.setupTagClickHandler();
   },
 
-  // 点击标签处理
-  setupTagClickHandler: function () {
-    document.addEventListener("click", function (e) {
-      if (e.target.closest(".tag")) {
+  setupTagClickHandler() {
+    document.addEventListener("click", (e) => {
+      const tagElement = e.target.closest(".tag");
+      if (tagElement) {
         e.preventDefault();
-        const tagElement = e.target.closest(".tag");
         const tagText = tagElement.querySelector("span").textContent;
         TagManager.navigateToTagPage(tagText);
       }
     });
   },
 
-  // 跳转到标签页面
-  navigateToTagPage: function (tagText) {
+  navigateToTagPage(tagText) {
     location.href = `/tags/${tagText}/`;
   },
 
-  // 获取所有标签
-  getAllTags: function () {
-    const tags = [];
-    document.querySelectorAll(".tag span").forEach(function (tag) {
-      const tagText = tag.textContent;
-      if (!tags.includes(tagText)) {
-        tags.push(tagText);
-      }
+  getAllTags() {
+    const tags = new Set();
+    document.querySelectorAll(".tag span").forEach((tag) => {
+      tags.add(tag.textContent);
     });
-    return tags;
+    return Array.from(tags);
   }
 };
 
@@ -633,8 +570,7 @@ function initTagNavigation() {
   TagManager.init();
 }
 
-// -------------------------------------------------------------
-
+// 分页
 function initPagination() {
   const prevTrigger = document.getElementById("prev-trigger");
   const nextTrigger = document.getElementById("next-trigger");
@@ -644,7 +580,6 @@ function initPagination() {
 
   if (!prevTrigger || !nextTrigger || !pageNum) return;
 
-  // 是否标签页
   const path = window.location.pathname;
   const isTagPage = path.startsWith("/tags/");
   let current = 1;
@@ -652,52 +587,43 @@ function initPagination() {
   let tagName = '';
 
   if (isTagPage) {
-    // 提取标签名和页码
     const pathParts = path.split("/");
     if (pathParts.length > 2) {
       tagName = decodeURIComponent(pathParts[2]);
       
-      // 检测是否有页码
       if (pathParts.length > 3) {
         const pagePart = pathParts[3].replace(".html", "");
-        if (pagePart && !isNaN(pagePart) && !isNaN(parseInt(pagePart))) {
+        if (pagePart && !isNaN(pagePart)) {
           current = parseInt(pagePart);
         }
       }
       
-      // 读取对应的分页数据
       maxPageNum = blogConfig.maxPageNum.maxTagPageNums[tagName] || 1;
     }
   } else {
-    // 获取当前页码
     if (path.includes("/pages/")) {
       const parts = path.split("/pages/");
       if (parts.length > 1) {
         const pagePart = parts[1].replace(".html", "");
-        if (pagePart && !isNaN(pagePart) && !isNaN(parseInt(pagePart))) {
+        if (pagePart && !isNaN(pagePart)) {
           current = parseInt(pagePart);
         }
       }
     }
   }
 
-  // 跳转
   const goToPage = (page) => {
-    if (isTagPage) {
-      window.location.href = page === 1 ? `/tags/${tagName}/` : `/tags/${tagName}/${page}.html`;
-    } else {
-      window.location.href = page === 1 ? "/" : `/pages/${page}.html`;
-    }
+    window.location.href = isTagPage
+      ? (page === 1 ? `/tags/${tagName}/` : `/tags/${tagName}/${page}.html`)
+      : (page === 1 ? "/" : `/pages/${page}.html`);
   };
 
-  // 更新页码显示
   const updatePageDisplay = () => {
     pageNum.textContent = `${current} / ${maxPageNum}`;
   };
 
   updatePageDisplay();
 
-  // 上一页
   prevTrigger.addEventListener("click", () => {
     if (current <= 1) {
       return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;已经到第一页了！");
@@ -705,7 +631,6 @@ function initPagination() {
     goToPage(current - 1);
   });
 
-  // 下一页
   nextTrigger.addEventListener("click", () => {
     if (current >= maxPageNum) {
       return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;已经到最后一页了！");
@@ -713,8 +638,7 @@ function initPagination() {
     goToPage(current + 1);
   });
 
-  // 跳转指定页
-  goToPageBtn.addEventListener("click", () => {
+  goToPageBtn?.addEventListener("click", () => {
     if (!inputPageNum) return;
     const target = parseInt(inputPageNum.value.trim());
 
@@ -727,16 +651,12 @@ function initPagination() {
     goToPage(target);
   });
 
-  // 输入框回车事件
-  if (inputPageNum) {
-    inputPageNum.addEventListener("keypress", (e) => {
-      if (e.key === "Enter") {
-        goToPageBtn.click();
-      }
-    });
-  }
+  inputPageNum?.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      goToPageBtn?.click();
+    }
+  });
 
-  // 禁用第一页的上一页按钮和最后一页的下一页按钮
   if (current <= 1) {
     prevTrigger.classList.add("disabled");
     prevTrigger.style.cursor = "not-allowed";
@@ -747,10 +667,8 @@ function initPagination() {
   }
 }
 
-// -------------------------------------------------------------
-
 // DOM加载完成后初始化所有功能
-window.addEventListener("DOMContentLoaded", function () {
+window.addEventListener("DOMContentLoaded", () => {
   initBackToTop();
   initSidebar();
   initWebTitle();
@@ -766,5 +684,3 @@ window.addEventListener("DOMContentLoaded", function () {
 
 // 监听窗口大小变化
 window.addEventListener("resize", setNavHeightVariable);
-
-// -------------------------------------------------------------
