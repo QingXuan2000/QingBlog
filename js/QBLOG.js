@@ -1,6 +1,13 @@
 // 变量设置
 
-const maxPageNum = 1;
+const blogConfig = {
+  maxPageNum: {
+    maxArticlePageNum: 1,
+    maxTagPageNums: {
+
+    }
+  }
+};
 
 // 主题设置
 const themes = {
@@ -122,15 +129,15 @@ const componentBox = `
 
             <ul>
                 <li>
-                    <a href="../index.html"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a>
+                    <a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a>
                 </li>
 
                 <li>
-                    <a href="../article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
+                    <a href="/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
                 </li>
 
                 <li>
-                    <a href="../tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a>
+                    <a href="/tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a>
                 </li>
 
                 <li>
@@ -157,26 +164,26 @@ const componentBox = `
         </div>
 
         <div class="user-info">
-            <img src="../img/Avatar.png" alt="Avatar" />
+            <img src="/img/Avatar.png" alt="Avatar" />
             <h1>QingXuanJun</h1>
         </div>
 
         <nav>
             <ul class="glass">
                 <li>
-                    <a href="../index.html"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a>
+                    <a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a>
                 </li>
 
                 <div class="divider" style="width: 100%; height: 1px;"></div>
 
                 <li>
-                    <a href="../article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
+                    <a href="/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a>
                 </li>
 
                 <div class="divider" style="width: 100%; height: 1px;"></div>
 
                 <li>
-                    <a href="../tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a>
+                    <a href="/tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a>
                 </li>
 
                 <div class="divider" style="width: 100%; height: 1px;"></div>
@@ -592,7 +599,7 @@ const TagManager = {
     this.setupTagClickHandler();
   },
 
-  // 设置标签点击处理（使用事件委托）
+  // 点击标签处理
   setupTagClickHandler: function () {
     document.addEventListener("click", function (e) {
       if (e.target.closest(".tag")) {
@@ -606,8 +613,7 @@ const TagManager = {
 
   // 跳转到标签页面
   navigateToTagPage: function (tagText) {
-    const basePath = window.location.pathname.includes("article") || window.location.pathname.includes("tags") ? "../" : "";
-    location.href = `${basePath}tags/${tagText}.html`;
+    location.href = `/tags/${tagText}/`;
   },
 
   // 获取所有标签
@@ -634,22 +640,62 @@ function initPagination() {
   const nextTrigger = document.getElementById("next-trigger");
   const goToPageBtn = document.getElementById("go-to-page-btn");
   const pageNum = document.getElementById("page-num");
+  const inputPageNum = document.getElementById("input-page-num");
 
-  if (!prevTrigger || !nextTrigger) return;
+  if (!prevTrigger || !nextTrigger || !pageNum) return;
 
-  // 获取当前页码
-  const getCurrentPage = () => {
-    const match = window.location.pathname.match(/\/pages\/(\d+)(?:\.html)?$/);
-    return match ? parseInt(match[1]) : 1;
-  };
+  // 是否标签页
+  const path = window.location.pathname;
+  const isTagPage = path.startsWith("/tags/");
+  let current = 1;
+  let maxPageNum = blogConfig.maxPageNum.maxArticlePageNum;
+  let tagName = '';
 
-  // 跳转页面
+  if (isTagPage) {
+    // 提取标签名和页码
+    const pathParts = path.split("/");
+    if (pathParts.length > 2) {
+      tagName = decodeURIComponent(pathParts[2]);
+      
+      // 检测是否有页码
+      if (pathParts.length > 3) {
+        const pagePart = pathParts[3].replace(".html", "");
+        if (pagePart && !isNaN(pagePart) && !isNaN(parseInt(pagePart))) {
+          current = parseInt(pagePart);
+        }
+      }
+      
+      // 读取对应的分页数据
+      maxPageNum = blogConfig.maxPageNum.maxTagPageNums[tagName] || 1;
+    }
+  } else {
+    // 获取当前页码
+    if (path.includes("/pages/")) {
+      const parts = path.split("/pages/");
+      if (parts.length > 1) {
+        const pagePart = parts[1].replace(".html", "");
+        if (pagePart && !isNaN(pagePart) && !isNaN(parseInt(pagePart))) {
+          current = parseInt(pagePart);
+        }
+      }
+    }
+  }
+
+  // 跳转
   const goToPage = (page) => {
-    window.location.href = page === 1 ? "/index.html" : `/pages/${page}.html`;
+    if (isTagPage) {
+      window.location.href = page === 1 ? `/tags/${tagName}/` : `/tags/${tagName}/${page}.html`;
+    } else {
+      window.location.href = page === 1 ? "/" : `/pages/${page}.html`;
+    }
   };
 
-  const current = getCurrentPage();
-  pageNum.textContent = `${current} / ${maxPageNum}`;
+  // 更新页码显示
+  const updatePageDisplay = () => {
+    pageNum.textContent = `${current} / ${maxPageNum}`;
+  };
+
+  updatePageDisplay();
 
   // 上一页
   prevTrigger.addEventListener("click", () => {
@@ -669,9 +715,10 @@ function initPagination() {
 
   // 跳转指定页
   goToPageBtn.addEventListener("click", () => {
-    const target = parseInt(document.getElementById("input-page-num").value.trim());
+    if (!inputPageNum) return;
+    const target = parseInt(inputPageNum.value.trim());
 
-    if (!target) {
+    if (isNaN(target)) {
       return showAlert("red", "<i class=\"fa fa-warning\" aria-hidden=\"true\"></i>&nbsp;请输入有效的页码！");
     }
     if (target < 1 || target > maxPageNum) {
@@ -679,6 +726,25 @@ function initPagination() {
     }
     goToPage(target);
   });
+
+  // 输入框回车事件
+  if (inputPageNum) {
+    inputPageNum.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        goToPageBtn.click();
+      }
+    });
+  }
+
+  // 禁用第一页的上一页按钮和最后一页的下一页按钮
+  if (current <= 1) {
+    prevTrigger.classList.add("disabled");
+    prevTrigger.style.cursor = "not-allowed";
+  }
+  if (current >= maxPageNum) {
+    nextTrigger.classList.add("disabled");
+    nextTrigger.style.cursor = "not-allowed";
+  }
 }
 
 // -------------------------------------------------------------

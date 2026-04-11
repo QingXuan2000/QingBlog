@@ -704,8 +704,8 @@ nav li {
     width: 30%;
     border-radius: 0.3em 0 0 0;
 
-    border-top: 14px dashed var(--text-color);
-    border-left: 14px dashed var(--text-color);
+    border-top: 14px solid var(--text-color);
+    border-left: 14px solid var(--text-color);
 
     position: absolute;
     top: 50%;
@@ -1061,7 +1061,7 @@ body.light-theme .loading-div {
 #pagination-controls #input-page-num-wrapper input:focus {
     box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
     outline: none;
-    padding: 0 1rem;
+    padding: 0 1em;
 
     color: var(--text-color);
 
@@ -1069,6 +1069,10 @@ body.light-theme .loading-div {
     max-width: 6.5em;
 
     border-radius: 0.6rem;
+}
+
+input::placeholder {
+  text-align: center;
 }
 
 #pagination-controls #input-page-num-wrapper #go-to-page-btn {
@@ -1106,8 +1110,8 @@ body.light-theme .loading-div {
     }
 
     .hero-div-content h1::before {
-        border-top: 10px dashed var(--text-color);
-        border-left: 10px dashed var(--text-color);
+        border-top: 10px solid var(--text-color);
+        border-left: 10px solid var(--text-color);
     }
 }
 
@@ -1155,17 +1159,12 @@ body.light-theme .loading-div {
     }
 
     .hero-div-content h1::before {
-        border-top: 5px dashed var(--text-color);
-        border-left: 5px dashed var(--text-color);
+        border-top: 5px solid var(--text-color);
+        border-left: 5px solid var(--text-color);
     }
 
     #pagination-controls {
         flex-direction: column;
-    }
-
-    #pagination-controls #input-page-num-wrapper input,
-    #pagination-controls #input-page-num-wrapper input:focus {
-        padding: 0 1rem;
     }
 }
 

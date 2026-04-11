@@ -1,32 +1,33 @@
-name: QingBlog Build
+name: 📝 QingBlog 自动构建运行流
 
 on:
   issues:
-    types: [opened, edited, deleted]
+    types: [opened, edited, deleted, reopened]
 
 jobs:
-  check-issue:
+  build-blog:
+    name: 🚀 QingBlog构建
     runs-on: ubuntu-latest
 
     permissions:
       contents: write
 
     steps:
-      - name: 📥 检出代码
+      - name: 📥 检出代码仓库
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐍 设置Python环境
+      - name: 🐍 配置 Python 3.11 环境
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: 🐍 安装Python依赖
+      - name: 📦安装 Python 依赖包
         run: pip install -r .github/scripts/requirements.txt
 
-      - name: 🚀 运行Python脚本
+      - name: 🔧启动构建脚本
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
@@ -40,7 +41,7 @@ jobs:
           BLOG_ARTICLES_PER_PAGE: "20"
         run: python .github/scripts/check_issue.py
 
-      - name: 💾 提交更改
+      - name: 📤提交并推送更改
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "📝 ${{ github.event.action == 'deleted' && '删除文章' || '更新文章' }}: ${{ github.event.issue.title }}"
