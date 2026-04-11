@@ -36,7 +36,7 @@ jobs:
           ISSUE_LABELS: ${{ toJson(github.event.issue.labels.*.name) }}
           ISSUE_ID: ${{ github.event.issue.number }}
           ISSUE_ACTION: ${{ github.event.action }}
-          TARGET_AUTHOR: "你的 GitHub 用户名"
+          TARGET_AUTHOR: "QingXuan2000"
           UTC_OFFSET: "8"
           BLOG_ARTICLES_PER_PAGE: "20"
         run: python .github/scripts/check_issue.py

@@ -97,11 +97,6 @@ class HTMLProcessor:
         """统计当前页面中的卡片数量"""
         return self.html.count('<li><a href="')
 
-    @staticmethod
-    def _gen_pagination_controls() -> str:
-        """生成分页控件"""
-        return f"""<div id="pagination-controls-wrapper"><div id="pagination-controls"><div id="prev-trigger"class="glass"><i class="fa fa-arrow-left"aria-hidden="true"></i><span>上一页</span></div><div id="input-page-num-wrapper"class="glass"><span id="page-num"></span><input id="input-page-num"type="text"placeholder="输入页码"class="glass"><div id="go-to-page-btn"class="glass"><i class="fa fa-level-down"aria-hidden="true"></i></div></div><div id="next-trigger"class="glass"><span>下一页</span><i class="fa fa-arrow-right"aria-hidden="true"></i></div></div></div>"""
-
     def add_or_update(
         self,
         title: str,
@@ -136,19 +131,6 @@ class HTMLProcessor:
 
             # 添加卡片到当前页面
             self.html = self.html[:ul_end] + card + self.html[ul_end:]
-
-            # 添加分页控件
-            if cfg and self.count_cards() >= cfg.BLOG_ARTICLES_PER_PAGE:
-                # 查找分页控件位置并添加
-                controls_pos = self.html.find("</div>", self.html.find("</ul>"))
-                if controls_pos != -1:
-                    pagination = self._gen_pagination_controls()
-                    self.html = (
-                        self.html[: controls_pos + 6]
-                        + pagination
-                        + self.html[controls_pos + 6 :]
-                    )
-
             print(f"✅ 卡片已添加：{title}")
             return False
 
@@ -176,7 +158,7 @@ class PageManager:
         # 创建基础页面结构
         with open(path, "w", encoding="utf-8") as f:
             f.write(
-                f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width, initial-scale=1.0"/><meta name="color-scheme"content="light dark"><title></title><link rel="shortcut icon"href="/favicon.ico"type="image/x-icon"/></head><body><div id="card-list-wrapper"><ul id="card-list"></ul><div id="pagination-controls-wrapper"><div id="pagination-controls"><div id="prev-trigger"class="glass"><i class="fa fa-arrow-left"aria-hidden="true"></i><span>上一页</span></div><div id="input-page-num-wrapper"class="glass"><span id="page-num"></span><input id="input-page-num"type="text"placeholder="输入页码"class="glass"><div id="go-to-page-btn"class="glass"><i class="fa fa-level-down"aria-hidden="true"></i></div></div><div id="next-trigger"class="glass"><span>下一页</span><i class="fa fa-arrow-right"aria-hidden="true"></i></div></div></div></div><footer><p>© 2025-2026 {self.cfg.ISSUE_AUTHOR}. All rights reserved.</p></footer><link rel="stylesheet"href="/css/QBLOG.css"/><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"/><style>#card-list-wrapper{{border-top:none}}</style></body></html>"""
+                f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width, initial-scale=1.0"/><meta name="color-scheme"content="light dark"><title></title><link rel="shortcut icon"href="/favicon.ico"type="image/x-icon"/></head><body><div id="card-list-wrapper"><ul id="card-list"></ul></div><link rel="stylesheet"href="/css/QBLOG.css"/><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"/><style>#card-list-wrapper{{border-top:none}}</style></body></html>"""
             )
 
         print(f"✅ 页面已创建：{path}")
@@ -348,7 +330,7 @@ class TagManager:
         os.makedirs(tag_dir, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(
-                f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width, initial-scale=1.0"><title></title></head><body><div id="title"><h1>{name}</h1></div><div id="card-list-wrapper"><ul id="card-list"></ul></div><div id="pagination-controls-wrapper"><div id="pagination-controls"><div id="prev-trigger"class="glass"><i class="fa fa-arrow-left"aria-hidden="true"></i><span>上一页</span></div><div id="input-page-num-wrapper"class="glass"><span id="page-num"></span><input id="input-page-num"type="text"placeholder="输入页码"class="glass"><div id="go-to-page-btn"class="glass"><i class="fa fa-level-down"aria-hidden="true"></i></div></div><div id="next-trigger"class="glass"><span>下一页</span><i class="fa fa-arrow-right"aria-hidden="true"></i></div></div></div><footer><p>© 2025-2026 {self.cfg.ISSUE_AUTHOR}. All rights reserved.</p></footer><link rel="stylesheet"href="/css/QBLOG.css"><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"><style>#card-list-wrapper{{border-top:none}}</style></body></html>"""
+                f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width, initial-scale=1.0"><title></title></head><body><div id="title"><h1>{name}</h1></div><div id="card-list-wrapper"><ul id="card-list"></ul></div><link rel="stylesheet"href="/css/QBLOG.css"><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"><style>#card-list-wrapper{{border-top:none}}</style></body></html>"""
             )
         print(f"✅ 标签页面已创建：{name} 第{page_num}页")
 

@@ -2,12 +2,12 @@
 
 const blogConfig = {
   blogInfo: {
-    author: "请输入你的 GitHub 用户名"
+    author: "您的 GitHub 用户名"
   },
   maxPageNum: {
     maxArticlePageNum: 1,
     maxTagPageNums: {
-
+      
     }
   }
 };
@@ -206,6 +206,37 @@ const componentBoxFooter = `
     <p>© 2025-2026 ${blogConfig.blogInfo.author}. All rights reserved.</p>
   </footer>
 `;
+
+const paginationControls = `
+  <!-- -------------------- 翻页控制 -------------------- -->
+  <div id="pagination-controls-wrapper">
+      <div id="pagination-controls">
+          <div id="prev-trigger" class="glass">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i>
+              <span>上一页</span>
+          </div>
+
+          <div id="input-page-num-wrapper" class="glass">
+              <span id="page-num"></span>
+              <input id="input-page-num" type="text" placeholder="输入页码" class="glass">
+              <div id="go-to-page-btn" class="glass">
+                  <i class="fa fa-level-down" aria-hidden="true"></i>
+              </div>
+          </div>
+
+          <div id="next-trigger" class="glass">
+              <span>下一页</span>
+              <i class="fa fa-arrow-right" aria-hidden="true"></i>
+          </div>
+      </div>
+  </div>
+`
+
+const pageName = window.location.pathname.split("/").filter(Boolean)[0];
+
+if (pageName === undefined || pageName === "article" || pageName === "pages" || pageName === "tags") {
+  document.querySelector("body").insertAdjacentHTML("beforeend", paginationControls);
+}
 
 document.querySelector("body").insertAdjacentHTML("afterbegin", componentBoxHeader);
 document.querySelector("body").insertAdjacentHTML("beforeend", componentBoxFooter);
@@ -600,14 +631,14 @@ function initPagination() {
     const pathParts = path.split("/");
     if (pathParts.length > 2) {
       tagName = decodeURIComponent(pathParts[2]);
-      
+
       if (pathParts.length > 3) {
         const pagePart = pathParts[3].replace(".html", "");
         if (pagePart && !isNaN(pagePart)) {
           current = parseInt(pagePart);
         }
       }
-      
+
       maxPageNum = blogConfig.maxPageNum.maxTagPageNums[tagName] || 1;
     }
   } else {
