@@ -307,7 +307,8 @@
 .article-tag .tag:hover,
 #pagination-controls #prev-trigger:hover,
 #pagination-controls #next-trigger:hover,
-#pagination-controls #input-page-num-wrapper #go-to-page-btn:hover {
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:hover,
+.article-content .codehilitetable .copy-btn:hover {
     box-shadow:
         0 6px 12px var(--box-shadow-color),
         0 2px 4px var(--box-shadow-color);
@@ -324,7 +325,8 @@
 .tag-item:active,
 #pagination-controls #prev-trigger:active,
 #pagination-controls #next-trigger:active,
-#pagination-controls #input-page-num-wrapper #go-to-page-btn:active {
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:active,
+.article-content .codehilitetable .copy-btn:active {
     transform: translateY(2px);
     box-shadow:
         inset 0 3px 6px var(--box-shadow-color),

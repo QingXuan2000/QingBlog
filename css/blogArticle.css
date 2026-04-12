@@ -313,39 +313,8 @@
     border: var(--article-border-width-sm) solid var(--border-color);
 }
 
-/* 代码块容器 */
-.article-content pre {
-    padding: 0;
-    margin: var(--article-margin-2xl) 0;
-    box-shadow: var(--article-shadow-lg);
-    display: flex;
-    flex-direction: column;
-    container-type: inline-size;
-}
-
-/* 代码块复制按钮 */
-.article-content pre .copy-btn {
-    position: absolute;
-    top: 6px;
-    right: 12px;
-    z-index: 10;
-    font-family: inherit !important;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.8em;
-    cursor: pointer;
-    user-select: none;
-    opacity: 0;
-    transition: var(--article-transition-fast);
-}
-
-.article-content .codehilite:hover .copy-btn {
-    opacity: 1;
-}
-
-/* 代码块表格布局（带行号） */
-.article-content .codehilitetable {
-    width: 100%;
-    border-collapse: collapse;
+/* 代码块外层容器 */
+.article-content .codehilite {
     margin: var(--article-margin-2xl) 0;
     border-radius: var(--article-radius-xl);
     overflow: hidden;
@@ -353,32 +322,16 @@
     border: var(--article-border-width-sm) solid var(--article-code-border);
     box-shadow: var(--article-shadow-lg);
     position: relative;
-    display: block;
 }
 
-/* 终端窗口装饰 - 标题栏 */
-.article-content .codehilitetable::before {
-    content: "";
-    display: block;
-    height: 32px;
-    background: var(--article-terminal-header-bg);
-    border-radius: var(--article-radius-xl) var(--article-radius-xl) 0 0;
-    border-bottom: var(--article-border-width-sm) solid var(--article-terminal-header-border);
-}
-
-/* 终端窗口装饰 - 控制按钮 */
-.article-content .codehilitetable::after {
-    content: "";
-    position: absolute;
-    top: 10px;
-    left: 12px;
-    width: 12px;
-    height: 12px;
-    background: var(--article-terminal-btn-close);
-    border-radius: 50%;
-    box-shadow:
-        20px 0 0 var(--article-terminal-btn-minimize),
-        40px 0 0 var(--article-terminal-btn-maximize);
+/* 代码块表格布局 */
+.article-content .codehilitetable {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    background: transparent;
+    overflow: visible;
+    margin: 0;
 }
 
 .article-content .codehilitetable td {
@@ -391,10 +344,25 @@
 .article-content .codehilitetable .linenos {
     background: rgba(255, 255, 255, 0.03);
     border-right: var(--article-border-width-sm) solid var(--article-code-border);
-    width: 1%;
-    min-width: 3em;
+    width: 3.5em;
     text-align: center;
     user-select: none;
+    flex-shrink: 0;
+}
+
+/* 代码内容列 */
+.article-content .codehilitetable .code {
+    vertical-align: top;
+    width: 100%;
+    overflow: visible auto;
+}
+
+/* 代码块容器 */
+.article-content .codehilitetable pre {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 .article-content .codehilitetable .linenos .linenodiv {
@@ -407,11 +375,45 @@
 
 .article-content .codehilitetable .linenos .linenodiv pre {
     margin: 0;
-    padding: 0.4em;
+    padding: 0;
+    background: transparent;
+}
+
+/* 代码块复制按钮 */
+.article-content .codehilitetable .copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 500;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.8em;
+    cursor: pointer;
+    user-select: none;
+    opacity: 0;
+    transition: var(--article-transition-fast);
+    background: rgba(70, 70, 70, 0.4);
+    padding: 0.2rem 0.8rem;
+    border-radius: 0.4rem;
+    border: 1px solid var(--surface-border-color);
+}
+
+.article-content .codehilite:hover .copy-btn {
+    opacity: 1;
+}
+
+.article-content .copy-btn:hover {
+    color: #fff;
+}
+
+.article-content .copy-btn:active {
+    background: rgba(0, 0, 0, 0.3);
 }
 
 /* 代码内容区域 */
-.article-content pre code {
+.article-content .codehilitetable pre code {
     padding: var(--article-padding-3xl);
     border: none;
     color: var(--article-code-text);
@@ -420,24 +422,67 @@
     display: block;
     font-family: "SF Mono", "Monaco", "Inconsolata", "Fira Code", "Consolas", monospace;
     overflow-x: auto;
+    white-space: pre;
+    background: transparent;
+}
+
+.article-content .code-lang-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+    z-index: 100;
+
+    height: 2.2rem;
+    color: #FFF;
+    font-family: inherit;
+    font-size: 0.9em;
+    background: var(--article-terminal-header-bg);
+    border-bottom: var(--article-border-width-sm) solid var(--article-terminal-header-border);
+}
+
+.article-content .code-lang-label::before {
+    content: "\f121";
+
+    font-family: "Font Awesome 6 Free";
+
+    color: #22ac36;
+
+    position: relative;
+    right: 5px;
+}
+
+.article-content .code-lang-label::after {
+    content: "●●●";
+
+    position: absolute;
+    left: 0.8rem;
+
+    color: transparent;
+    background: linear-gradient(90deg, #FF5F57 0% 35%, #FFBD2E 30% 65%, #28CA42 60% 100%);
+    background-clip: text;
+
+    letter-spacing: 0.5rem;
+    font-family: inherit;
 }
 
 /* 代码块滚动条 */
-.article-content pre code::-webkit-scrollbar {
+.article-content .codehilitetable pre code::-webkit-scrollbar {
     height: 6px;
 }
 
-.article-content pre code::-webkit-scrollbar-track {
+.article-content .codehilitetable pre code::-webkit-scrollbar-track {
     background: var(--article-scrollbar-track);
-    border-radius: 0 0 var(--article-radius-xl) var(--article-radius-xl);
+    border-radius: 0 0 var(--article-radius-md) var(--article-radius-md);
 }
 
-.article-content pre code::-webkit-scrollbar-thumb {
+.article-content .codehilitetable pre code::-webkit-scrollbar-thumb {
     background: var(--article-scrollbar-thumb);
     border-radius: var(--article-radius-md);
 }
 
-.article-content pre code::-webkit-scrollbar-thumb:hover {
+.article-content .codehilitetable pre code::-webkit-scrollbar-thumb:hover {
     background: var(--article-scrollbar-thumb-hover);
 }
 

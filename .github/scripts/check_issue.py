@@ -606,6 +606,21 @@ def md_to_html(md: str) -> str:
             "html.parser",
         )
         pre.insert(0, copy_btn)
+    for div in soup.select("div.codehilite"):
+        code = div.find("code")
+        if code:
+            classes = code.get("class", [])
+            lang = None
+            for cls in classes:
+                if cls.startswith("language-"):
+                    lang = cls.replace("language-", "").capitalize()
+                    break
+            if lang:
+                lang_label = BeautifulSoup(
+                    f'<div class="code-lang-label">{lang}</div>',
+                    "html.parser",
+                )
+                div.insert(0, lang_label)
     return str(soup)
 
 
