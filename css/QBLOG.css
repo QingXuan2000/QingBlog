@@ -544,7 +544,7 @@ nav li {
     box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
     border: 1px solid var(--border-color);
     backdrop-filter: var(--backdrop-blur);
-    overflow: auto;
+    overflow-x: hidden;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -940,11 +940,11 @@ body.light-theme .loading-div {
 /* 标签云容器 */
 /* ------------------------------------------------------------- */
 
-#tags-container {
+#tags-wrapper {
     display: flex;
     justify-content: center;
-    padding: 2rem 1rem 4rem;
-    min-height: 50vh;
+    overflow: hidden;
+    min-height: 100vh;
 }
 
 /* ------------------------------------------------------------- */
@@ -1093,7 +1093,7 @@ body:has(.article-content) #pagination-controls-wrapper {
     display: none;
 }
 
-body:has(#tags-container) #pagination-controls-wrapper {
+body:has(#tags-wrapper) #pagination-controls-wrapper {
     display: none;
 }
 

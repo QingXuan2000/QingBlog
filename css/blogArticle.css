@@ -94,9 +94,11 @@
 /* ------------------------------------------------------------- */
 
 /* 卡片容器 */
-.card-box {
+.card-wrapper {
     display: flex;
     justify-content: center;
+
+    overflow-x: hidden;
 }
 
 .card {
