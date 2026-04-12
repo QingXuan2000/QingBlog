@@ -454,17 +454,19 @@
 }
 
 .article-content .code-lang-label::after {
-    content: "●●●";
+    content: "\f111\f111\f111";
 
     position: absolute;
     left: 0.8rem;
 
+    font-family: "Font Awesome 6 Free";
+
+    letter-spacing: 0.5rem;
+    font-size: 1rem;
+
     color: transparent;
     background: linear-gradient(90deg, #FF5F57 0% 35%, #FFBD2E 30% 65%, #28CA42 60% 100%);
     background-clip: text;
-
-    letter-spacing: 0.5rem;
-    font-family: inherit;
 }
 
 /* 代码块滚动条 */
