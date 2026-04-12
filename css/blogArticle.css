@@ -465,7 +465,7 @@
     font-size: 1rem;
 
     color: transparent;
-    background: linear-gradient(90deg, #FF5F57 0% 35%, #FFBD2E 30% 65%, #28CA42 60% 100%);
+    background: linear-gradient(90deg, #FF5F57 0% 33%, #FFBD2E 33% 66%, #28CA42 66% 100%);
     background-clip: text;
 }
 
