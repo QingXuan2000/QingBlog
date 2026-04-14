@@ -8,7 +8,7 @@ const blogConfig = {
     maxArticlePageNum: 1,
     maxTagPageNums: {
 
-}
+    }
   }
 };
 
@@ -712,39 +712,26 @@ function initPagination() {
 
 function initCardScrollAnimation() {
   const cards = document.querySelectorAll('.card');
-  if (cards.length === 0) return;
+  if (!cards.length) return;
 
-  const pageName = window.location.pathname.split("/").filter(Boolean)[0];
-  if (pageName === "article") {
-    cards.forEach(card => card.classList.add('card-visible'));
+  if (location.pathname.includes('/article')) {
+    cards.forEach(c => c.classList.add('card-visible'));
     return;
   }
 
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px 0px -50px 0px',
-    threshold: 0.1
-  };
-
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('card-visible');
-        }, index * 100);
-        observer.unobserve(entry.target);
-      }
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('card-visible');
+      observer.unobserve(entry.target);
     });
-  }, observerOptions);
+  });
 
   cards.forEach(card => observer.observe(card));
 }
 
 function initLazyLoadImages() {
-  const images = document.querySelectorAll('img');
-  images.forEach(img => {
-    img.setAttribute('loading', 'lazy');
-  });
+  document.querySelectorAll('img').forEach(img => img.loading = 'lazy');
 }
 
 // DOM加载完成后初始化所有功能
