@@ -41,6 +41,17 @@
 /* 动画定义 */
 /* ------------------------------------------------------------- */
 
+@keyframes cardSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes showOverlayAnimation {
     to {
         opacity: 1;
@@ -548,6 +559,12 @@ nav li {
     backdrop-filter: var(--backdrop-blur);
     overflow-x: hidden;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.card.card-visible {
+    animation: cardSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 .card-header {

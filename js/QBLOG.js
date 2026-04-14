@@ -2,12 +2,12 @@
 
 const blogConfig = {
   blogInfo: {
-    author: "您的GitHub用户名"
+    author: "您的 GitHub 用户名"
   },
   maxPageNum: {
     maxArticlePageNum: 1,
     maxTagPageNums: {
-    
+
     }
   }
 };
@@ -710,6 +710,37 @@ function initPagination() {
   }
 }
 
+function initCardScrollAnimation() {
+  const cards = document.querySelectorAll('.card');
+  if (cards.length === 0) return;
+
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -50px 0px',
+    threshold: 0.1
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('card-visible');
+        }, index * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  cards.forEach(card => observer.observe(card));
+}
+
+function initLazyLoadImages() {
+  const images = document.querySelectorAll('img');
+  images.forEach(img => {
+    img.setAttribute('loading', 'lazy');
+  });
+}
+
 // DOM加载完成后初始化所有功能
 window.addEventListener("DOMContentLoaded", () => {
   DynamicComponentBox();
@@ -724,6 +755,8 @@ window.addEventListener("DOMContentLoaded", () => {
   initContextMenu();
   initTagNavigation();
   initPagination();
+  initCardScrollAnimation();
+  initLazyLoadImages();
 });
 
 // 监听窗口大小变化
