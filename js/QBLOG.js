@@ -2,13 +2,13 @@
 
 const blogConfig = {
   blogInfo: {
-    author: "您的 GitHub 用户名"
+    author: "您的GitHub用户名"
   },
   maxPageNum: {
     maxArticlePageNum: 1,
     maxTagPageNums: {
 
-    }
+}
   }
 };
 
@@ -713,6 +713,12 @@ function initPagination() {
 function initCardScrollAnimation() {
   const cards = document.querySelectorAll('.card');
   if (cards.length === 0) return;
+
+  const pageName = window.location.pathname.split("/").filter(Boolean)[0];
+  if (pageName === "article") {
+    cards.forEach(card => card.classList.add('card-visible'));
+    return;
+  }
 
   const observerOptions = {
     root: null,
