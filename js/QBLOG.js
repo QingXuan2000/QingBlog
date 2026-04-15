@@ -10,7 +10,7 @@ const blogConfig = {
     maxArticlePageNum: 1,
     maxTagPageNums: {
 
-}
+    }
   }
 };
 
