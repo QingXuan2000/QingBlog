@@ -2,6 +2,8 @@
 
 const blogConfig = {
   blogInfo: {
+    yearOfWriting: "您创作开始的年份",
+    currentYear: new Date().getFullYear(),
     author: "您的GitHub用户名"
   },
   maxPageNum: {
@@ -203,7 +205,55 @@ const componentBoxHeader = `
 const componentBoxFooter = `
   <!-- -------------------- 页脚 -------------------- -->
   <footer>
-    <p>© 2025-2026 ${blogConfig.blogInfo.author}. All rights reserved.</p>
+    <div class="footer-content">
+      <div class="footer-section footer-brand">
+        <svg class="footer-logo" width="50" height="50" viewBox="0 0 620 620" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle class="qingblog-loading-icon-circle" cx="310" cy="310" r="250" />
+            <circle class="qingblog-loading-icon-circle" cx="310" cy="310" r="300" />
+            <path class="qingblog-loading-icon" d="M315 70L315 550" />
+            <line class="qingblog-loading-icon" x1="124" y1="213" x2="264" y2="213" />
+            <line class="qingblog-loading-icon" x1="104" y1="310" x2="284" y2="310" />
+            <line class="qingblog-loading-icon" x1="124" y1="407" x2="264" y2="407" />
+            <line class="qingblog-loading-icon" x1="365" y1="115" x2="365" y2="245" />
+            <line class="qingblog-loading-icon" x1="365" y1="286" x2="365" y2="386" />
+            <line class="qingblog-loading-icon" x1="365" y1="427" x2="365" y2="507" />
+            <line class="qingblog-loading-icon" x1="423" y1="490" x2="423" y2="380" />
+            <line class="qingblog-loading-icon" x1="474" y1="440" x2="474" y2="330" />
+            <line class="qingblog-loading-icon" x1="423" y1="345" x2="423" y2="255" />
+            <line class="qingblog-loading-icon" x1="423" y1="220" x2="423" y2="140" />
+            <line class="qingblog-loading-icon" x1="474" y1="285" x2="474" y2="205" />
+        </svg>
+        <h2>QingBlog</h2>
+        <p>保持好奇心，不断学习，持续进步</p>
+      </div>
+      
+      <div class="footer-section footer-links">
+        <h3>快速链接</h3>
+        <ul>
+          <li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+          <li><a href="/article/"><i class="fa fa-book"></i> 文章</a></li>
+          <li><a href="/tags/"><i class="fa fa-tags"></i> 标签</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section footer-social">
+        <h3>关注我</h3>
+        <ul class="social-links">
+          <li>
+            <a href="https://github.com/QingXuan2000" target="_blank" class="social-link">
+              <i class="fa fa-github"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="divider" style="width: 100%; height: 1px; margin: 1rem 0;"></div>
+      <p>© ${blogConfig.blogInfo.yearOfWriting}-${blogConfig.blogInfo.currentYear} ${blogConfig.blogInfo.author}. All rights reserved.</p>
+      <p class="footer-powered">Powered by Love and Coffee</p>
+    </div>
   </footer>
 `;
 
@@ -712,39 +762,26 @@ function initPagination() {
 
 function initCardScrollAnimation() {
   const cards = document.querySelectorAll('.card');
-  if (cards.length === 0) return;
+  if (!cards.length) return;
 
-  const pageName = window.location.pathname.split("/").filter(Boolean)[0];
-  if (pageName === "article") {
-    cards.forEach(card => card.classList.add('card-visible'));
+  if (location.pathname.includes('/article')) {
+    cards.forEach(c => c.classList.add('card-visible'));
     return;
   }
 
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px 0px -50px 0px',
-    threshold: 0.1
-  };
-
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('card-visible');
-        }, index * 100);
-        observer.unobserve(entry.target);
-      }
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('card-visible');
+      observer.unobserve(entry.target);
     });
-  }, observerOptions);
+  });
 
   cards.forEach(card => observer.observe(card));
 }
 
 function initLazyLoadImages() {
-  const images = document.querySelectorAll('img');
-  images.forEach(img => {
-    img.setAttribute('loading', 'lazy');
-  });
+  document.querySelectorAll('img').forEach(img => img.loading = 'lazy');
 }
 
 // DOM加载完成后初始化所有功能
