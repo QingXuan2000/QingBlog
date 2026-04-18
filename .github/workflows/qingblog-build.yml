@@ -19,10 +19,10 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐍 配置 Python 3.11 环境
+      - name: 🐍 配置 Python 3.12 环境
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: 📦安装 Python 依赖包
         run: pip install -r .github/scripts/requirements.txt
