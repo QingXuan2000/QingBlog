@@ -1,0 +1,30 @@
+{
+    "dark": {
+        "--primary-color": "#d9d9deb8",
+        "--text-color": "rgba(200, 200, 200, 1)",
+        "--text-shadow-color": "rgba(0, 0, 0, 0.5)",
+        "--text-secondary-color": "rgba(160, 160, 160, 1)",
+        "--bg-color": "linear-gradient(180deg, rgba(20, 20, 20, 1), rgba(15, 15, 15, 1), rgba(10, 10, 10, 1), rgba(5, 5, 5, 1))",
+        "--hero-bg-color": "rgba(10, 10, 10, 1)",
+        "--surface-color": "linear-gradient(rgba(40, 40, 40, 0.6), transparent)",
+        "--surface-border-color": "rgba(255, 255, 255, 0.1)",
+        "--border-color": "rgba(255, 255, 255, 0.1)",
+        "--box-shadow-color": "rgba(0, 0, 0, 0.5)",
+        "--divider-color": "rgba(255, 255, 255, 0.15)",
+        "--backdrop-blur": "blur(0.6em)"
+    },
+    "light": {
+        "--primary-color": "#2c2c2db8",
+        "--text-color": "rgba(44, 44, 44, 1)",
+        "--text-shadow-color": "rgba(144, 144, 144, 1)",
+        "--text-secondary-color": "rgba(85, 85, 85, 1)",
+        "--bg-color": "linear-gradient(180deg, rgba(233, 233, 237, 1), rgba(224, 225, 228, 1), rgba(220, 220, 220, 1), rgba(215, 213, 213, 1))",
+        "--hero-bg-color": "rgba(217, 218, 220, 1)",
+        "--surface-color": "linear-gradient(rgba(240, 240, 240, 0.4), transparent)",
+        "--surface-border-color": "rgba(255, 255, 255, 0.1)",
+        "--border-color": "rgba(255, 255, 255, 0.1)",
+        "--box-shadow-color": "rgba(0, 0, 0, 0.2)",
+        "--divider-color": "rgba(0, 0, 0, 0.3)",
+        "--backdrop-blur": "blur(0.6em)"
+    }
+}

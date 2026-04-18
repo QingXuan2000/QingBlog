@@ -13,9 +13,9 @@
                 "icon": "<i class=\"fa fa-github\" aria-hidden=\"true\"></i>",
                 "url": "https://github.com/QingXuan2000"
             },
-            "社交平台设置（格式如上）": {
-                "icon": "<i class=\"fa fa-github\" aria-hidden=\"true\"></i>",
-                "url": "https://github.com/QingXuan2000"
+            "社交平台设置（格式如上，此处填写名字）": {
+                "icon": "图标",
+                "url": "链接"
             }
         },
         "authorTags": {
@@ -28,5 +28,15 @@
     "buildConfig": {
         "utcOffset": 8,
         "articlesPerPage": 20
+    },
+    "robotsConfig": {
+        "siteUrl": "网站主域名",
+        "allowPaths": [
+            "/"
+        ],
+        "disallowPaths": [
+            "/blogData/"
+        ],
+        "sitemapUrl": "Sitemap完整URL"
     }
 }

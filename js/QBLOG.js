@@ -6,37 +6,6 @@
 
 class QingBlog {
   // ========== 静态常量配置 ==========
-  static themes = {
-    dark: {
-      "--primary-color": "#d9d9deb8",
-      "--text-color": "rgba(200, 200, 200, 1)",
-      "--text-shadow-color": "rgba(0, 0, 0, 0.5)",
-      "--text-secondary-color": "rgba(160, 160, 160, 1)",
-      "--bg-color": "linear-gradient(180deg, rgba(20, 20, 20, 1), rgba(15, 15, 15, 1), rgba(10, 10, 10, 1), rgba(5, 5, 5, 1))",
-      "--hero-bg-color": "rgba(10, 10, 10, 1)",
-      "--surface-color": "linear-gradient(rgba(40, 40, 40, 0.6), transparent)",
-      "--surface-border-color": "rgba(255, 255, 255, 0.1)",
-      "--border-color": "rgba(255, 255, 255, 0.1)",
-      "--box-shadow-color": "rgba(0, 0, 0, 0.5)",
-      "--divider-color": "rgba(255, 255, 255, 0.15)",
-      "--backdrop-blur": "blur(0.6em)",
-    },
-    light: {
-      "--primary-color": "#2c2c2db8",
-      "--text-color": "rgba(44, 44, 44, 1)",
-      "--text-shadow-color": "rgba(144, 144, 144, 1)",
-      "--text-secondary-color": "rgba(85, 85, 85, 1)",
-      "--bg-color": "linear-gradient(180deg, rgba(233, 233, 237, 1), rgba(224, 225, 228, 1), rgba(220, 220, 220, 1), rgba(215, 213, 213, 1))",
-      "--hero-bg-color": "rgba(217, 218, 220, 1)",
-      "--surface-color": "linear-gradient(rgba(240, 240, 240, 0.4), transparent)",
-      "--surface-border-color": "rgba(255, 255, 255, 0.1)",
-      "--border-color": "rgba(255, 255, 255, 0.1)",
-      "--box-shadow-color": "rgba(0, 0, 0, 0.2)",
-      "--divider-color": "rgba(0, 0, 0, 0.3)",
-      "--backdrop-blur": "blur(0.6em)",
-    },
-  };
-
   static blogLogoSvg = `<svg class="loading-logo" width="620" height="620" viewBox="0 0 620 620" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle class="qingblog-loading-icon-circle" cx="310" cy="310" r="250" />
     <circle class="qingblog-loading-icon-circle" cx="310" cy="310" r="300" />
@@ -66,6 +35,7 @@ class QingBlog {
     this.eventCleanPool = []; // 清理任务池
     this.blogConfig = null;   // 博客配置
     this.pagesConfig = null;  // 分页配置
+    this.themes = null;       // 主题配置
     this.root = document.documentElement; // HTML根元素
     this.body = document.body; // body元素
   }
@@ -113,6 +83,8 @@ class QingBlog {
   async loadConfigs() {
     this.blogConfig = await this.getConfig("/blogData/blogConfig.json");
     this.pagesConfig = await this.getConfig("/blogData/pagesConfig.json");
+    this.themes = await this.getConfig("/blogData/themes.json");
+
     // 防抖导航栏高度更新
     this.debounceSetNavHeight = this.debounce(() => this.setNavHeightVariable());
   }
@@ -388,7 +360,7 @@ class QingBlog {
     const systemThemeMedia = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = (theme) => {
-      Object.entries(QingBlog.themes[theme]).forEach(([key, value]) => {
+      Object.entries(this.themes[theme]).forEach(([key, value]) => {
         this.root.style.setProperty(key, value);
       });
     };
@@ -802,7 +774,7 @@ class QingBlog {
         trigger: 'item',
         backgroundColor: 'rgba(20, 20, 20, 0.7)',
         textStyle: { color: '#fff' },
-        borderRadius: 6,
+        borderRadius: 10,
         fontFamily: '江城圆体, 阿里妈妈方圆体, sans-serif',
         formatter: '{b}: {c} 篇文章'
       },
@@ -814,11 +786,11 @@ class QingBlog {
       series: [
         {
           type: 'pie',
-          radius: ['10%', '70%'],
-          center: ['50%', '40%'],
-          roseType: 'area',
+          radius: ['20%', '60%'],
+          center: ['50%', '45%'],
+          padAngle: 4,
           itemStyle: {
-            borderRadius: 10,
+            borderRadius: 16,
             borderColor: 'rgba(255,255,255,0.2)',
             borderWidth: 2,
             opacity: 0.8
@@ -826,18 +798,11 @@ class QingBlog {
           label: {
             show: true,
             fontSize: 14,
-            formatter: '{b}'
+            formatter: '{b} {d} %'
           },
           emphasis: {
-            itemStyle: {
-              shadowBlur: 20
-            },
-            label: {
-              show: true,
-              fontSize: 16,
-              fontWeight: 'bold',
-              fontFamily: '江城圆体, 阿里妈妈方圆体, sans-serif'
-            }
+            scale: true,
+            scaleSize: 15
           },
           data: roseData
         }
@@ -891,7 +856,7 @@ class QingBlog {
           type: 'wordCloud',
           shape: 'rect',
           gridSize: 10,
-          sizeRange: [16, 64],
+          sizeRange: [16, 48],
           rotationRange: [0, 0],
           textStyle: {
             color() {
@@ -902,7 +867,7 @@ class QingBlog {
           },
           emphasis: {
             textStyle: {
-              shadowBlur: 6,
+              shadowBlur: 10,
               shadowColor: '#fff'
             }
           },

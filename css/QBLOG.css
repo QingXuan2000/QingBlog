@@ -760,49 +760,51 @@ nav li {
     flex: 1;
     container-type: inline-size;
     overflow: hidden;
+
+    display: grid;
+    place-content: center;
 }
 
 .hero-div-content h1 {
-    position: relative;
+    display: inline-block;
+
     font-family: "This-July";
     font-size: 12cqw;
     color: var(--text-color);
     text-shadow: 0.1em 0.12em 0 var(--text-shadow-color);
     letter-spacing: 0.15em;
 
-    top: 50%;
-    left: 50%;
-    transform: translate(-25%, -50%);
+    position: relative;
 }
 
 .hero-div-content h1::after {
     content: "";
-    height: 110%;
-    width: 25%;
+    height: 120%;
+    width: 50%;
     border-radius: 0 0 0.3em 0;
 
-    border-bottom: 14px solid var(--text-color);
-    border-right: 14px solid var(--text-color);
+    border-bottom: 16px solid var(--text-color);
+    border-right: 16px solid var(--text-color);
 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-80%, -20%);
+    transform: translate(20%, -30%);
 }
 
 .hero-div-content h1::before {
     content: "";
     height: 120%;
-    width: 30%;
+    width: 50%;
     border-radius: 0.3em 0 0 0;
 
-    border-top: 14px solid var(--text-color);
-    border-left: 14px solid var(--text-color);
+    border-top: 16px solid var(--text-color);
+    border-left: 16px solid var(--text-color);
 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-180%, -65%);
+    transform: translate(-125%, -70%);
 }
 
 .hero-div-user-down-text {
@@ -1318,17 +1320,18 @@ body:has(#tags-wrapper) #pagination-controls-wrapper {
     width: 100%;
     max-width: 794px;
     margin: 2rem auto;
-    padding: 0 1rem;
-    display: block;
-    box-sizing: border-box;
+}
+
+.tag-in-article-wrapper,
+.tag-in-article {
+    padding: 2rem;
 }
 
 .tag-in-article,
 .about-me-data {
     width: 100%;
-    height: 85vh;
+    height: 60vh;
 
-    padding: 2rem;
     border-radius: 16px;
     background: var(--surface-color);
     backdrop-filter: var(--backdrop-blur);
@@ -1341,7 +1344,7 @@ body:has(#tags-wrapper) #pagination-controls-wrapper {
 .about-me-data {
     height: 30vh;
     width: 100%;
-    
+
     background: none;
     box-shadow: none;
     border: none;
@@ -1605,6 +1608,10 @@ body:has(#about-me-data) {
 
     .social-links {
         justify-content: center;
+    }
+
+    .about-me-data {
+        height: 80vh;
     }
 }
 

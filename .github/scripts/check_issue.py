@@ -33,6 +33,12 @@ class Config:
         author_cfg = blog_config.get("author", {})
         self.TARGET_AUTHOR = author_cfg.get("targetAuthor", "")
 
+        robots_cfg = blog_config.get("robotsConfig", {})
+        self.SITE_URL = robots_cfg.get("siteUrl", "https://qingxuan2000.github.io")
+        self.ALLOW_PATHS = robots_cfg.get("allowPaths", ["/"])
+        self.DISALLOW_PATHS = robots_cfg.get("disallowPaths", ["/.github/", "/.git/", "/blogData/"])
+        self.SITEMAP_URL = robots_cfg.get("sitemapUrl", "https://qingxuan2000.github.io/sitemap.xml")
+
         self.ISSUE_TITLE = os.getenv("ISSUE_TITLE", "")
         self.ISSUE_BODY = os.getenv("ISSUE_BODY") or "(无内容)"
         self.ISSUE_DATE = os.getenv("ISSUE_DATE", "")
@@ -689,6 +695,167 @@ class ArticleManager:
         print(f"? 文章已{'更新' if is_update else '生成'}：{self._path(issue_id)}")
 
 
+# 网站地图和Robots生成器
+
+
+class SitemapGenerator:
+    def __init__(self, workspace: str, cfg: Config):
+        self.workspace = workspace
+        self.cfg = cfg
+
+    def scan_html_files(self, directory: str, exclude_dirs: List[str] = None) -> List[str]:
+        """扫描目录下的HTML文件，返回相对路径列表"""
+        if exclude_dirs is None:
+            exclude_dirs = []
+        
+        html_files = []
+        for root, dirs, files in os.walk(directory):
+            # 排除指定目录
+            dirs[:] = [d for d in dirs if d not in exclude_dirs]
+            
+            for file in files:
+                if file.endswith('.html'):
+                    full_path = os.path.join(root, file)
+                    rel_path = os.path.relpath(full_path, self.workspace)
+                    # 转换为URL路径
+                    url_path = '/' + rel_path.replace('\\', '/')
+                    html_files.append(url_path)
+        
+        return sorted(html_files)
+
+    def get_file_mod_time(self, file_path: str) -> str:
+        """获取文件修改时间，返回ISO格式"""
+        try:
+            mtime = os.path.getmtime(file_path)
+            return datetime.fromtimestamp(mtime).strftime('%Y-%m-%dT%H:%M:%S+08:00')
+        except:
+            return datetime.now().strftime('%Y-%m-%dT%H:%M:%S+08:00')
+
+    def generate(self) -> None:
+        """生成sitemap.xml"""
+        print("\n?? 开始生成 sitemap.xml...")
+        
+        urls = []
+        
+        # 添加静态页面
+        static_pages = [
+            '/',
+            '/article/',
+            '/tags/',
+            '/data/',
+            '/about/'
+        ]
+        for page in static_pages:
+            full_path = os.path.join(self.workspace, page.lstrip('/'), 'index.html') if page != '/' else os.path.join(self.workspace, 'index.html')
+            if os.path.exists(full_path):
+                urls.append({
+                    'loc': f"{self.cfg.SITE_URL}{page}",
+                    'lastmod': self.get_file_mod_time(full_path),
+                    'changefreq': 'daily',
+                    'priority': '1.0' if page == '/' else '0.8'
+                })
+
+        # 添加文章分页页面
+        pages_config = self.cfg.pages_config
+        max_article_page = pages_config.get('maxPageNum', {}).get('maxArticlePageNum', 1)
+        for i in range(2, max_article_page + 1):
+            page_path = f'/pages/{i}.html'
+            full_path = os.path.join(self.workspace, 'pages', f'{i}.html')
+            if os.path.exists(full_path):
+                urls.append({
+                    'loc': f"{self.cfg.SITE_URL}{page_path}",
+                    'lastmod': self.get_file_mod_time(full_path),
+                    'changefreq': 'weekly',
+                    'priority': '0.7'
+                })
+
+        # 添加标签页面
+        max_tag_page_nums = pages_config.get('maxPageNum', {}).get('maxTagPageNums', {})
+        for tag, page_count in max_tag_page_nums.items():
+            for i in range(1, int(page_count) + 1):
+                if i == 1:
+                    tag_path = f'/tags/{tag}/'
+                    full_path = os.path.join(self.workspace, 'tags', tag, 'index.html')
+                else:
+                    tag_path = f'/tags/{tag}/{i}.html'
+                    full_path = os.path.join(self.workspace, 'tags', tag, f'{i}.html')
+                
+                if os.path.exists(full_path):
+                    urls.append({
+                        'loc': f"{self.cfg.SITE_URL}{tag_path}",
+                        'lastmod': self.get_file_mod_time(full_path),
+                        'changefreq': 'weekly',
+                        'priority': '0.6'
+                    })
+
+        # 添加文章页面
+        article_dir = os.path.join(self.workspace, 'article')
+        if os.path.exists(article_dir):
+            for file in os.listdir(article_dir):
+                if file.endswith('.html'):
+                    full_path = os.path.join(article_dir, file)
+                    article_id = file.replace('.html', '')
+                    urls.append({
+                        'loc': f"{self.cfg.SITE_URL}/article/{article_id}.html",
+                        'lastmod': self.get_file_mod_time(full_path),
+                        'changefreq': 'monthly',
+                        'priority': '0.9'
+                    })
+
+        # 生成XML
+        xml_content = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        xml_content += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        
+        for url in urls:
+            xml_content += '  <url>\n'
+            xml_content += f"    <loc>{url['loc']}</loc>\n"
+            xml_content += f"    <lastmod>{url['lastmod']}</lastmod>\n"
+            xml_content += f"    <changefreq>{url['changefreq']}</changefreq>\n"
+            xml_content += f"    <priority>{url['priority']}</priority>\n"
+            xml_content += '  </url>\n'
+        
+        xml_content += '</urlset>\n'
+
+        # 保存文件
+        sitemap_path = os.path.join(self.workspace, 'sitemap.xml')
+        with open(sitemap_path, 'w', encoding='utf-8') as f:
+            f.write(xml_content)
+        
+        print(f"? sitemap.xml 已生成，共 {len(urls)} 个URL")
+
+
+class RobotsGenerator:
+    def __init__(self, workspace: str, cfg: Config):
+        self.workspace = workspace
+        self.cfg = cfg
+
+    def generate(self) -> None:
+        """生成robots.txt"""
+        print("\n🤖 开始生成 robots.txt...")
+        
+        robots_content = f"# robots.txt for {self.cfg.SITE_URL}\n"
+        robots_content += "# Generated automatically by check_issue.py\n\n"
+        robots_content += "User-agent: *\n"
+        
+        for path in self.cfg.ALLOW_PATHS:
+            robots_content += f"Allow: {path}\n"
+        
+        robots_content += "\n"
+        
+        for path in self.cfg.DISALLOW_PATHS:
+            robots_content += f"Disallow: {path}\n"
+        
+        robots_content += f"\n# Sitemap\n"
+        robots_content += f"Sitemap: {self.cfg.SITEMAP_URL}\n"
+
+        # 保存文件
+        robots_path = os.path.join(self.workspace, 'robots.txt')
+        with open(robots_path, 'w', encoding='utf-8') as f:
+            f.write(robots_content)
+        
+        print(f"✅ robots.txt 已生成")
+
+
 # 主流程
 
 
@@ -699,6 +866,8 @@ class BlogGenerator:
         self.tag = TagManager(self.cfg.WORKSPACE)
         self.page = PageManager(self.cfg.WORKSPACE)
         self.pages_config_mgr = PagesConfigManager(self.cfg)
+        self.sitemap_gen = SitemapGenerator(self.cfg.WORKSPACE, self.cfg)
+        self.robots_gen = RobotsGenerator(self.cfg.WORKSPACE, self.cfg)
 
     def _log(self) -> None:
         date = format_date(self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET)
@@ -928,6 +1097,10 @@ class BlogGenerator:
             self.handle_delete()
         else:
             self.handle_create_update()
+
+        # 生成 sitemap.xml 和 robots.txt
+        self.sitemap_gen.generate()
+        self.robots_gen.generate()
 
 
 if __name__ == "__main__":
