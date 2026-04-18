@@ -225,7 +225,7 @@ class QingBlog {
           <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
           <div id="sidebar-content" class="sidebar-content">
               <div class="user-info">
-                  <img src="/img/Avatar.png" alt="Avatar" />
+                  <img id="sidebar-avatar" src="/img/Avatar.png" alt="Avatar" />
                   <h1>${this.blogConfig.author.targetAuthor}</h1>
                   <p class="sidebar-motto">${this.blogConfig.author.introShort}</p>
               </div>

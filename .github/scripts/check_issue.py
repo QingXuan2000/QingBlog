@@ -1,7 +1,5 @@
 """
 GitHub Issues Blog Build
-监听 GitHub Issues 事件，自动生成静态博客页面
-修改说明：移除了 /tags/index.html 标签云页面的所有操作，仅保留JSON配置更新
 """
 
 import os
@@ -34,10 +32,10 @@ class Config:
         self.TARGET_AUTHOR = author_cfg.get("targetAuthor", "")
 
         robots_cfg = blog_config.get("robotsConfig", {})
-        self.SITE_URL = robots_cfg.get("siteUrl", "https://qingxuan2000.github.io")
+        self.SITE_URL = robots_cfg.get("siteUrl")
         self.ALLOW_PATHS = robots_cfg.get("allowPaths", ["/"])
         self.DISALLOW_PATHS = robots_cfg.get("disallowPaths", ["/.github/", "/.git/", "/blogData/"])
-        self.SITEMAP_URL = robots_cfg.get("sitemapUrl", "https://qingxuan2000.github.io/sitemap.xml")
+        self.SITEMAP_URL = robots_cfg.get("sitemapUrl")
 
         self.ISSUE_TITLE = os.getenv("ISSUE_TITLE", "")
         self.ISSUE_BODY = os.getenv("ISSUE_BODY") or "(无内容)"
@@ -112,10 +110,10 @@ class HTMLProcessor:
     def remove_card(self, issue_id: str) -> bool:
         pos = self.find_card(issue_id)
         if not pos:
-            print(f"?? 卡片不存在：{issue_id}")
+            print(f"❌ 卡片不存在：{issue_id}")
             return False
         self.html = self.html[: pos[0]] + self.html[pos[1] :]
-        print(f"? 卡片已删除：{issue_id}")
+        print(f"✅ 卡片已删除：{issue_id}")
         return True
 
     @staticmethod
@@ -148,7 +146,7 @@ class HTMLProcessor:
         if pos:
             # 更新现有卡片
             self.html = self.html[: pos[0]] + card + self.html[pos[1] :]
-            print(f"? 卡片已更新：{title}")
+            print(f"✅ 卡片已更新：{title}")
             return False
         else:
             # 添加新卡片
@@ -158,13 +156,13 @@ class HTMLProcessor:
             # 检查是否需要分页
             if cfg and self.count_cards() >= cfg.BLOG_ARTICLES_PER_PAGE:
                 print(
-                    f"?? 当前页面卡片数量已达限制({cfg.BLOG_ARTICLES_PER_PAGE})，需要创建新页面"
+                    f"❌ 当前页面卡片数量已达限制({cfg.BLOG_ARTICLES_PER_PAGE})，需要创建新页面"
                 )
                 return True
 
             # 添加卡片到当前页面
             self.html = self.html[:ul_end] + card + self.html[ul_end:]
-            print(f"? 卡片已添加：{title}")
+            print(f"✅ 卡片已添加：{title}")
             return False
 
 
@@ -181,7 +179,7 @@ class PagesConfigManager:
             config["maxPageNum"] = {}
         config["maxPageNum"]["maxArticlePageNum"] = total_pages
         self.cfg.save_pages_config(config)
-        print(f"? pagesConfig.json 中 maxArticlePageNum 已更新为：{total_pages}")
+        print(f"✅ pagesConfig.json 中 maxArticlePageNum 已更新为：{total_pages}")
 
     def update_tag_page_nums(self, tag_page_nums: dict) -> None:
         config = self.cfg.pages_config
@@ -191,7 +189,7 @@ class PagesConfigManager:
             config["maxPageNum"]["maxTagPageNums"] = {}
         config["maxPageNum"]["maxTagPageNums"].update(tag_page_nums)
         self.cfg.save_pages_config(config)
-        print(f"? pagesConfig.json 中 maxTagPageNums 已更新：{tag_page_nums}")
+        print(f"✅ pagesConfig.json 中 maxTagPageNums 已更新：{tag_page_nums}")
 
     def update_tags_article_total(self, tag: str, delta: int) -> None:
         config = self.cfg.pages_config
@@ -205,13 +203,13 @@ class PagesConfigManager:
             if tag in config["tagsArtiAcleTotal"]:
                 del config["tagsArtiAcleTotal"][tag]
         self.cfg.save_pages_config(config)
-        print(f"? pagesConfig.json 中 {tag} 标签文章数已更新：{current} → {new_total}")
+        print(f"✅ pagesConfig.json 中 {tag} 标签文章数已更新：{current} → {new_total}")
 
     def sync_tag_totals(self, tag_totals: dict) -> None:
         config = self.cfg.pages_config
         config["tagsArtiAcleTotal"] = tag_totals
         self.cfg.save_pages_config(config)
-        print(f"? pagesConfig.json 中 tagsArtiAcleTotal 已同步：{tag_totals}")
+        print(f"✅ pagesConfig.json 中 tagsArtiAcleTotal 已同步：{tag_totals}")
 
 
 # 分页管理
@@ -239,8 +237,7 @@ class PageManager:
             f.write(
                 f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width, initial-scale=1.0"/><meta name="color-scheme"content="light dark"><title></title><link rel="shortcut icon"href="/favicon.ico"type="image/x-icon"/></head><body><div id="card-list-wrapper"><ul id="card-list"></ul></div><link rel="stylesheet"href="/css/QBLOG.css"/><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"/><style>#card-list-wrapper{{border-top:none}}</style></body></html>"""
             )
-
-        print(f"? 页面已创建：{path}")
+        print(f"✅ 页面已创建：{path}")
         return path
 
     def get_next_page_num(self) -> int:
@@ -316,14 +313,12 @@ class PageManager:
             with open(js_path, "r", encoding="utf-8") as f:
                 content = f.read()
 
-            # 更新blogConfig对象中的文章分页变量
             content = re.sub(
                 r"maxArticlePageNum: \d+,",
                 f"maxArticlePageNum: {total_pages},",
                 content,
             )
 
-            # 更新blogConfig对象中的标签页分页变量
             if tag_page_nums:
                 pattern = r"maxTagPageNums: \{([^\}]*)\}"
                 match = re.search(pattern, content)
@@ -338,7 +333,6 @@ class PageManager:
                     )
                     content = re.sub(pattern, replacement, content)
 
-            # 同时更新别名变量，保持兼容性
             content = re.sub(
                 r"const maxArticlePageNum = \d+;",
                 f"const maxArticlePageNum = {total_pages};",
@@ -361,7 +355,6 @@ class PageManager:
                     )
                     content = re.sub(pattern, replacement, content)
                 else:
-                    # 如果不存在maxTagPageNums变量，创建它
                     pattern = r"const maxArticlePageNum = \d+;"
                     tag_entries = [
                         f"'{tag}': {num}"
@@ -377,12 +370,10 @@ class PageManager:
 
             with open(js_path, "w", encoding="utf-8") as f:
                 f.write(content)
-            print(f"? QBLOG.js 中 maxArticlePageNum 已更新为：{total_pages}")
+            print(f"✅ QBLOG.js 中 maxArticlePageNum 已更新为：{total_pages}")
             if tag_page_nums:
-                print(f"? QBLOG.js 中 maxTagPageNums 已更新")
+                print(f"✅ QBLOG.js 中 maxTagPageNums 已更新")
 
-
-# 标签管理（移除了标签云相关操作，仅保留标签分页页面和JSON配置同步）
 
 
 class TagManager:
@@ -404,14 +395,14 @@ class TagManager:
         tag_dir = self._get_tag_dir(name)
         path = self._get_tag_page_path(name, page_num)
         if os.path.exists(path):
-            print(f"?? 标签页面已存在：{name} 第{page_num}页")
+            print(f"❌ 标签页面已存在：{name} 第{page_num}页")
             return
         os.makedirs(tag_dir, exist_ok=True)
         with open(path, "w", encoding="utf-8") as f:
             f.write(
                 f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport"content="width=device-width, initial-scale=1.0"><title></title></head><body><div id="title"><h1>{name}</h1></div><div id="card-list-wrapper"><ul id="card-list"></ul></div><link rel="stylesheet"href="/css/QBLOG.css"><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"><style>#card-list-wrapper{{border-top:none}}</style></body></html>"""
             )
-        print(f"? 标签页面已创建：{name} 第{page_num}页")
+        print(f"✅ 标签页面已创建：{name} 第{page_num}页")
 
     def get_tag_page_count(self, tag_name: str) -> int:
         """获取标签页的总页数"""
@@ -447,12 +438,11 @@ class TagManager:
                             title, date, content, issue_id, all_labels, None
                         )
                         p.save()
-                        print(f"? 卡片已更新：{issue_id}")
+                        print(f"✅ 卡片已更新：{issue_id}")
                         found = True
                 if found:
                     continue
 
-                # 查找最后一个未满的页面
                 page_num = 1
                 while True:
                     path = self._get_tag_page_path(label, page_num)
@@ -466,13 +456,12 @@ class TagManager:
                             title, date, content, issue_id, all_labels, None
                         )
                         p.save()
-                        print(f"? 卡片已添加到标签页：{label} 第{page_num}页")
+                        print(f"✅ 卡片已添加到标签页：{label} 第{page_num}页")
                         break
                     else:
                         page_num += 1
 
             elif op == "remove":
-                # 从所有标签页删除卡片
                 page_num = 1
                 while os.path.exists(self._get_tag_page_path(label, page_num)):
                     path = self._get_tag_page_path(label, page_num)
@@ -480,9 +469,8 @@ class TagManager:
                     p.remove_card(issue_id)
                     p.save()
                     page_num += 1
-                print(f"? 卡片已从标签页删除：{label}")
+                print(f"✅ 卡片已从标签页删除：{label}")
 
-            # 更新标签页的总页数
             tag_page_nums[label] = self.get_tag_page_count(label)
 
         return tag_page_nums
@@ -500,7 +488,7 @@ def escape_special_chars(md: str) -> str:
     result = []
 
     for line in lines:
-        # 匹配列表项：以 - 或 * 或 + 开头
+
         stripped = line.lstrip()
         indent = line[: len(line) - len(stripped)]
 
@@ -509,29 +497,21 @@ def escape_special_chars(md: str) -> str:
             or stripped.startswith("* ")
             or stripped.startswith("+ ")
         ):
-            # 提取列表标记后的内容
             marker = stripped[:2]
             content = stripped[2:]
 
-            # 转义内容中的特殊字符
-            # 转义 [ ] 任务列表语法（如果不在开头）
             if (
                 content.startswith("[ ] ")
                 or content.startswith("[x] ")
                 or content.startswith("[X] ")
             ):
-                # 保留任务列表语法，但转义后面的内容
                 task_marker = content[:4]
                 rest = content[4:]
-                # 转义 rest 中的特殊字符
                 rest = rest.replace("[", "\\[").replace("]", "\\]")
                 content = task_marker + rest
             else:
-                # 转义所有 [ 和 ]
                 content = content.replace("[", "\\[").replace("]", "\\]")
 
-            # 转义其他可能被误解析的字符
-            # 转义行首的 > 避免被解析为引用
             if content.startswith(">"):
                 content = "\\" + content
 
@@ -543,7 +523,6 @@ def escape_special_chars(md: str) -> str:
 
 
 def md_to_html(md: str) -> str:
-    # 先进行字符转义
     md = escape_special_chars(md)
     extensions = [
         "extra",
@@ -653,10 +632,10 @@ class ArticleManager:
     def delete(self, issue_id: str) -> bool:
         path = self._path(issue_id)
         if not os.path.exists(path):
-            print(f"?? 文章文件不存在：{path}")
+            print(f"❌ 文章文件不存在：{path}")
             return False
         os.remove(path)
-        print(f"? 文章已删除：{path}")
+        print(f"✅ 文章已删除：{path}")
         return True
 
     def extract_labels(self, issue_id: str) -> List[str]:
@@ -692,7 +671,7 @@ class ArticleManager:
                 f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><meta name="viewport"content="width=device-width, initial-scale=1.0"/><title></title></head><body><div class="card-wrapper"><div class="card"><div class="card-header"><h1>{title}</h1><p>作者：{author}</p><p>发布日期：{date}</p></div><div class="divider"style="height:1px;width:100%;margin:1rem 0"></div><div class="card-content article-content">{md_to_html(content)}</div><div class="article-footer"><div class="article-tag"><span>文章标签：</span>{tags}</div></div></div></div><link rel="stylesheet"href="/css/blogArticle.css"><link rel="stylesheet"href="/css/QBLOG.css"/><script src="/js/QBLOG.js"></script><link rel="stylesheet"href="/css/font-awesome.min.css"/><script id="MathJax-script"async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><script>window.MathJax={{tex:{{inlineMath:[['$','$'],['\\(','\\)']],displayMath:[['$$','$$'],['\\[','\\]']]}},svg:{{fontCache:'global'}}}};</script></body></html>"""
             )
 
-        print(f"? 文章已{'更新' if is_update else '生成'}：{self._path(issue_id)}")
+        print(f"✅ 文章已{'更新' if is_update else '生成'}：{self._path(issue_id)}")
 
 
 # 网站地图和Robots生成器
@@ -733,7 +712,7 @@ class SitemapGenerator:
 
     def generate(self) -> None:
         """生成sitemap.xml"""
-        print("\n?? 开始生成 sitemap.xml...")
+        print("\n❌ 开始生成 sitemap.xml...")
         
         urls = []
         
@@ -821,7 +800,7 @@ class SitemapGenerator:
         with open(sitemap_path, 'w', encoding='utf-8') as f:
             f.write(xml_content)
         
-        print(f"? sitemap.xml 已生成，共 {len(urls)} 个URL")
+        print(f"✅ sitemap.xml 已生成，共 {len(urls)} 个URL")
 
 
 class RobotsGenerator:
@@ -871,10 +850,10 @@ class BlogGenerator:
 
     def _log(self) -> None:
         date = format_date(self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET)
-        print(f"\n?? 标题：{self.cfg.ISSUE_TITLE}\n?? 内容：\n{self.cfg.ISSUE_BODY}")
-        print(f"?? 发布日期：{date}\n?? 发布者：{self.cfg.ISSUE_AUTHOR}")
+        print(f"\n❌ 标题：{self.cfg.ISSUE_TITLE}\n❌ 内容：\n{self.cfg.ISSUE_BODY}")
+        print(f"❌ 发布日期：{date}\n❌ 发布者：{self.cfg.ISSUE_AUTHOR}")
         print(
-            f"??? 标签：{', '.join(self.cfg.ISSUE_LABELS) if self.cfg.ISSUE_LABELS else '无'}"
+            f"⚠️ 标签：{', '.join(self.cfg.ISSUE_LABELS) if self.cfg.ISSUE_LABELS else '无'}"
         )
         print("=" * 50)
 
@@ -930,14 +909,14 @@ class BlogGenerator:
                 # 更新maxPageNum值
                 self.pages_config_mgr.update_max_article_page_num(self.page.get_total_pages())
 
-                print(f"? 卡片已添加到新页面：{new_page_path}")
+                print(f"✅ 卡片已添加到新页面：{new_page_path}")
             else:
 
                 page_path = self.page.get_page_path(last_non_full_page)
                 p_target = HTMLProcessor(page_path)
                 p_target.add_or_update(title, date, content, issue_id, labels, self.cfg)
                 p_target.save()
-                print(f"? 卡片已添加到页面 {last_non_full_page}：{page_path}")
+                print(f"✅ 卡片已添加到页面 {last_non_full_page}：{page_path}")
 
         # 更新文章列表页
         idx = self.cfg.WORKSPACE + "article/index.html"
@@ -946,9 +925,9 @@ class BlogGenerator:
         p.save()
 
     def handle_delete(self) -> None:
-        print(f"\n??? 删除文章：ID {self.cfg.ISSUE_ID}")
+        print(f"\n⚠️ 删除文章：ID {self.cfg.ISSUE_ID}")
         old = self.article.extract_labels(self.cfg.ISSUE_ID)
-        print(f"?? 旧标签：{', '.join(old) if old else '无'}")
+        print(f"❌ 旧标签：{', '.join(old) if old else '无'}")
 
         self.article.delete(self.cfg.ISSUE_ID)
 
@@ -984,12 +963,11 @@ class BlogGenerator:
                 "remove",
                 self.cfg.BLOG_ARTICLES_PER_PAGE,
             )
-            # 仅更新JSON，不再操作标签云页面
             for tag in old:
                 self.pages_config_mgr.update_tags_article_total(tag, -1)
             self.pages_config_mgr.update_max_article_page_num(self.page.get_total_pages())
             self.pages_config_mgr.update_tag_page_nums(tag_page_nums)
-        print("=" * 50 + "\n? 删除操作完成")
+        print("=" * 50 + "\n✅ 删除操作完成")
 
     def handle_create_update(self) -> None:
         date = format_date(self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET)
@@ -998,7 +976,7 @@ class BlogGenerator:
         is_new = not self.article.exists(self.cfg.ISSUE_ID)
         old = [] if is_new else self.article.extract_labels(self.cfg.ISSUE_ID)
         if not is_new:
-            print(f"?? 旧标签：{', '.join(old) if old else '无'}")
+            print(f"❌ 旧标签：{', '.join(old) if old else '无'}")
 
         self.article.generate(
             self.cfg.ISSUE_ID,
@@ -1087,11 +1065,11 @@ class BlogGenerator:
     def run(self) -> None:
         if self.cfg.ISSUE_AUTHOR != self.cfg.TARGET_AUTHOR:
             print(
-                f"? 跳过：作者不匹配 ({self.cfg.ISSUE_AUTHOR} != {self.cfg.TARGET_AUTHOR})"
+                f"✅ 跳过：作者不匹配 ({self.cfg.ISSUE_AUTHOR} != {self.cfg.TARGET_AUTHOR})"
             )
             return
 
-        print(f"\n{'='*50}\n? Issue操作：{self.cfg.ISSUE_ACTION}\n{'='*50}")
+        print(f"\n{'='*50}\n✅ Issue操作：{self.cfg.ISSUE_ACTION}\n{'='*50}")
 
         if self.cfg.ISSUE_ACTION == "deleted":
             self.handle_delete()

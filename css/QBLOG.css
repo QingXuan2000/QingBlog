@@ -468,7 +468,7 @@ p,
     overflow-y: auto;
 }
 
-#sidebar img {
+#sidebar #sidebar-avatar {
     width: 80px;
     height: 80px;
     background: #FFF;
