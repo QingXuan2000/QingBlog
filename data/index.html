@@ -11,24 +11,17 @@
 </head>
 
 <body>
-    <div id="hero-div">
-        <div class="hero-div-content">
-            <h1 id="hero-center-text"></h1>
-        </div>
-
-        <div class="hero-div-user-down-text">
-            <p>向下滑动</p>
-            <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-        </div>
+    <div id="title">
+        <h1>文章数据</h1>
     </div>
 
-    <div id="card-list-wrapper">
-        <ul id="card-list">
-        
-        </ul>
+    <div class="tag-in-article-wrapper">
+        <div class="tag-in-article"></div>
     </div>
 
     <!-- ------------------------------------------------------------ -->
+
+    <script src="/js/echarts.min.js"></script>
 
     <link rel="stylesheet" href="/css/QBLOG.css" />
     <script src="/js/QBLOG.js"></script>
@@ -38,8 +31,8 @@
     <!-- ------------------------------------------------------------ -->
 
     <style>
-        header {
-            background: var(--hero-bg-color);
+        #card-list-wrapper {
+            border-top: none;
         }
     </style>
 
