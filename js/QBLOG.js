@@ -203,7 +203,7 @@ class QingBlog {
       <header>
           <nav id="navbar" class="glass">
               ${this.resizeLogo(35, 35)}
-              <h1>${this.blogConfig.blogInfo.blogName}</h1>
+              <div id="navbar-title">${this.blogConfig.blogInfo.blogName}</div>
               <div class="divider" style="width: 2px; margin: 0 0.5rem 0 1rem; border-radius: 100em;"></div>
               <ul>
                   <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
@@ -219,14 +219,14 @@ class QingBlog {
       <div id="sidebar">
           <div id="sidebar-header" class="sidebar-header">
               <div class="sidebar-logo">${this.resizeLogo(35, 35)}</div>
-              <h1 class="sidebar-title">${this.blogConfig.blogInfo.blogName}</h1>
+              <div class="sidebar-title">${this.blogConfig.blogInfo.blogName}</div>
               <div id="sidebar-close" class="nav-button btn-active"><i class="fa fa-remove" aria-hidden="true"></i></div>
           </div>
           <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
           <div id="sidebar-content" class="sidebar-content">
               <div class="user-info">
                   <img id="sidebar-avatar" src="/img/Avatar.png" alt="Avatar" />
-                  <h1>${this.blogConfig.author.targetAuthor}</h1>
+                  <div id="user-name">${this.blogConfig.author.targetAuthor}</h1>
                   <p class="sidebar-motto">${this.blogConfig.author.introShort}</p>
               </div>
               <nav>
@@ -906,7 +906,7 @@ class QingBlog {
         card.querySelector(".card-footer").insertAdjacentHTML("afterbegin", `<a href="${url}" class="tag" target="_blank">${icon}&nbsp;${name}</a>`);
       });
 
-      card.querySelector(".card-footer").insertAdjacentHTML("beforeend", `<span>写作年限：${blogInfo.yearOfWriting} – ${blogInfo.currentYear}</span>`);
+      card.querySelector(".card-footer").insertAdjacentHTML("beforeend", `<p>写作年限：${blogInfo.yearOfWriting} – ${blogInfo.currentYear}</p>`);
     });
   }
 

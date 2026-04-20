@@ -167,20 +167,6 @@
 }
 
 @font-face {
-    font-family: "阿里妈妈方圆体";
-    src: url("../fonts/阿里妈妈方圆体.ttf");
-
-    font-display: swap;
-}
-
-@font-face {
-    font-family: "得意黑";
-    src: url("../fonts/得意黑.ttf");
-
-    font-display: swap;
-}
-
-@font-face {
     font-family: "江城圆体";
     src: url("../fonts/江城圆体/江城圆体 200W.ttf");
     font-weight: 200;
@@ -237,7 +223,7 @@
     margin: 0;
     box-sizing: border-box;
 
-    font-family: "江城圆体", "阿里妈妈方圆体", sans-serif;
+    font-family: "江城圆体";
 
     scroll-behavior: smooth;
 }
@@ -484,7 +470,7 @@ p,
     text-align: center;
 }
 
-#sidebar .user-info h1 {
+#sidebar .user-info #user-name {
     font-size: 1.5rem;
     font-weight: bold;
 }
@@ -594,7 +580,7 @@ header {
     background: var(--surface-color);
 }
 
-#navbar h1 {
+#navbar #navbar-title {
     font-family: "This-July";
     letter-spacing: 0.1em;
     font-size: 1.5em;
@@ -661,7 +647,7 @@ nav li {
 .card-header h2 {
     flex-grow: 1;
 
-    font-family: "得意黑";
+    font-family: "江城圆体";
 }
 
 .card-header p {
@@ -1485,7 +1471,7 @@ body:has(#about-me-data) {
     border-top: 1px solid var(--divider-color);
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .about-me-card .card-footer .tag {
