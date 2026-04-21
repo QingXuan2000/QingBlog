@@ -64,6 +64,7 @@ class QingBlog {
       this.initCardScrollAnimation();
       this.initLazyLoadImages();
       this.initArticleData();
+      this.addTagToPages();
       this.initMeData();
       this.addAboutCard();
 
@@ -542,8 +543,6 @@ class QingBlog {
 
   // ========== 标签管理 ==========
   initTagManager() {
-    this.addTagToPages();
-
     document.addEventListener("click", (e) => {
       const tagElement = e.target.closest(".tag");
       if (tagElement) {
