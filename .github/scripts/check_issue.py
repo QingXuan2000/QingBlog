@@ -182,15 +182,15 @@ class PagesConfigManager:
 
     def update_tags_article_total(self, tag: str, delta: int) -> None:
         config = self.cfg.pages_config
-        if "tagsArtiAcleTotal" not in config:
-            config["tagsArtiAcleTotal"] = {}
-        current = config["tagsArtiAcleTotal"].get(tag, 0)
+        if "tagsArticleTotal" not in config:
+            config["tagsArticleTotal"] = {}
+        current = config["tagsArticleTotal"].get(tag, 0)
         new_total = max(0, current + delta)
         if new_total > 0:
-            config["tagsArtiAcleTotal"][tag] = new_total
+            config["tagsArticleTotal"][tag] = new_total
         else:
-            if tag in config["tagsArtiAcleTotal"]:
-                del config["tagsArtiAcleTotal"][tag]
+            if tag in config["tagsArticleTotal"]:
+                del config["tagsArticleTotal"][tag]
         self.cfg.save_pages_config(config)
         print(
             f"[成功] pagesConfig.json 中 {tag} 标签文章数已更新：{current} → {new_total}"
@@ -198,9 +198,9 @@ class PagesConfigManager:
 
     def sync_tag_totals(self, tag_totals: dict) -> None:
         config = self.cfg.pages_config
-        config["tagsArtiAcleTotal"] = tag_totals
+        config["tagsArticleTotal"] = tag_totals
         self.cfg.save_pages_config(config)
-        print(f"[成功] pagesConfig.json 中 tagsArtiAcleTotal 已同步：{tag_totals}")
+        print(f"[成功] pagesConfig.json 中 tagsArticleTotal 已同步：{tag_totals}")
 
 
 # 页面管理器：创建列表页、分页、查找页面路径
