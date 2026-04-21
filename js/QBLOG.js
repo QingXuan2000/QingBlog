@@ -561,7 +561,7 @@ class QingBlog {
 
     const tagList = [];
 
-    Object.entries(this.pagesConfig.tagsArtiAcleTotal).forEach(([tagName, tagInArticleTotal]) => {
+    Object.entries(this.pagesConfig.tagsArticleTotal).forEach(([tagName, tagInArticleTotal]) => {
       tagList.push(`
         <li>
           <a href="/tags/${tagName}/" class="tag-item">
@@ -765,7 +765,7 @@ class QingBlog {
     }
 
     const roseData = [];
-    Object.entries(this.pagesConfig.tagsArtiAcleTotal).forEach(([name, value]) => {
+    Object.entries(this.pagesConfig.tagsArticleTotal).forEach(([name, value]) => {
       roseData.push({ name, value });
     });
 
