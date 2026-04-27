@@ -32,28 +32,28 @@ LIST_PAGE_TEMPLATE = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\"><title></title>"
-    "<meta name=\"description\"content=\"QingBlog - 文章列表\"/>"
-    "<link rel=\"shortcut icon\"href=\"/favicon.ico\"type=\"image/x-icon\"/>"
-    "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\"/>"
-    "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\"/>"
-    "<style>.card-list{border-top:none}</style>"
+    "<meta name=\"description\"content=\"文章列表\"/>"
+    "<link rel=\"shortcut icon\"href=\"{prefix}favicon.ico\"type=\"image/x-icon\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/QBLOG.css\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/font-awesome.min.css\"/>"
+    "<style>.card-list{{border-top:none}}</style>"
     "</head><body><header id=\"title\"><h1></h1></header>"
     "<main class=\"card-list\"><ul class=\"card-list__items\"></ul></main>"
-    "<script src=\"/js/QBLOG.js\"></script></body></html>"
+    "<script src=\"{prefix}js/QBLOG.js\"></script></body></html>"
 )
 
 TAG_PAGE_TEMPLATE = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\"><title></title>"
-    "<meta name=\"description\"content=\"QingBlog - {tag} 标签下的文章\"/>"
-    "<link rel=\"shortcut icon\"href=\"/favicon.ico\"type=\"image/x-icon\"/>"
-    "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\">"
-    "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\">"
-    "<style>.card-list{border-top:none}</style>"
+    "<meta name=\"description\"content=\"{tag} 标签下的文章\"/>"
+    "<link rel=\"shortcut icon\"href=\"{prefix}favicon.ico\"type=\"image/x-icon\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/QBLOG.css\">"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/font-awesome.min.css\">"
+    "<style>.card-list{{border-top:none}}</style>"
     "</head><body><header id=\"title\"><h1>{tag}</h1></header>"
     "<main class=\"card-list\"><ul class=\"card-list__items\"></ul></main>"
-    "<script src=\"/js/QBLOG.js\"></script></body></html>"
+    "<script src=\"{prefix}js/QBLOG.js\"></script></body></html>"
 )
 
 ARTICLE_PAGE_TEMPLATE = (
@@ -61,31 +61,31 @@ ARTICLE_PAGE_TEMPLATE = (
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\">"
     "<meta name=\"description\"content=\"{title} - QingBlog\"/>"
-    "<link rel=\"shortcut icon\"href=\"/favicon.ico\"type=\"image/x-icon\"/>"
+    "<link rel=\"shortcut icon\"href=\"{prefix}favicon.ico\"type=\"image/x-icon\"/>"
     "<title></title>"
-    "<link rel=\"stylesheet\"href=\"/css/blogArticle.css\">"
-    "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\"/>"
-    "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/blogArticle.css\">"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/QBLOG.css\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/font-awesome.min.css\"/>"
     "</head><body><main class=\"card__wrapper\"><article class=\"card\">"
     "<header class=\"card__header\"><h1>{title}</h1><p>作者：{author}</p>"
     "<p>发布日期：<time datetime=\"{date}\">{date}</time></p></header>"
     "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
     "<div class=\"card__content article-content\">{content_html}</div>"
     "<footer class=\"article-footer\">"
-    "<nav class=\"article-tag\" aria-label=\"文章标签\">"
+    "<nav class=\"article-tag\" style=\"display: {'inline-block' if tags_html.strip() else 'none'};\" aria-label=\"文章标签\">"
     "<span class=\"article-tag__label\">文章标签：</span>"
     "<ul class=\"article-tag__list\">{tags_html}</ul>"
     "</nav>"
     "</footer></article></main>"
-    "<script src=\"/js/QBLOG.js\"></script>"
+    "<script src=\"{prefix}js/QBLOG.js\"></script>"
     "<script>\n"
-    "window.MathJax = {\n"
-    "  tex: {\n"
+    "window.MathJax = {{\n"
+    "  tex: {{\n"
     "    inlineMath: [['$','$'],['\\\\(','\\\\)']],\n"
     "    displayMath: [['$$','$$'],['\\\\[','\\\\]']]\n"
-    "  },\n"
-    "  chtml: { fontCache: 'global' }\n"
-    "};\n"
+    "  }},\n"
+    "  chtml: {{ fontCache: 'global' }}\n"
+    "}};\n"
     "</script>\n"
     "<script id=\"MathJax-script\" src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>\n"
     "</body></html>"
@@ -154,8 +154,8 @@ def _write_text(path: str, content: str) -> None:
 #
 # 负责加载环境变量、博客配置、页面配置等全局参数。
 class Config:
-    def __init__(self):
-        self.WORKSPACE = os.getenv("GITHUB_WORKSPACE", "") + "/"
+    def __init__(self) -> None:
+        self.WORKSPACE = (os.getenv("GITHUB_WORKSPACE") or os.getcwd()) + "/"
         self.BLOG_CONFIG_PATH = os.getenv(
             "BLOG_CONFIG_PATH", "blogData/blogConfig.json"
         )
@@ -164,7 +164,7 @@ class Config:
         )
         self._load_configs()
 
-    def _load_configs(self):
+    def _load_configs(self) -> None:
         blog_config = self._load_json(self.BLOG_CONFIG_PATH)
         pages_config = self._load_json(self.PAGES_CONFIG_PATH)
 
@@ -227,8 +227,16 @@ def truncate(text: str, max_len: int = 150) -> str:
 
 
 # 生成文章链接（列表页卡片跳转）
-def get_link(target_id: str) -> str:
-    return f"/article/{target_id}.html"
+def get_link(target_id: str, depth: int = 0) -> str:
+    prefix = "../" * depth
+    return f"{prefix}article/{target_id}.html"
+
+
+# 计算页面深度的工具函数
+def _get_page_depth(file_path: str, workspace: str) -> int:
+    rel = os.path.relpath(file_path, workspace).replace("\\", "/")
+    parts = rel.split("/")
+    return len(parts) - 1
 
 
 # =============================================================================
@@ -237,15 +245,16 @@ def get_link(target_id: str) -> str:
 
 # 对列表页 HTML 进行卡片增删改查
 class HTMLProcessor:
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, workspace: str = "") -> None:
         self.path = path
+        self.depth = _get_page_depth(path, workspace) if workspace else 0
         self.html = _read_text(path)
 
     def save(self) -> None:
         _write_text(self.path, self.html)
 
     def find_card(self, issue_id: str) -> Optional[Tuple[int, int]]:
-        link = get_link(issue_id)
+        link = get_link(issue_id, self.depth)
         start = self.html.find(f'<a href="{link}">')
         if start != -1:
             li_start = self.html.rfind(CARD_LI_PREFIX, 0, start)
@@ -264,10 +273,11 @@ class HTMLProcessor:
         return True
 
     @staticmethod
-    def _gen_tags(labels: List[str]) -> str:
+    def _gen_tags(labels: List[str], depth: int = 0) -> str:
         items = []
+        prefix = "../" * depth
         for l in labels[:3]:
-            href = f"/tags/{l}/"
+            href = f"{prefix}tags/{l}/"
             items.append(
                 "<li class=\"article-tag__list-item\">"
                 f"<a class=\"article-tag__item\" href=\"{href}\">"
@@ -280,7 +290,7 @@ class HTMLProcessor:
     def _gen_card(
         self, title: str, date: str, content: str, issue_id: str, labels: List[str]
     ) -> str:
-        link, tags = get_link(issue_id), self._gen_tags(labels)
+        link, tags = get_link(issue_id, self.depth), self._gen_tags(labels, self.depth)
         return (
             f"<li><article class=\"card\"><a href=\"{link}\">"
             f"<header class=\"card__header\"><h2>{title}</h2></header>"
@@ -341,7 +351,7 @@ class HTMLProcessor:
 #
 # 负责维护页数、标签文章统计等运行态数据。
 class PagesConfigManager:
-    def __init__(self, cfg: Config):
+    def __init__(self, cfg: Config) -> None:
         self.cfg = cfg
 
     def update_max_article_page_num(self, total_pages: int) -> None:
@@ -389,7 +399,7 @@ class PagesConfigManager:
 # 列表分页管理（pages/）
 # =============================================================================
 class PageManager:
-    def __init__(self, workspace: str):
+    def __init__(self, workspace: str) -> None:
         self.workspace = workspace
         self.pages_dir = os.path.join(workspace, "pages")
         os.makedirs(self.pages_dir, exist_ok=True)
@@ -402,7 +412,9 @@ class PageManager:
 
     def create_page(self, page_num: int) -> str:
         path = self.get_page_path(page_num)
-        _write_text(path, LIST_PAGE_TEMPLATE)
+        depth = 0 if page_num == 1 else 1
+        prefix = "../" * depth
+        _write_text(path, LIST_PAGE_TEMPLATE.format(prefix=prefix))
         print(f"[成功] 页面已创建：{path}")
         return path
 
@@ -423,7 +435,7 @@ class PageManager:
         for page_num in range(total_pages, 0, -1):
             path = self.get_page_path(page_num)
             if os.path.exists(path):
-                p = HTMLProcessor(path)
+                p = HTMLProcessor(path, self.workspace)
                 card_count = p.count_cards()
                 if card_count < max_cards:
                     return page_num
@@ -468,7 +480,8 @@ class PageManager:
 # 标签页管理（tags/）
 # =============================================================================
 class TagManager:
-    def __init__(self, workspace: str):
+    def __init__(self, workspace: str) -> None:
+        self.workspace = workspace
         self.tags_dir = os.path.join(workspace, "tags")
 
     def _get_tag_page_path(self, tag_name: str, page_num: int = 1) -> str:
@@ -487,7 +500,8 @@ class TagManager:
             print(f"[提示] 标签页面已存在：{name} 第{page_num}页")
             return
         os.makedirs(tag_dir, exist_ok=True)
-        _write_text(path, TAG_PAGE_TEMPLATE.format(tag=name))
+        prefix = "../" * 2  # tags/{name}/index.html or tags/{name}/{n}.html depth=2
+        _write_text(path, TAG_PAGE_TEMPLATE.format(tag=name, prefix=prefix))
         print(f"[成功] 标签页面已创建：{name} 第{page_num}页")
 
     def get_tag_page_count(self, tag_name: str) -> int:
@@ -514,7 +528,7 @@ class TagManager:
                 found = False
                 path = self._get_tag_page_path(label)
                 if os.path.exists(path):
-                    p = HTMLProcessor(path)
+                    p = HTMLProcessor(path, self.workspace)
                     if p.find_card(issue_id):
                         p.add_or_update(
                             title, date, content, issue_id, all_labels, None
@@ -532,7 +546,7 @@ class TagManager:
                         self.create_page(label, page_num)
                         path = self._get_tag_page_path(label, page_num)
 
-                    p = HTMLProcessor(path)
+                    p = HTMLProcessor(path, self.workspace)
                     if p.count_cards() < max_cards:
                         p.add_or_update(
                             title, date, content, issue_id, all_labels, None
@@ -547,7 +561,7 @@ class TagManager:
                 page_num = 1
                 while os.path.exists(self._get_tag_page_path(label, page_num)):
                     path = self._get_tag_page_path(label, page_num)
-                    p = HTMLProcessor(path)
+                    p = HTMLProcessor(path, self.workspace)
                     p.remove_card(issue_id)
                     p.save()
                     page_num += 1
@@ -568,7 +582,7 @@ def escape_special_chars(md: str) -> str:
     store = {}
     idx = 0
 
-    def save(m):
+    def save(m: re.Match[str]) -> str:
         nonlocal idx
         k = f"__FML{idx}__"
         store[k] = m.group(0)
@@ -625,7 +639,7 @@ def md_to_html(md: str) -> str:
 
 # 生成、删除、查询文章详情页
 class ArticleManager:
-    def __init__(self, workspace: str, cfg: Config = None):
+    def __init__(self, workspace: str, cfg: Optional[Config] = None) -> None:
         self.pages_dir = os.path.join(workspace, "article")
         self.cfg = cfg
         os.makedirs(self.pages_dir, exist_ok=True)
@@ -675,13 +689,14 @@ class ArticleManager:
         except ValueError:
             pass
         is_update = self.exists(issue_id)
-        tags = HTMLProcessor._gen_tags(labels)
+        tags = HTMLProcessor._gen_tags(labels, depth=1)
         html = ARTICLE_PAGE_TEMPLATE.format(
             title=title,
             author=author,
             date=date,
             content_html=md_to_html(content),
             tags_html=tags,
+            prefix="../",
         )
         _write_text(self._path(issue_id), html)
         print(f"[成功] 文章已{'更新' if is_update else '生成'}：{self._path(issue_id)}")
@@ -693,7 +708,7 @@ class ArticleManager:
 
 # 自动生成网站地图 sitemap.xml
 class SitemapGenerator:
-    def __init__(self, workspace: str, cfg: Config):
+    def __init__(self, workspace: str, cfg: Config) -> None:
         self.workspace = workspace
         self.cfg = cfg
 
@@ -798,7 +813,7 @@ class SitemapGenerator:
 
 # 生成 robots.txt
 class RobotsGenerator:
-    def __init__(self, workspace: str, cfg: Config):
+    def __init__(self, workspace: str, cfg: Config) -> None:
         self.workspace = workspace
         self.cfg = cfg
 
@@ -825,7 +840,7 @@ class RobotsGenerator:
 # 主流程调度
 # =============================================================================
 class BlogGenerator:
-    def __init__(self):
+    def __init__(self) -> None:
         self.cfg = Config()
         self.article = ArticleManager(self.cfg.WORKSPACE, self.cfg)
         self.tag = TagManager(self.cfg.WORKSPACE)
@@ -864,7 +879,7 @@ class BlogGenerator:
         for path in self._iter_existing_page_paths():
             if not os.path.exists(path):
                 continue
-            p = HTMLProcessor(path)
+            p = HTMLProcessor(path, self.cfg.WORKSPACE)
             if p.find_card(issue_id):
                 p.add_or_update(title, date, content, issue_id, labels, self.cfg)
                 p.save()
@@ -875,7 +890,7 @@ class BlogGenerator:
         for path in self._iter_existing_page_paths():
             if not os.path.exists(path):
                 continue
-            p = HTMLProcessor(path)
+            p = HTMLProcessor(path, self.cfg.WORKSPACE)
             p.remove_card(issue_id)
             p.save()
 
@@ -892,7 +907,7 @@ class BlogGenerator:
             if last_non_full_page == 0:
                 next_page_num = self.page.get_next_page_num()
                 new_page_path = self.page.create_page(next_page_num)
-                p_new = HTMLProcessor(new_page_path)
+                p_new = HTMLProcessor(new_page_path, self.cfg.WORKSPACE)
                 p_new.add_or_update(title, date, content, issue_id, labels, self.cfg)
                 p_new.save()
                 self.pages_config_mgr.update_max_article_page_num(
@@ -901,12 +916,12 @@ class BlogGenerator:
                 print(f"[成功] 卡片已添加到新页面：{new_page_path}")
             else:
                 page_path = self.page.get_page_path(last_non_full_page)
-                p_target = HTMLProcessor(page_path)
+                p_target = HTMLProcessor(page_path, self.cfg.WORKSPACE)
                 p_target.add_or_update(title, date, content, issue_id, labels, self.cfg)
                 p_target.save()
                 print(f"[成功] 卡片已添加到页面 {last_non_full_page}：{page_path}")
         idx = os.path.join(self.cfg.WORKSPACE, "article", "index.html")
-        p = HTMLProcessor(idx)
+        p = HTMLProcessor(idx, self.cfg.WORKSPACE)
         p.add_or_update(title, date, content, issue_id, labels, self.cfg)
         p.save()
 
@@ -917,7 +932,7 @@ class BlogGenerator:
         self.article.delete(self.cfg.ISSUE_ID)
         self._remove_card_from_all_pages(self.cfg.ISSUE_ID)
         idx = os.path.join(self.cfg.WORKSPACE, "article", "index.html")
-        p = HTMLProcessor(idx)
+        p = HTMLProcessor(idx, self.cfg.WORKSPACE)
         p.remove_card(self.cfg.ISSUE_ID)
         p.save()
         if old:

@@ -81,10 +81,20 @@ class QingBlog {
   }
 
   // ========== 配置加载 ==========
+  _getBase() {
+    const path = window.location.pathname;
+    const cleaned = path.replace(/\/$/, "");
+    const parts = cleaned.split("/").filter(Boolean);
+    const last = parts[parts.length - 1];
+    const depth = last && last.includes(".") ? parts.length - 1 : parts.length;
+    return depth > 0 ? "../".repeat(depth) : ".";
+  }
+
   async loadConfigs() {
-    this.blogConfig = await this.getConfig("/blogData/blogConfig.json");
-    this.pagesConfig = await this.getConfig("/blogData/pagesConfig.json");
-    this.themes = await this.getConfig("/blogData/themes.json");
+    const base = this._getBase();
+    this.blogConfig = await this.getConfig(`${base}/blogData/blogConfig.json`);
+    this.pagesConfig = await this.getConfig(`${base}/blogData/pagesConfig.json`);
+    this.themes = await this.getConfig(`${base}/blogData/themes.json`);
 
     // 防抖导航栏高度更新
     this.debounceSetNavHeight = this.debounce(() => this.setNavHeightVariable());
@@ -170,6 +180,7 @@ class QingBlog {
 
   // ========== 公共组件渲染 ==========
   dynamicComponentBox() {
+    const base = this._getBase();
     const pathSegments = window.location.pathname.split("/").filter(Boolean);
     const pageName = pathSegments[0];
     const needPaginationPages = ["", "index.html", "article", "pages", "tags"];
@@ -207,11 +218,11 @@ class QingBlog {
               <div id="navbar-title" aria-label="博客名称">${this.blogConfig.blogInfo.blogName}</div>
               <div class="divider" style="width: 2px; margin: 0 0.5rem 0 1rem; border-radius: 100em;" aria-hidden="true"></div>
               <ul>
-                  <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
-                  <li><a href="/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
-                  <li><a href="/tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
-                  <li><a href="/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
-                  <li><a href="/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
+                  <li><a href="${base}/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
+                  <li><a href="${base}/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
+                  <li><a href="${base}/tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
+                  <li><a href="${base}/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
+                  <li><a href="${base}/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
               </ul>
           </nav>
           <button id="theme-toggle" aria-label="切换主题"><i class="fa fa-sun-o"></i></button>
@@ -226,21 +237,21 @@ class QingBlog {
           <div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div>
           <div id="sidebar-content" class="sidebar__content">
               <div class="sidebar__user-info">
-                  <img id="sidebar-avatar" src="/img/Avatar.png" alt="作者头像" />
+                  <img id="sidebar-avatar" src="../../../../img/Avatar.png" alt="作者头像" />
                   <h2 id="user-name" class="sidebar__user-name">${this.blogConfig.author.targetAuthor}</h2>
                   <p class="sidebar__motto">${this.blogConfig.author.introShort}</p>
               </div>
               <nav aria-label="侧边栏导航">
                   <ul>
-                      <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
+                      <li><a href="../../../../"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
                       <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
-                      <li><a href="/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
+                      <li><a href="../../../../article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
                       <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
-                      <li><a href="/tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
+                      <li><a href="../../../../tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
                       <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
-                      <li><a href="/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
+                      <li><a href="../../../../data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
                       <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
-                      <li><a href="/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
+                      <li><a href="../../../../about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
                   </ul>
               </nav>
               <div class="sidebar__social">
@@ -267,11 +278,11 @@ class QingBlog {
         <nav class="footer__section footer__links" aria-label="页脚导航">
           <h3>快速链接</h3>
           <ul>
-            <li><a href="/"><i class="fa fa-home"></i>&nbsp;首页</a></li>
-            <li><a href="/article/"><i class="fa fa-book"></i>&nbsp;文章</a></li>
-            <li><a href="/tags/"><i class="fa fa-tags"></i>&nbsp;标签</a></li>
-            <li><a href="/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
-            <li><a href="/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
+            <li><a href="${base}/"><i class="fa fa-home"></i>&nbsp;首页</a></li>
+            <li><a href="${base}/article/"><i class="fa fa-book"></i>&nbsp;文章</a></li>
+            <li><a href="${base}/tags/"><i class="fa fa-tags"></i>&nbsp;标签</a></li>
+            <li><a href="${base}/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
+            <li><a href="${base}/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
           </ul>
         </nav>
         <div class="footer__section footer__social">
@@ -556,6 +567,7 @@ class QingBlog {
   addTagToPages() {
     if (!document.getElementById("tags-wrapper")) return;
 
+    const base = this._getBase();
     const tagCloud = document.querySelector(".tag-cloud");
 
     const tagList = [];
@@ -563,7 +575,7 @@ class QingBlog {
     Object.entries(this.pagesConfig.tagsArticleTotal).forEach(([tagName, tagInArticleTotal]) => {
       tagList.push(`
         <li>
-          <a href="/tags/${tagName}/" class="tag-cloud__item">
+          <a href="${base}/tags/${tagName}/" class="tag-cloud__item">
             <span class="tag-cloud__name">${tagName}</span>
             <span class="tag-cloud__count">${tagInArticleTotal}</span>
           </a>
@@ -574,7 +586,7 @@ class QingBlog {
   }
 
   navigateToTagPage(tagText) {
-    location.href = `/tags/${encodeURIComponent(tagText)}/`;
+    location.href = `${this._getBase()}/tags/${encodeURIComponent(tagText)}/`;
   }
 
   // ========== 自定义右键菜单 ==========
@@ -661,6 +673,7 @@ class QingBlog {
     const inputPageNum = document.getElementById("input-page-num");
     if (!prevTrigger || !nextTrigger || !pageNum) return;
 
+    const base = this._getBase();
     const path = window.location.pathname;
     const isTagPage = path.startsWith("/tags/");
     let current = 1;
@@ -691,8 +704,8 @@ class QingBlog {
 
     const goToPage = (page) => {
       window.location.href = isTagPage
-        ? (page === 1 ? `/tags/${encodeURIComponent(tagName)}/` : `/tags/${encodeURIComponent(tagName)}/${page}.html`)
-        : (page === 1 ? "/" : `/pages/${page}.html`);
+        ? (page === 1 ? `${base}/tags/${encodeURIComponent(tagName)}/` : `${base}/tags/${encodeURIComponent(tagName)}/${page}.html`)
+        : (page === 1 ? base : `${base}/pages/${page}.html`);
     };
 
     const updatePageDisplay = () => {
