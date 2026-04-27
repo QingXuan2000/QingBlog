@@ -1,0 +1,6 @@
+# IDE
+.idea/
+
+# Claude Code
+.claude/
+CLAUDE.md
