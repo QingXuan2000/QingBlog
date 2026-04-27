@@ -64,6 +64,7 @@ class QingBlog {
       this.initCardScrollAnimation();
       this.initLazyLoadImages();
       this.initArticleData();
+      this.addTagToPages();
       this.initMeData();
       this.addAboutCard();
 
@@ -542,8 +543,6 @@ class QingBlog {
 
   // ========== 标签管理 ==========
   initTagManager() {
-    this.addTagToPages();
-
     document.addEventListener("click", (e) => {
       const tagElement = e.target.closest(".article-tag__item");
       if (tagElement) {
@@ -561,7 +560,7 @@ class QingBlog {
 
     const tagList = [];
 
-    Object.entries(this.pagesConfig.tagsArtiAcleTotal).forEach(([tagName, tagInArticleTotal]) => {
+    Object.entries(this.pagesConfig.tagsArticleTotal).forEach(([tagName, tagInArticleTotal]) => {
       tagList.push(`
         <li>
           <a href="/tags/${tagName}/" class="tag-cloud__item">
@@ -772,7 +771,7 @@ class QingBlog {
     }
 
     const roseData = [];
-    Object.entries(this.pagesConfig.tagsArtiAcleTotal).forEach(([name, value]) => {
+    Object.entries(this.pagesConfig.tagsArticleTotal).forEach(([name, value]) => {
       roseData.push({ name, value });
     });
 
