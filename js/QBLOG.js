@@ -6,21 +6,21 @@
 
 class QingBlog {
   // ========== 静态常量配置 ==========
-  static blogLogoSvg = `<svg class="loading-logo" width="620" height="620" viewBox="0 0 620 620" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle class="qingblog-loading-icon-circle" cx="310" cy="310" r="250" />
-    <circle class="qingblog-loading-icon-circle" cx="310" cy="310" r="300" />
-    <path class="qingblog-loading-icon" d="M315 70L315 550" />
-    <line class="qingblog-loading-icon" x1="124" y1="213" x2="264" y2="213" />
-    <line class="qingblog-loading-icon" x1="104" y1="310" x2="284" y2="310" />
-    <line class="qingblog-loading-icon" x1="124" y1="407" x2="264" y2="407" />
-    <line class="qingblog-loading-icon" x1="365" y1="115" x2="365" y2="245" />
-    <line class="qingblog-loading-icon" x1="365" y1="286" x2="365" y2="386" />
-    <line class="qingblog-loading-icon" x1="365" y1="427" x2="365" y2="507" />
-    <line class="qingblog-loading-icon" x1="423" y1="490" x2="423" y2="380" />
-    <line class="qingblog-loading-icon" x1="474" y1="440" x2="474" y2="330" />
-    <line class="qingblog-loading-icon" x1="423" y1="345" x2="423" y2="255" />
-    <line class="qingblog-loading-icon" x1="423" y1="220" x2="423" y2="140" />
-    <line class="qingblog-loading-icon" x1="474" y1="285" x2="474" y2="205" />
+  static blogLogoSvg = `<svg class="loading__graphic-svg" width="620" height="620" viewBox="0 0 620 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle class="loading__logo-circle" cx="310" cy="310" r="250" />
+    <circle class="loading__logo-circle" cx="310" cy="310" r="300" />
+    <path class="loading__logo-path" d="M315 70L315 550" />
+    <line class="loading__logo-path" x1="124" y1="213" x2="264" y2="213" />
+    <line class="loading__logo-path" x1="104" y1="310" x2="284" y2="310" />
+    <line class="loading__logo-path" x1="124" y1="407" x2="264" y2="407" />
+    <line class="loading__logo-path" x1="365" y1="115" x2="365" y2="245" />
+    <line class="loading__logo-path" x1="365" y1="286" x2="365" y2="386" />
+    <line class="loading__logo-path" x1="365" y1="427" x2="365" y2="507" />
+    <line class="loading__logo-path" x1="423" y1="490" x2="423" y2="380" />
+    <line class="loading__logo-path" x1="474" y1="440" x2="474" y2="330" />
+    <line class="loading__logo-path" x1="423" y1="345" x2="423" y2="255" />
+    <line class="loading__logo-path" x1="423" y1="220" x2="423" y2="140" />
+    <line class="loading__logo-path" x1="474" y1="285" x2="474" y2="205" />
   </svg>`;
 
   static alertColors = {
@@ -183,28 +183,28 @@ class QingBlog {
 
     // 头部组件
     const componentBoxHeader = `
-      <div class="loading">
-          <div class="loading-icon">${QingBlog.blogLogoSvg}</div>
-          <div class="loading-div"></div>
-          <div class="loading-div"></div>
+      <div class="loading" role="status" aria-label="页面加载中">
+          <div class="loading__graphic">${QingBlog.blogLogoSvg}</div>
+          <div class="loading__bar"></div>
+          <div class="loading__bar"></div>
       </div>
-      <div id="alert">
+      <div id="alert" role="alert" aria-live="polite">
           <div id="alert-message"><span></span></div>
       </div>
-      <div class="overlay"></div>
-      <div id="context-menu" class="context-menu">
+      <div class="overlay" aria-hidden="true"></div>
+      <nav id="context-menu" class="context-menu" aria-label="右键菜单">
           <ul>
-              <li onclick="qingBlogInstance.initContextMenu('copy')"><i class="fa fa-copy"></i> 复制</li>
-              <li class="divider"></li>
-              <li onclick="qingBlogInstance.initContextMenu('refresh')"><i class="fa fa-refresh"></i>&nbsp;<span>刷新</span></li>
+              <li><button type="button" data-action="copy" aria-label="复制选中内容"><i class="fa fa-copy"></i> 复制</button></li>
+              <li class="divider" role="separator"></li>
+              <li><button type="button" data-action="refresh" aria-label="刷新页面"><i class="fa fa-refresh"></i>&nbsp;<span>刷新</span></button></li>
           </ul>
-      </div>
-      <div id="back-to-top" class="glass btn-active"><i class="fa fa-chevron-up"></i></div>
-      <header>
-          <nav id="navbar" class="glass">
+      </nav>
+      <button id="back-to-top" aria-label="返回顶部"><i class="fa fa-chevron-up"></i></button>
+      <header id="page-header">
+          <nav id="navbar" aria-label="主导航">
               ${this.resizeLogo(35, 35)}
-              <div id="navbar-title">${this.blogConfig.blogInfo.blogName}</div>
-              <div class="divider" style="width: 2px; margin: 0 0.5rem 0 1rem; border-radius: 100em;"></div>
+              <div id="navbar-title" aria-label="博客名称">${this.blogConfig.blogInfo.blogName}</div>
+              <div class="divider" style="width: 2px; margin: 0 0.5rem 0 1rem; border-radius: 100em;" aria-hidden="true"></div>
               <ul>
                   <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
                   <li><a href="/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
@@ -213,57 +213,57 @@ class QingBlog {
                   <li><a href="/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
               </ul>
           </nav>
-          <div id="theme-toggle" class="nav-button btn-active"><i class="fa fa-sun-o"></i></div>
-          <div id="sidebar-toggle" class="nav-button btn-active"><i class="fa fa-bars" aria-hidden="true"></i></div>
+          <button id="theme-toggle" aria-label="切换主题"><i class="fa fa-sun-o"></i></button>
+          <button id="sidebar-toggle" aria-label="打开侧边栏"><i class="fa fa-bars" aria-hidden="true"></i></button>
       </header>
-      <div id="sidebar">
-          <div id="sidebar-header" class="sidebar-header">
-              <div class="sidebar-logo">${this.resizeLogo(35, 35)}</div>
-              <div class="sidebar-title">${this.blogConfig.blogInfo.blogName}</div>
-              <div id="sidebar-close" class="nav-button btn-active"><i class="fa fa-remove" aria-hidden="true"></i></div>
+      <aside id="sidebar" aria-label="侧边栏导航">
+          <div id="sidebar-header" class="sidebar__header">
+              <div class="sidebar__logo">${this.resizeLogo(35, 35)}</div>
+              <div class="sidebar__title">${this.blogConfig.blogInfo.blogName}</div>
+              <button id="sidebar-close" aria-label="关闭侧边栏"><i class="fa fa-remove" aria-hidden="true"></i></button>
           </div>
-          <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
-          <div id="sidebar-content" class="sidebar-content">
-              <div class="user-info">
-                  <img id="sidebar-avatar" src="/img/Avatar.png" alt="Avatar" />
-                  <div id="user-name">${this.blogConfig.author.targetAuthor}</h1>
-                  <p class="sidebar-motto">${this.blogConfig.author.introShort}</p>
+          <div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div>
+          <div id="sidebar-content" class="sidebar__content">
+              <div class="sidebar__user-info">
+                  <img id="sidebar-avatar" src="/img/Avatar.png" alt="作者头像" />
+                  <h2 id="user-name" class="sidebar__user-name">${this.blogConfig.author.targetAuthor}</h2>
+                  <p class="sidebar__motto">${this.blogConfig.author.introShort}</p>
               </div>
-              <nav>
-                  <ul class="glass">
+              <nav aria-label="侧边栏导航">
+                  <ul>
                       <li><a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
-                      <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
+                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
                       <li><a href="/article/"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
-                      <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
+                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
                       <li><a href="/tags/"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
-                      <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
+                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
                       <li><a href="/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
-                      <div class="sidebar-header-divider divider" style="width: 100%; height: 1px;"></div>
+                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
                       <li><a href="/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
                   </ul>
               </nav>
-              <div class="sidebar-social glass">
-                  <h3 class="sidebar-social-title">关注我</h3>
+              <div class="sidebar__social">
+                  <h3 class="sidebar__social-title">关注我</h3>
                   <ul class="social-links">${socialMediaPlatform}</ul>
               </div>
           </div>
-          <div id="sidebar-footer" class="sidebar-footer">
-              <div class="sidebar-header-divider divider" style="width: 100%; height: 1px; margin-bottom: 1rem;"></div>
+          <div id="sidebar-footer" class="sidebar__footer">
+              <div class="sidebar__header-divider divider" style="width: 100%; height: 1px; margin-bottom: 1rem;" aria-hidden="true"></div>
               <p>${copyrightText}</p>
           </div>
-      </div>
+      </aside>
     `;
 
     // 页脚组件
     const componentBoxFooter = `
-    <footer>
-      <div class="footer-content">
-        <div class="footer-section footer-brand">
+    <footer class="footer">
+      <div class="footer__content">
+        <div class="footer__section footer__brand">
           ${this.resizeLogo(50, 50)}
           <h2>${this.blogConfig.blogInfo.blogName}</h2>
           <p>${this.blogConfig.author.introShort}</p>
         </div>
-        <div class="footer-section footer-links">
+        <nav class="footer__section footer__links" aria-label="页脚导航">
           <h3>快速链接</h3>
           <ul>
             <li><a href="/"><i class="fa fa-home"></i>&nbsp;首页</a></li>
@@ -272,41 +272,41 @@ class QingBlog {
             <li><a href="/data/"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
             <li><a href="/about/"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
           </ul>
-        </div>
-        <div class="footer-section footer-social">
+        </nav>
+        <div class="footer__section footer__social">
           <h3>关注我</h3>
           <ul class="social-links">${socialMediaPlatform}</ul>
         </div>
       </div>
-      <div class="footer-bottom">
-        <div class="divider" style="width: 100%; height: 1px; margin: 1rem 0;"></div>
+      <div class="footer__bottom">
+        <div class="divider" style="width: 100%; height: 1px; margin: 1rem 0;" aria-hidden="true"></div>
         <p>${copyrightText}</p>
-        <p class="footer-powered">Powered by Love and Coffee</p>
+        <p class="footer__powered">Powered by Love and Coffee</p>
       </div>
     </footer>
     `;
 
     // 分页组件
     const paginationControls = `
-    <div id="pagination-controls-wrapper">
+    <nav id="pagination-controls-wrapper" aria-label="分页导航">
         <div id="pagination-controls">
-            <div id="prev-trigger" class="glass">
+            <button type="button" id="prev-trigger" aria-label="上一页">
                 <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 <span>上一页</span>
-            </div>
-            <div id="input-page-num-wrapper" class="glass">
-                <span id="page-num"></span>
-                <input id="input-page-num" type="text" placeholder="输入页码" class="glass">
-                <div id="go-to-page-btn" class="glass">
+            </button>
+            <div id="input-page-num-wrapper">
+                <span id="page-num" aria-live="polite"></span>
+                <input id="input-page-num" type="text" placeholder="输入页码" aria-label="输入页码">
+                <button type="button" id="go-to-page-btn" aria-label="跳转到指定页">
                     <i class="fa fa-level-down" aria-hidden="true"></i>
-                </div>
+                </button>
             </div>
-            <div id="next-trigger" class="glass">
+            <button type="button" id="next-trigger" aria-label="下一页">
                 <span>下一页</span>
                 <i class="fa fa-arrow-right" aria-hidden="true"></i>
-            </div>
+            </button>
         </div>
-    </div>
+    </nav>
     `;
 
     // 渲染组件
@@ -328,8 +328,8 @@ class QingBlog {
     if (!loadingContainer) return;
 
     if (firstLoading !== "false") {
-      const qingBlogIcon = document.querySelector(".loading-icon");
-      const loadingDivs = document.querySelectorAll(".loading-div");
+      const qingBlogIcon = document.querySelector(".loading__graphic");
+      const loadingDivs = document.querySelectorAll(".loading__bar");
       this.body.style.overflow = "hidden";
 
       const hideTimer = setTimeout(() => {
@@ -510,7 +510,7 @@ class QingBlog {
   // ========== 代码复制 ==========
   initCopyButtons() {
     document.addEventListener("click", async (e) => {
-      const copyBtn = e.target.closest(".copy-btn");
+      const copyBtn = e.target.closest(".article-content__copy-btn");
       if (!copyBtn) return;
 
       try {
@@ -527,9 +527,9 @@ class QingBlog {
 
   // ========== 导航栏背景 ==========
   initHeaderBackground() {
-    const heroDiv = document.getElementById("hero-div");
+    const heroDiv = document.querySelector(".hero");
     if (!heroDiv) return;
-    const header = document.querySelector("header");
+    const header = document.getElementById("page-header");
 
     const handleScroll = this.throttle(() => {
       const navHeight = this.setNavHeightVariable();
@@ -545,7 +545,7 @@ class QingBlog {
     this.addTagToPages();
 
     document.addEventListener("click", (e) => {
-      const tagElement = e.target.closest(".tag");
+      const tagElement = e.target.closest(".article-tag__item");
       if (tagElement) {
         e.preventDefault();
         const tagText = tagElement.querySelector("span")?.textContent;
@@ -564,9 +564,9 @@ class QingBlog {
     Object.entries(this.pagesConfig.tagsArtiAcleTotal).forEach(([tagName, tagInArticleTotal]) => {
       tagList.push(`
         <li>
-          <a href="/tags/${tagName}/" class="tag-item">
-            <span class="tag-name">${tagName}</span>
-            <span class="tag-count">${tagInArticleTotal}</span>
+          <a href="/tags/${tagName}/" class="tag-cloud__item">
+            <span class="tag-cloud__name">${tagName}</span>
+            <span class="tag-cloud__count">${tagInArticleTotal}</span>
           </a>
         </li>`)
     })
@@ -583,9 +583,16 @@ class QingBlog {
     const menu = document.getElementById("context-menu");
     if (!menu) return;
 
+    menu.addEventListener("click", (e) => {
+      const button = e.target.closest("[data-action]");
+      if (!button) return;
+      const action = button.dataset.action;
+      this.initContextMenu(action);
+    });
+
     const showContextMenu = () => {
       menu.style.display = "block";
-      menu.classList.add("show");
+      menu.classList.add("context-menu--visible");
     };
 
     document.addEventListener("contextmenu", (e) => {
@@ -619,7 +626,7 @@ class QingBlog {
   hideContextMenu() {
     const menu = document.getElementById("context-menu");
     if (!menu) return;
-    menu.classList.remove("show");
+    menu.classList.remove("context-menu--visible");
     setTimeout(() => { menu.style.display = "none"; }, 200);
   }
 
@@ -733,14 +740,14 @@ class QingBlog {
     if (!cards.length) return;
 
     if (location.pathname.includes('/article')) {
-      cards.forEach(c => c.classList.add('card-visible'));
+      cards.forEach(c => c.classList.add('card--visible'));
       return;
     }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add('card-visible');
+        entry.target.classList.add('card--visible');
         observer.unobserve(entry.target);
       });
     });
@@ -756,7 +763,7 @@ class QingBlog {
 
   // ========== 文章数据图表生成 ==========
   initArticleData() {
-    const chartDoms = document.querySelectorAll(".tag-in-article");
+    const chartDoms = document.querySelectorAll(".data-chart__pie");
     if (!chartDoms.length) return;
 
     if (typeof echarts === 'undefined') {
@@ -824,7 +831,7 @@ class QingBlog {
 
   // ========== 关于图表生成 ==========
   initMeData() {
-    const chartDoms = document.querySelectorAll(".about-me-data");
+    const chartDoms = document.querySelectorAll(".about-card__chart");
     if (!chartDoms.length) return;
 
     if (typeof echarts === 'undefined') {
@@ -890,23 +897,23 @@ class QingBlog {
   }
 
   addAboutCard() {
-    const cards = document.querySelectorAll(".about-me-card-wrapper");
+    const cards = document.querySelectorAll(".about-card__wrapper");
     if (!cards.length) return;
 
     const { author, blogInfo } = this.blogConfig;
 
     cards.forEach((card) => {
-      const authorText = card.querySelector(".author-text");
+      const authorText = card.querySelector(".about-card__author-text");
       authorText.querySelector("h3").textContent = author.targetAuthor;
       authorText.querySelector("p").textContent = author.introShort;
 
-      card.querySelector(".author-desc p").textContent = author.introDetail;
+      card.querySelector(".about-card__desc p").textContent = author.introDetail;
 
       Object.entries(author.socialMediaPlatform).forEach(([name, { icon, url }]) => {
-        card.querySelector(".card-footer").insertAdjacentHTML("afterbegin", `<a href="${url}" class="tag" target="_blank">${icon}&nbsp;${name}</a>`);
+        card.querySelector(".card__footer").insertAdjacentHTML("afterbegin", `<a href="${url}" class="about-card__social-item" target="_blank">${icon}&nbsp;${name}</a>`);
       });
 
-      card.querySelector(".card-footer").insertAdjacentHTML("beforeend", `<p>写作年限：${blogInfo.yearOfWriting} – ${blogInfo.currentYear}</p>`);
+      card.querySelector(".card__footer").insertAdjacentHTML("beforeend", `<p>写作年限：${blogInfo.yearOfWriting} – ${blogInfo.currentYear}</p>`);
     });
   }
 

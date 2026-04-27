@@ -5,38 +5,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark">
-    <title></title>
-
+    <title>文章</title>
+    <meta name="description" content="QingBlog - 文章列表" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-</head>
-
-<body>
-    <div id="title">
-        <h1>文章</h1>
-    </div>
-
-    <div id="card-list-wrapper">
-        <ul id="card-list">
-            
-        </ul>
-    </div>
-
-    <!-- ------------------------------------------------------------ -->
-
     <link rel="stylesheet" href="/css/QBLOG.css" />
-    <script src="/js/QBLOG.js"></script>
-
     <link rel="stylesheet" href="/css/font-awesome.min.css" />
-
-    <!-- ------------------------------------------------------------ -->
-
     <style>
-        #card-list-wrapper {
+        .card-list {
             border-top: none;
         }
     </style>
+</head>
 
-    <!-- ------------------------------------------------------------ -->
+<body>
+    <header id="title">
+        <h1>文章</h1>
+    </header>
+
+    <main class="card-list">
+        <ul class="card-list__items">
+
+        </ul>
+    </main>
+
+    <script src="/js/QBLOG.js"></script>
 </body>
 
 </html>

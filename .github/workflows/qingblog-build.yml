@@ -31,14 +31,14 @@ jobs:
         env:
           ISSUE_TITLE: ${{ github.event.issue.title }}
           ISSUE_BODY: ${{ github.event.issue.body }}
-          ISSUE_DATE: ${{ github.event.issue.created_at }}
+          ISSUE_DATE: ${{ github.event.issue.updated_at }}
           ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
           ISSUE_LABELS: ${{ toJson(github.event.issue.labels.*.name) }}
           ISSUE_ID: ${{ github.event.issue.number }}
           ISSUE_ACTION: ${{ github.event.action }}
           BLOG_CONFIG_PATH: "blogData/blogConfig.json"
           PAGES_CONFIG_PATH: "blogData/pagesConfig.json"
-        run: python .github/scripts/check_issue.py
+        run: python .github/scripts/static_blog_generator.py
 
       - name: 📤提交并推送更改
         uses: stefanzweifel/git-auto-commit-action@v5

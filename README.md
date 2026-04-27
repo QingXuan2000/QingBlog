@@ -18,51 +18,32 @@
 
 ## 📖 项目简介
 
-QingBlog 是一个创新的博客框架，它将 GitHub Issues 作为内容管理系统，通过 GitHub Actions 自动将 Issue 转换为精美的博客文章页面。无需服务器、无需数据库，只需创建 Issue 即可发布博客。内置丰富的 Markdown 支持、分页系统、标签管理和现代化 UI 设计。
+QingBlog 是一个以 **GitHub Issues 作为内容源** 的静态博客方案：你在 Issue 里写作，GitHub Actions 会自动把内容渲染成文章页面并部署到 GitHub Pages。无需服务器与数据库，适合把写作与代码托管统一在同一套工作流里。
 
 ## ✨ 核心特性
 
-- 🚀 **零成本部署**：利用 GitHub Pages 免费托管
-- 📝 **Issue 即文章**：在 GitHub Issues 中写作，自动同步到博客
-- 🔄 **自动化流程**：创建/编辑 Issue 后自动构建部署
-- 📄 **智能分页系统**：首页、文章列表页、标签页均支持分页
-- 🎨 **现代化设计**：渐变背景、毛玻璃效果、卡片式布局
-- 🌓 **深色/浅色主题**：支持一键切换主题，自动适配系统偏好
-- 📱 **响应式设计**：适配桌面和移动设备，侧边栏导航
-- 🏷️ **标签系统**：自动提取 Issue 标签，生成独立标签页面
-- 💻 **代码高亮**：支持代码块语法高亮和复制功能
-- 🔒 **作者验证**：仅指定作者的 Issue 才会被发布
-- ✨ **动态标题**：页面动态切换标题，检测用户离开/返回
-- 🎬 **加载动画**：炫酷的 SVG 加载动画
-- ⬆️ **返回顶部**：一键返回顶部功能
-- 🎯 **右键菜单**：自定义右键菜单（复制、刷新）
-- 📐 **数学公式**：支持 LaTeX 数学公式渲染
-- 🎭 **弹窗提示**：友好的操作反馈弹窗
-- 📊 **数据可视化**：文章数据可视化展示（ECharts）
-- 🔧 **JSON 配置系统**：灵活的 JSON 配置文件管理
-- 🤖 **SEO 优化**：自动生成 sitemap.xml 和 robots.txt
+- 🚀 **一键部署**：GitHub Pages 免费托管，Actions 自动构建与提交
+- 📝 **Issue 即文章**：创建/编辑/删除 Issue 后自动同步到站点
+- 🔒 **作者校验**：仅 `targetAuthor` 的 Issue 会被发布，避免被“投喂内容”
+- 📄 **分页 + 标签**：首页/文章列表/标签页均支持分页，自动生成标签目录与统计
+- 💻 **写作体验**：Markdown 渲染、代码高亮、公式（MathJax）、基础 SEO（sitemap/robots）
+- 🎨 **前端体验**：响应式布局、深浅主题切换与一套现代化 UI
 
 ## 🛠️ 技术栈
 
 ### 前端
 
-- **HTML5** - 语义化页面结构
-- **CSS3** - 渐变、动画、毛玻璃效果
-- **JavaScript (ES6+)** - 面向对象编程，QingBlog 类架构设计
-- **Font Awesome** - 矢量图标库
-- **MathJax** - 数学公式渲染
-- **ECharts** - 数据可视化图表库
-- **中文字体** - 江城圆体、阿里妈妈方圆体、得意黑等
+- **HTML/CSS/JavaScript** - 静态页面与交互
+- **Font Awesome** - 图标
+- **MathJax** - 公式渲染
+- **ECharts** - 数据可视化（可选）
 
 ### 自动化
 
-- **Python 3.12** - 核心处理脚本
-- **GitHub Actions** - CI/CD 工作流
-- **Python-Markdown** - Markdown 渲染
-- **PyMdown Extensions** - Markdown 增强扩展
-- **Pygments** - 代码高亮
-- **Beautiful Soup 4** - HTML 处理
-- **GitHub Pages** - 静态站点托管
+- **Python 3.12** - 构建脚本
+- **GitHub Actions** - 触发构建、自动提交
+- **Python-Markdown / PyMdown Extensions / Pygments / BeautifulSoup4** - 渲染与页面处理
+- **GitHub Pages** - 部署托管
 
 ## 📁 项目结构
 
@@ -72,8 +53,8 @@ QingBlog/
 │   ├── workflows/
 │   │   └── qingblog-build.yml    # GitHub Actions 工作流配置
 │   └── scripts/
-│       ├── check_issue.py        # 核心处理脚本
-│       └── requirements.txt      # Python 依赖
+│       ├── static_blog_generator.py # 核心构建脚本（Issue → 页面）
+│       └── requirements.txt         # Python 依赖
 │
 ├── blogData/                     # 博客配置目录
 │   ├── blogConfig.json           # 博客核心配置（作者信息、构建设置）
@@ -122,101 +103,33 @@ QingBlog/
 
 ## 🚀 快速开始
 
-### 1. Fork 项目
+### 1) Fork + 开启 Pages
 
-Fork 本仓库到你的 GitHub 账号下。
+Fork 本仓库到你的账号下，然后在仓库 **Settings → Pages** 中把站点源设置为 **main 分支 /(root)**。
 
-### 2. 配置 GitHub Pages
+### 2) 允许工作流写入仓库
 
-1. 进入仓库 **Settings** → **Pages**
-2. **Source** 选择 **Deploy from a branch**
-3. **Branch** 选择 **main** 分支，文件夹选择 **/(root)**
-4. 点击 **Save**
+在 **Settings → Actions → General → Workflow permissions** 里选择 **Read and write permissions**，否则自动提交生成结果会失败。
 
-### 3. 启用 GitHub Actions
+### 3) 配置你的博客信息
 
-1. 进入仓库 **Actions** 标签页
-2. 点击 **I understand my workflows, go ahead and enable them** 按钮
-3. 确保工作流已启用，否则自动构建将无法运行
+编辑 `blogData/blogConfig.json`，通常你只需要关心这些字段：
 
-### 4. 配置工作流权限
+- `blogInfo.blogName`: 博客名称（ **8 字英文**，与模板样式更匹配）
+- `author.targetAuthor`: 允许发布文章的 GitHub 用户名（重要）
+- `buildConfig.utcOffset`: 时区偏移（默认 `8`，北京时间）
+- `buildConfig.articlesPerPage`: 每页文章数量
+- `robotsConfig.siteUrl` / `robotsConfig.sitemapUrl`: 用于 SEO（可选，但建议配置）
 
-1. 进入仓库 **Settings** → **Actions** → **General**
-2. 找到 **Workflow permissions**
-3. 选择 **Read and write permissions**
-4. 点击 **Save**
+### 4) 发布文章
 
-### 5. 修改博客配置
-
-编辑 [`blogData/blogConfig.json`](blogData/blogConfig.json) 配置文件：
-
-```json
-{
-    "blogInfo": {
-        "blogName": "博客名称（4字英文）",
-        "yearOfWriting": 2025,
-        "currentYear": 2026
-    },
-    "author": {
-        "targetAuthor": "你的GitHub名称",
-        "introShort": "标语",
-        "introDetail": "自我介绍",
-        "socialMediaPlatform": {
-            "GitHub": {
-                "icon": "<i class=\"fa fa-github\" aria-hidden=\"true\"></i>",
-                "url": "https://github.com/QingXuan2000"
-            },
-            "社交平台设置（格式如上，此处填写名字）": {
-                "icon": "图标",
-                "url": "链接"
-            }
-        },
-        "authorTags": {
-            "HTML": 65,
-            "CSS": 60,
-            "JavaScript": 40,
-            "个人标签设置（格式如上，数字为占比）": 0
-        }
-    },
-    "buildConfig": {
-        "utcOffset": 8,
-        "articlesPerPage": 20
-    },
-    "robotsConfig": {
-        "siteUrl": "网站主域名",
-        "allowPaths": ["/"],
-        "disallowPaths": ["/blogData/"],
-        "sitemapUrl": "Sitemap完整URL"
-    }
-}
-```
-
-**配置说明**：
-- `targetAuthor`: 指定允许发布博客的 GitHub 用户名
-- `utcOffset`: 时区偏移（默认东八区北京时间）
-- `articlesPerPage`: 每页文章数量（默认 20）
-- `robotsConfig`: SEO 配置，包括站点 URL、允许/禁止路径、站点地图 URL
-- `socialMediaPlatform`: 社交媒体平台配置，可配置多个社交平台
-- `authorTags`: 作者个人标签配置，数字表示占比（用于数据可视化页面）
-
-> **时区说明**：`utcOffset` 用于将 GitHub 的 UTC 时间转换为本地时间显示，默认为 `8`（东八区）。如需其他时区，请修改为对应偏移值，如 `-5`（美东）、`0`（伦敦）等。
-
-### 6. 发布第一篇文章
-
-1. 打开你 Fork 的仓库
-2. 进入 **Issues** 标签页
-3. 点击 **New issue**
-4. 填写标题和内容（支持 Markdown）
-5. 添加标签（可选，最多显示3个）
-6. 点击 **Submit new issue**
-
-等待几秒后，GitHub Actions 会自动构建并部署，你的文章就会出现在博客中了！
+在你的仓库 **Issues** 新建 Issue（支持 Markdown）。工作流会在 `opened/edited/deleted/reopened` 时触发，生成页面并自动提交到仓库，Pages 随后完成部署。
 
 ## 🔧 工作原理
 
 ```
 ┌─────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  创建 Issue  │────▶│  GitHub Actions │────▶│ check_issue.py  │
+│  创建 Issue  │────▶│  GitHub Actions │────▶│ static_blog_generator.py │
 │  或编辑     │     │  触发工作流      │     │   执行脚本       │
 └─────────────┘     └─────────────────┘     └────────┬────────┘
                                                       │
@@ -224,7 +137,7 @@ Fork 本仓库到你的 GitHub 账号下。
             ▼
    ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
    │  验证作者身份    │────▶│ Markdown 转 HTML │────▶│ 生成文章页面    │
-   │ (TARGET_AUTHOR) │     │  (含代码高亮)    │     │ article/{id}.html │
+   │ (targetAuthor)  │     │  (含代码高亮)    │     │ article/{id}.html │
    └─────────────────┘     └─────────────────┘     └────────┬────────┘
                                                              │
    ┌─────────────────────────────────────────────────────────┘
@@ -245,55 +158,53 @@ Fork 本仓库到你的 GitHub 账号下。
 
 ### 详细流程
 
-1. **触发**：当 Issue 被创建、编辑、删除或重新打开时，GitHub Actions 自动触发
-2. **验证**：脚本检查 Issue 作者是否匹配 `targetAuthor`
-3. **时区转换**：根据 `utcOffset` 将 UTC 时间转换为本地时间
-4. **转换**：使用 Python-Markdown + PyMdown Extensions 将 Markdown 转换为 HTML，支持：
-   - 表格、脚注、目录
-   - 代码高亮（带复制按钮）
-   - 自动换行
-   - 任务列表
-   - Emoji 表情
-   - 数学公式（LaTeX）
-   - 标签页、警告框等高级特性
-5. **生成**：创建文章页面 `article/{id}.html`
-6. **分页管理**：
-   - 在 `index.html` 和 `article/index.html` 中添加/更新文章卡片
-   - 当文章数量超过 `articlesPerPage` 时自动创建新的分页页面 `pages/{page}.html`
-   - 更新 JSON 配置文件和 JS 文件中的分页数据
-7. **标签处理**：
-   - 自动为每个标签创建独立目录和页面 `tags/{标签名}/index.html`
-   - 标签页也支持分页，自动创建 `tags/{标签名}/{page}.html`
-   - 更新 `pagesConfig.json` 中的标签文章统计
-   - 将文章同步到对应的标签页面
-   - 自动删除空标签页面和目录
-8. **SEO 优化**：
-   - 自动生成 `sitemap.xml` 包含所有页面链接
-   - 生成 `robots.txt` 配置搜索引擎爬取规则
-9. **部署**：自动提交更改，GitHub Pages 自动部署
+1. **触发**：Issue 被创建/编辑/删除/重新打开时触发工作流
+2. **校验**：只处理作者为 `targetAuthor` 的 Issue
+3. **渲染**：Markdown → HTML（含代码高亮等扩展能力）
+4. **生成**：输出文章页、列表页、分页页、标签页及统计配置
+5. **SEO**：生成 `sitemap.xml` 与 `robots.txt`（依赖 `robotsConfig`）
+6. **提交**：自动提交生成结果并推送，Pages 完成部署
+
+## 💻 本地运行（可选）
+
+本项目默认通过 GitHub Actions 运行构建脚本；如果你想在本地调试生成逻辑，可以用环境变量模拟 Actions 传入的 Issue 信息。
+
+### 前置条件
+
+- 安装 Python 3.12（或与工作流一致的版本）
+- 安装依赖：
+
+```bash
+pip install -r .github/scripts/requirements.txt
+```
+
+### 运行脚本（PowerShell 示例）
+
+```powershell
+$env:ISSUE_TITLE="本地调试标题"
+$env:ISSUE_BODY="# Hello QingBlog`n这是本地调试内容"
+$env:ISSUE_DATE="2026-01-01T00:00:00Z"
+$env:ISSUE_AUTHOR="你的GitHub名称"
+$env:ISSUE_LABELS='["tag1","tag2"]'
+$env:ISSUE_ID="1"
+$env:ISSUE_ACTION="opened"
+$env:BLOG_CONFIG_PATH="blogData/blogConfig.json"
+$env:PAGES_CONFIG_PATH="blogData/pagesConfig.json"
+
+python .github/scripts/static_blog_generator.py
+```
+
+> 提示：若 `ISSUE_AUTHOR` 不等于 `blogData/blogConfig.json` 中的 `author.targetAuthor`，脚本可能会跳过生成（用于避免他人 Issue 被发布）。
 
 ## 📝 Markdown 支持
 
-QingBlog 支持极其丰富的 Markdown 语法，通过 PyMdown Extensions 提供强大的增强功能：
+QingBlog 通过 `Python-Markdown` + `PyMdown Extensions` 提供增强的 Markdown 渲染能力（以写作友好为目标）：
 
-- ✅ 标准 Markdown 语法（标题、列表、链接、图片等）
-- ✅ 代码块（支持复制按钮、语法高亮）
-- ✅ 表格
-- ✅ 任务列表（可点击复选框）
-- ✅ 脚注
-- ✅ 目录（TOC）
-- ✅ Emoji 表情支持
-- ✅ 数学公式（LaTeX，通过 MathJax 渲染）
-- ✅ 高亮文本（使用 `==文本==` 语法）
-- ✅ 删除线（使用 `~~文本~~` 语法）
-- ✅ 上标/下标
-- ✅ 进度条
-- ✅ 标签页（Tabbed）内容
-- ✅ 警告框/提示框（Admonition）
-- ✅ 详情折叠框（Details）
-- ✅ 魔法链接（自动识别 URL、邮箱等）
-- ✅ 按键样式（Keyboard）
-- ✅ 代码行内高亮
+- 标准 Markdown（标题、列表、链接、图片等）
+- 代码块语法高亮（Pygments）
+- 表格/脚注/目录（TOC）/任务列表
+- 数学公式（LaTeX，MathJax）
+- 常用扩展（如 admonition、details、tabbed 等，按需使用）
 
 ## 🏷️ 标签系统
 

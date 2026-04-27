@@ -1,5 +1,17 @@
 from __future__ import annotations
 
+"""
+QingBlog 静态站点生成脚本（GitHub Issues → HTML）
+
+该脚本由 GitHub Actions 在 Issue 生命周期事件触发时运行，通过环境变量获取 Issue 信息，
+并同步更新：
+- `article/{id}.html` 文章详情页
+- `index.html` / `pages/{n}.html` 首页与分页列表
+- `article/index.html` 文章列表页
+- `tags/{tag}/...` 标签页
+- `sitemap.xml` / `robots.txt` SEO 文件
+"""
+
 import json
 import os
 import re
@@ -10,7 +22,7 @@ import markdown
 from bs4 import BeautifulSoup
 
 # =============================================================================
-# Constants / Templates
+# 常量与模板
 # =============================================================================
 
 CARD_LI_PREFIX = "<li>"
@@ -20,39 +32,52 @@ LIST_PAGE_TEMPLATE = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\"><title></title>"
+    "<meta name=\"description\"content=\"QingBlog - 文章列表\"/>"
     "<link rel=\"shortcut icon\"href=\"/favicon.ico\"type=\"image/x-icon\"/>"
-    "</head><body><main class=\"card-list\"><ul class=\"card-list__items\"></ul></main>"
     "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\"/>"
-    "<script src=\"/js/QBLOG.js\"></script>"
     "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\"/>"
-    "<style>.card-list{border-top:none}</style></body></html>"
+    "<style>.card-list{border-top:none}</style>"
+    "</head><body><header id=\"title\"><h1></h1></header>"
+    "<main class=\"card-list\"><ul class=\"card-list__items\"></ul></main>"
+    "<script src=\"/js/QBLOG.js\"></script></body></html>"
 )
 
 TAG_PAGE_TEMPLATE = (
-    "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\">"
-    "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\">"
-    "<title></title></head><body><header id=\"title\"><h1>{tag}</h1></header>"
-    "<main class=\"card-list\"><ul class=\"card-list__items\"></ul></main>"
+    "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
+    "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
+    "<meta name=\"color-scheme\"content=\"light dark\"><title></title>"
+    "<meta name=\"description\"content=\"QingBlog - {tag} 标签下的文章\"/>"
+    "<link rel=\"shortcut icon\"href=\"/favicon.ico\"type=\"image/x-icon\"/>"
     "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\">"
-    "<script src=\"/js/QBLOG.js\"></script>"
     "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\">"
-    "<style>.card-list{border-top:none}</style></body></html>"
+    "<style>.card-list{border-top:none}</style>"
+    "</head><body><header id=\"title\"><h1>{tag}</h1></header>"
+    "<main class=\"card-list\"><ul class=\"card-list__items\"></ul></main>"
+    "<script src=\"/js/QBLOG.js\"></script></body></html>"
 )
 
 ARTICLE_PAGE_TEMPLATE = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
-    "<title></title></head><body><main class=\"card__wrapper\"><article class=\"card\">"
+    "<meta name=\"color-scheme\"content=\"light dark\">"
+    "<meta name=\"description\"content=\"{title} - QingBlog\"/>"
+    "<link rel=\"shortcut icon\"href=\"/favicon.ico\"type=\"image/x-icon\"/>"
+    "<title></title>"
+    "<link rel=\"stylesheet\"href=\"/css/blogArticle.css\">"
+    "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\"/>"
+    "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\"/>"
+    "</head><body><main class=\"card__wrapper\"><article class=\"card\">"
     "<header class=\"card__header\"><h1>{title}</h1><p>作者：{author}</p>"
     "<p>发布日期：<time datetime=\"{date}\">{date}</time></p></header>"
     "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
     "<div class=\"card__content article-content\">{content_html}</div>"
-    "<footer class=\"article-footer\"><div class=\"article-tag\"><span>文章标签：</span>{tags_html}</div>"
+    "<footer class=\"article-footer\">"
+    "<nav class=\"article-tag\" aria-label=\"文章标签\">"
+    "<span class=\"article-tag__label\">文章标签：</span>"
+    "<ul class=\"article-tag__list\">{tags_html}</ul>"
+    "</nav>"
     "</footer></article></main>"
-    "<link rel=\"stylesheet\"href=\"/css/blogArticle.css\">"
-    "<link rel=\"stylesheet\"href=\"/css/QBLOG.css\"/>"
     "<script src=\"/js/QBLOG.js\"></script>"
-    "<link rel=\"stylesheet\"href=\"/css/font-awesome.min.css\"/>"
     "<script>\n"
     "window.MathJax = {\n"
     "  tex: {\n"
@@ -103,13 +128,13 @@ MD_EXTENSION_CONFIGS = {
 }
 
 COPY_BUTTON_HTML = (
-    "<span class=\"article-content__copy-btn\">"
-    "<i class=\"fa fa-copy\" aria-hidden=\"true\"></i>&nbsp;Copy</span>"
+    "<button type=\"button\" class=\"article-content__copy-btn\" aria-label=\"复制代码\">"
+    "<i class=\"fa fa-copy\" aria-hidden=\"true\"></i>&nbsp;Copy</button>"
 )
 
 
 # =============================================================================
-# Small IO helpers
+# I/O 工具函数
 # =============================================================================
 
 def _read_text(path: str) -> str:
@@ -123,7 +148,11 @@ def _write_text(path: str, content: str) -> None:
         f.write(content)
 
 
-# 配置类：加载环境变量、博客配置、页面配置等全局参数
+# =============================================================================
+# 配置
+# =============================================================================
+#
+# 负责加载环境变量、博客配置、页面配置等全局参数。
 class Config:
     def __init__(self):
         self.WORKSPACE = os.getenv("GITHUB_WORKSPACE", "") + "/"
@@ -180,7 +209,11 @@ class Config:
         _write_text(full_path, json.dumps(config_data, ensure_ascii=False, indent=4))
 
 
-# 日期格式化：将 ISO 时间转为指定时区的中文格式时间
+# =============================================================================
+# 通用工具
+# =============================================================================
+
+# 将 ISO 时间转为指定时区的中文格式时间
 def format_date(iso_date: str, offset: int = 8) -> str:
     dt = datetime.fromisoformat(iso_date.replace("Z", "+00:00"))
     return dt.astimezone(timezone(timedelta(hours=offset))).strftime(
@@ -188,21 +221,21 @@ def format_date(iso_date: str, offset: int = 8) -> str:
     )
 
 
-# 文本截断：用于首页卡片摘要
+# 文本截断：用于列表页卡片摘要
 def truncate(text: str, max_len: int = 150) -> str:
     return text[:max_len] + "..." if len(text) > max_len else text
 
 
-# 生成文章链接
+# 生成文章链接（列表页卡片跳转）
 def get_link(target_id: str) -> str:
     return f"/article/{target_id}.html"
 
 
 # =============================================================================
-# HTML list pages (index/article/tags/pages) manipulation
+# 列表页 HTML 操作（首页 / 文章列表 / 分页 / 标签页）
 # =============================================================================
 
-# HTML 处理器：对列表页 HTML 进行卡片增删改查
+# 对列表页 HTML 进行卡片增删改查
 class HTMLProcessor:
     def __init__(self, path: str) -> None:
         self.path = path
@@ -232,10 +265,17 @@ class HTMLProcessor:
 
     @staticmethod
     def _gen_tags(labels: List[str]) -> str:
-        return "".join(
-            f'<span class="article-tag__item"><span>{l}</span></span>'
-            for l in labels[:3]
-        )
+        items = []
+        for l in labels[:3]:
+            href = f"/tags/{l}/"
+            items.append(
+                "<li class=\"article-tag__list-item\">"
+                f"<a class=\"article-tag__item\" href=\"{href}\">"
+                f"<span>{l}</span>"
+                "</a>"
+                "</li>"
+            )
+        return "".join(items)
 
     def _gen_card(
         self, title: str, date: str, content: str, issue_id: str, labels: List[str]
@@ -247,13 +287,18 @@ class HTMLProcessor:
             "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
             f"<p>{content}</p>"
             "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
-            f"<footer class=\"card__footer\"><div class=\"article-tag\">{tags}</div>"
+            "<footer class=\"card__footer\">"
+            "<nav class=\"article-tag\" aria-label=\"文章标签\">"
+            "<ul class=\"article-tag__list\">"
+            f"{tags}"
+            "</ul>"
+            "</nav>"
             f"<p>发布日期：<time datetime=\"{date}\">{date}</time></p></footer>"
             "</a></article></li>"
         )
 
     def count_cards(self) -> int:
-        # 历史结构可能是 <li><a ...>，当前生成结构是 <li><article ...><a ...>
+        # 兼容历史结构 <li><a ...> 与当前结构 <li><article ...><a ...>
         count_article = self.html.count('<article class="card">')
         count_legacy = self.html.count('<li><a href="')
         return max(count_article, count_legacy)
@@ -290,7 +335,11 @@ class HTMLProcessor:
             return False
 
 
-# 页面配置管理器：更新 pagesConfig.json 中的页数、标签文章数等
+# =============================================================================
+# pagesConfig.json 管理
+# =============================================================================
+#
+# 负责维护页数、标签文章统计等运行态数据。
 class PagesConfigManager:
     def __init__(self, cfg: Config):
         self.cfg = cfg
@@ -336,7 +385,9 @@ class PagesConfigManager:
         print(f"[成功] pagesConfig.json 中 tagsArticleTotal 已同步：{tag_totals}")
 
 
-# 页面管理器：创建列表页、分页、查找页面路径
+# =============================================================================
+# 列表分页管理（pages/）
+# =============================================================================
 class PageManager:
     def __init__(self, workspace: str):
         self.workspace = workspace
@@ -413,7 +464,9 @@ class PageManager:
         return new_dict
 
 
-# 标签管理器：创建标签页、同步标签页文章卡片
+# =============================================================================
+# 标签页管理（tags/）
+# =============================================================================
 class TagManager:
     def __init__(self, workspace: str):
         self.tags_dir = os.path.join(workspace, "tags")
@@ -504,6 +557,10 @@ class TagManager:
         return tag_page_nums
 
 
+# =============================================================================
+# Markdown 渲染
+# =============================================================================
+
 # 转义 Markdown 中特殊字符，避免解析异常
 def escape_special_chars(md: str) -> str:
     block_pat = re.compile(r'\\\[[\s\S]*?\\\]')
@@ -546,7 +603,7 @@ def escape_special_chars(md: str) -> str:
     return md
 
 
-# Markdown 转 HTML，带代码高亮、任务列表、数学公式等扩展
+# Markdown 转 HTML（代码高亮 / 任务列表 / 数学公式等扩展）
 def md_to_html(md: str) -> str:
     md = escape_special_chars(md)
     html = markdown.markdown(
@@ -563,10 +620,10 @@ def md_to_html(md: str) -> str:
 
 
 # =============================================================================
-# Article detail pages
+# 文章详情页（article/）
 # =============================================================================
 
-# 文章管理器：生成、删除、查询文章详情页
+# 生成、删除、查询文章详情页
 class ArticleManager:
     def __init__(self, workspace: str, cfg: Config = None):
         self.pages_dir = os.path.join(workspace, "article")
@@ -593,13 +650,13 @@ class ArticleManager:
         if not os.path.exists(path):
             return []
         with open(path, "r", encoding="utf-8") as f:
+            soup = BeautifulSoup(f.read(), "html.parser")
             return list(
-                set(
-                    re.findall(
-                        r'<span class="article-tag__item"><span>(.*?)</span></span>',
-                        f.read(),
-                    )
-                )
+                {
+                    span.get_text(strip=True)
+                    for span in soup.select(".article-tag__item span")
+                    if span.get_text(strip=True)
+                }
             )
 
     def generate(
@@ -618,10 +675,7 @@ class ArticleManager:
         except ValueError:
             pass
         is_update = self.exists(issue_id)
-        tags = "".join(
-            f'<span class="article-tag__item"><span>{l}</span></span>'
-            for l in labels[:3]
-        )
+        tags = HTMLProcessor._gen_tags(labels)
         html = ARTICLE_PAGE_TEMPLATE.format(
             title=title,
             author=author,
@@ -634,10 +688,10 @@ class ArticleManager:
 
 
 # =============================================================================
-# SEO: sitemap.xml / robots.txt
+# SEO（sitemap.xml / robots.txt）
 # =============================================================================
 
-# Sitemap 生成器：自动生成网站地图 XML
+# 自动生成网站地图 sitemap.xml
 class SitemapGenerator:
     def __init__(self, workspace: str, cfg: Config):
         self.workspace = workspace
@@ -742,7 +796,7 @@ class SitemapGenerator:
         print(f"[成功] sitemap.xml 已生成，共 {len(urls)} 个URL")
 
 
-# Robots 生成器：生成 robots.txt
+# 生成 robots.txt
 class RobotsGenerator:
     def __init__(self, workspace: str, cfg: Config):
         self.workspace = workspace
@@ -767,7 +821,9 @@ class RobotsGenerator:
         print(f"[成功] robots.txt 已生成")
 
 
-# 博客生成器主类：统一调度所有模块
+# =============================================================================
+# 主流程调度
+# =============================================================================
 class BlogGenerator:
     def __init__(self):
         self.cfg = Config()
@@ -780,9 +836,8 @@ class BlogGenerator:
 
     def _log(self) -> None:
         date = format_date(self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET)
-        print(
-            f"\n[信息] 标题：{self.cfg.ISSUE_TITLE}\n[信息] 内容：\n{self.cfg.ISSUE_BODY}"
-        )
+        body_len = len(self.cfg.ISSUE_BODY or "")
+        print(f"\n[信息] 标题：{self.cfg.ISSUE_TITLE}\n[信息] 内容：<已隐藏>（长度：{body_len}）")
         print(f"[信息] 发布日期：{date}\n[信息] 发布者：{self.cfg.ISSUE_AUTHOR}")
         print(
             f"[信息] 标签：{', '.join(self.cfg.ISSUE_LABELS) if self.cfg.ISSUE_LABELS else '无'}"
@@ -790,7 +845,7 @@ class BlogGenerator:
         print("=" * 50)
 
     def _iter_existing_page_paths(self) -> Iterable[str]:
-        """Yield existing list page html paths: index + pages/2..N."""
+        """遍历现有列表页路径：`index.html` + `pages/2..N`。"""
         yield os.path.join(self.cfg.WORKSPACE, "index.html")
         page_num = 2
         while os.path.exists(self.page.get_page_path(page_num)):
@@ -805,7 +860,7 @@ class BlogGenerator:
         issue_id: str,
         labels: List[str],
     ) -> bool:
-        """Update existing card if found in any list page. Returns True if updated."""
+        """若卡片已存在于任意列表页则更新之；更新成功返回 True。"""
         for path in self._iter_existing_page_paths():
             if not os.path.exists(path):
                 continue
@@ -988,6 +1043,8 @@ class BlogGenerator:
         self.robots_gen.generate()
 
 
+# =============================================================================
 # 程序入口
+# =============================================================================
 if __name__ == "__main__":
     BlogGenerator().run()

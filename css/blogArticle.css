@@ -94,7 +94,7 @@
 /* ------------------------------------------------------------- */
 
 /* 卡片容器 */
-.card-wrapper {
+.card__wrapper {
     display: flex;
     justify-content: center;
 
@@ -105,14 +105,14 @@
     width: 794px;
 }
 
-.card-header {
+.card__header {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--article-spacing-xl);
 }
 
-.card-content {
+.card__content {
     min-height: calc(100dvh - (var(--nav-height) + 26rem));
 }
 
@@ -380,12 +380,14 @@
 }
 
 /* 代码块复制按钮 */
-.article-content .codehilitetable .copy-btn {
+.article-content__copy-btn {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
     z-index: 500;
     font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
     display: flex;
     align-items: center;
     color: rgba(255, 255, 255, 0.8);
@@ -400,16 +402,24 @@
     border: 1px solid var(--surface-border-color);
 }
 
-.article-content .codehilite:hover .copy-btn {
+.article-content .codehilite:hover .article-content__copy-btn {
     opacity: 1;
 }
 
-.article-content .copy-btn:hover {
+.article-content__copy-btn:hover {
     color: #fff;
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.article-content .copy-btn:active {
+.article-content__copy-btn:active {
     background: rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+    box-shadow:
+        inset 0 3px 6px rgba(0, 0, 0, 0.3),
+        inset 0 -1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* 代码内容区域 */

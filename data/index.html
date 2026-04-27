@@ -5,38 +5,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark">
-    <title></title>
-
+    <title>文章数据</title>
+    <meta name="description" content="QingBlog - 文章数据统计" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
-</head>
-
-<body>
-    <div id="title">
-        <h1>文章数据</h1>
-    </div>
-
-    <div class="tag-in-article-wrapper">
-        <div class="tag-in-article"></div>
-    </div>
-
-    <!-- ------------------------------------------------------------ -->
-
-    <script src="/js/echarts.min.js"></script>
-
     <link rel="stylesheet" href="/css/QBLOG.css" />
-    <script src="/js/QBLOG.js"></script>
-
     <link rel="stylesheet" href="/css/font-awesome.min.css" />
-
-    <!-- ------------------------------------------------------------ -->
-
     <style>
-        #card-list-wrapper {
+        .card-list {
             border-top: none;
         }
     </style>
+</head>
 
-    <!-- ------------------------------------------------------------ -->
+<body>
+    <header id="title">
+        <h1>文章数据</h1>
+    </header>
+
+    <main class="data-chart__wrapper">
+        <div class="data-chart__pie" role="img" aria-label="文章标签占比饼图"></div>
+    </main>
+
+    <script src="/js/echarts.min.js"></script>
+    <script src="/js/QBLOG.js"></script>
 </body>
 
 </html>
