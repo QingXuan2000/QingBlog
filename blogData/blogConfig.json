@@ -2,7 +2,8 @@
     "blogInfo": {
         "blogName": "博客名称（8字英文）",
         "yearOfWriting": 2025,
-        "currentYear": 2026
+        "currentYear": 2026,
+        "repositoryName": "你的仓库名称"
     },
     "author": {
         "targetAuthor": "你的GitHub名称",

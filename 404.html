@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark">
+    <title>404 - 页面未找到</title>
+
+    <meta name="description" content="页面未找到" />
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="./css/QBLOG.css" />
+    <link rel="stylesheet" href="./css/font-awesome.min.css" />
+
+</head>
+
+<body>
+    <main class="error-page">
+        <div class="error-card">
+            <div class="error-icon">
+                <i class="fa fa-map-signs"></i>
+            </div>
+
+            <div class="error-code">404</div>
+
+            <h2>页面未找到</h2>
+            <p>抱歉，您访问的页面不存在或已被移除。<br>请检查链接是否正确，或返回首页。</p>
+
+            <div class="error-actions">
+                <a href="#" onclick="window.qingBlogInstance.navigation('/')" class="error-btn error-btn-secondary">
+                    <i class="fa fa-home"></i>
+                    返回首页
+                </a>
+                <a href="javascript:history.back()" class="error-btn error-btn-secondary">
+                    <i class="fa fa-arrow-left"></i>
+                    返回上页
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="./js/QBLOG.js"></script>
+</body>
+
+</html>

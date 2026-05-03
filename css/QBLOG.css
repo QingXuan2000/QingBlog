@@ -148,6 +148,19 @@
     }
 }
 
+@keyframes errorPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.04);
+        opacity: 0.85;
+    }
+}
 /* ------------------------------------------------------------- */
 /* 字体定义 */
 /* ------------------------------------------------------------- */
@@ -1671,6 +1684,92 @@ body:has(.about-card__chart) {
     font-size: 0.9rem;
 }
 
+/* ------------------------------------------------------------- */
+/* 404 错误页面样式 */
+/* ------------------------------------------------------------- */
+
+.error-page {
+    display: grid;
+    place-content: center;
+    height: calc(100vh - (var(--nav-height) * 2));
+}
+
+.error-card {
+    text-align: center;
+    min-width: 50vw;
+    padding: 3rem;
+    background: var(--surface-color);
+    backdrop-filter: var(--backdrop-blur);
+    border-radius: 1.5rem;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
+}
+
+.error-code {
+    font-family: "This-July";
+    font-size: 10rem;
+    font-weight: bold;
+    line-height: 1;
+    color: var(--primary-color);
+    text-shadow: 0 4px 12px var(--box-shadow-color);
+    margin-bottom: 0.5rem;
+    animation: errorPulse 2s ease-in-out infinite;
+}
+
+.error-icon {
+    font-size: 3rem;
+    color: var(--text-secondary-color);
+    margin-bottom: 1rem;
+}
+
+.error-card h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.8rem;
+}
+
+.error-card p {
+    font-size: 1rem;
+    color: var(--text-secondary-color);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.error-actions {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+.error-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 2rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    background: var(--surface-color);
+    backdrop-filter: var(--backdrop-blur);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: var(--box-shadow-color) 0 4px 12px 0px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+}
+
+.error-btn-secondary:hover {
+    color: var(--text-color);
+    transform: translateY(-2px);
+}
+
+.error-btn:active {
+    transform: translateY(2px);
+    box-shadow: inset 0 3px 6px var(--box-shadow-color);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
 /* ------------------------------------------------------------- */
 /* 媒体查询 */
 /* ------------------------------------------------------------- */

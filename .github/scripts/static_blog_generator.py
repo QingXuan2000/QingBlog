@@ -16,7 +16,7 @@ import json
 import os
 import re
 from datetime import datetime, timedelta, timezone
-from typing import Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import markdown
 from bs4 import BeautifulSoup
@@ -25,10 +25,10 @@ from bs4 import BeautifulSoup
 # 常量与模板
 # =============================================================================
 
-CARD_LI_PREFIX = "<li>"
-CARD_LI_SUFFIX = "</li>"
+CARD_LI_PREFIX: str = "<li>"
+CARD_LI_SUFFIX: str = "</li>"
 
-LIST_PAGE_TEMPLATE = (
+LIST_PAGE_TEMPLATE: str = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\"><title></title>"
@@ -42,7 +42,7 @@ LIST_PAGE_TEMPLATE = (
     "<script src=\"{prefix}js/QBLOG.js\"></script></body></html>"
 )
 
-TAG_PAGE_TEMPLATE = (
+TAG_PAGE_TEMPLATE: str = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\"><title></title>"
@@ -56,13 +56,13 @@ TAG_PAGE_TEMPLATE = (
     "<script src=\"{prefix}js/QBLOG.js\"></script></body></html>"
 )
 
-ARTICLE_PAGE_TEMPLATE = (
+ARTICLE_PAGE_TEMPLATE: str = (
     "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
     "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
     "<meta name=\"color-scheme\"content=\"light dark\">"
-    "<meta name=\"description\"content=\"{title} - QingBlog\"/>"
+    "<meta name=\"description\"content=\"{title}\"/>"
     "<link rel=\"shortcut icon\"href=\"{prefix}favicon.ico\"type=\"image/x-icon\"/>"
-    "<title></title>"
+    "<title>{title}</title>"
     "<link rel=\"stylesheet\"href=\"{prefix}css/blogArticle.css\">"
     "<link rel=\"stylesheet\"href=\"{prefix}css/QBLOG.css\"/>"
     "<link rel=\"stylesheet\"href=\"{prefix}css/font-awesome.min.css\"/>"
@@ -72,7 +72,7 @@ ARTICLE_PAGE_TEMPLATE = (
     "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
     "<div class=\"card__content article-content\">{content_html}</div>"
     "<footer class=\"article-footer\">"
-    "<nav class=\"article-tag\" style=\"display: {'inline-block' if tags_html.strip() else 'none'};\" aria-label=\"文章标签\">"
+    "<nav class=\"article-tag\" style=\"display: {tag_display};\" aria-label=\"文章标签\">"
     "<span class=\"article-tag__label\">文章标签：</span>"
     "<ul class=\"article-tag__list\">{tags_html}</ul>"
     "</nav>"
@@ -87,11 +87,11 @@ ARTICLE_PAGE_TEMPLATE = (
     "  chtml: {{ fontCache: 'global' }}\n"
     "}};\n"
     "</script>\n"
-    "<script id=\"MathJax-script\" src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js\"></script>\n"
+    "<script id=\"MathJax-script\" src=\"{prefix}js/tex-mml-chtml.js\"></script>\n"
     "</body></html>"
 )
 
-MD_EXTENSIONS = [
+MD_EXTENSIONS: list[str] = [
     "extra",
     "toc",
     "sane_lists",
@@ -114,7 +114,7 @@ MD_EXTENSIONS = [
     "pymdownx.arithmatex",
 ]
 
-MD_EXTENSION_CONFIGS = {
+MD_EXTENSION_CONFIGS: dict[str, dict[str, bool | str]] = {
     "codehilite": {"linenums": True, "css_class": "codehilite", "use_pygments": True},
     "toc": {"permalink": "&nbsp;&para;"},
     "pymdownx.highlight": {
@@ -127,7 +127,7 @@ MD_EXTENSION_CONFIGS = {
     "pymdownx.arithmatex": {"generic": True},
 }
 
-COPY_BUTTON_HTML = (
+COPY_BUTTON_HTML: str = (
     "<button type=\"button\" class=\"article-content__copy-btn\" aria-label=\"复制代码\">"
     "<i class=\"fa fa-copy\" aria-hidden=\"true\"></i>&nbsp;Copy</button>"
 )
@@ -155,45 +155,43 @@ def _write_text(path: str, content: str) -> None:
 # 负责加载环境变量、博客配置、页面配置等全局参数。
 class Config:
     def __init__(self) -> None:
-        self.WORKSPACE = (os.getenv("GITHUB_WORKSPACE") or os.getcwd()) + "/"
-        self.BLOG_CONFIG_PATH = os.getenv(
+        self.WORKSPACE: str = (os.getenv("GITHUB_WORKSPACE") or os.getcwd()) + "/"
+        self.BLOG_CONFIG_PATH: str = os.getenv(
             "BLOG_CONFIG_PATH", "blogData/blogConfig.json"
         )
-        self.PAGES_CONFIG_PATH = os.getenv(
+        self.PAGES_CONFIG_PATH: str = os.getenv(
             "PAGES_CONFIG_PATH", "blogData/pagesConfig.json"
         )
         self._load_configs()
 
     def _load_configs(self) -> None:
-        blog_config = self._load_json(self.BLOG_CONFIG_PATH)
-        pages_config = self._load_json(self.PAGES_CONFIG_PATH)
+        blog_config: dict[str, Any] = self._load_json(self.BLOG_CONFIG_PATH)
+        pages_config: dict[str, Any] = self._load_json(self.PAGES_CONFIG_PATH)
 
-        build_cfg = blog_config.get("buildConfig", {})
-        self.UTC_OFFSET = build_cfg.get("utcOffset", 8)
-        self.BLOG_ARTICLES_PER_PAGE = build_cfg.get("articlesPerPage", 20)
+        build_cfg: dict[str, Any] = blog_config.get("buildConfig", {})
+        self.UTC_OFFSET: int = build_cfg.get("utcOffset", 8)
+        self.BLOG_ARTICLES_PER_PAGE: int = build_cfg.get("articlesPerPage", 20)
 
-        author_cfg = blog_config.get("author", {})
-        self.TARGET_AUTHOR = author_cfg.get("targetAuthor", "")
+        author_cfg: dict[str, Any] = blog_config.get("author", {})
+        self.TARGET_AUTHOR: str = author_cfg.get("targetAuthor", "")
 
-        robots_cfg = blog_config.get("robotsConfig", {})
-        self.SITE_URL = robots_cfg.get("siteUrl")
-        self.ALLOW_PATHS = robots_cfg.get("allowPaths", ["/"])
-        self.DISALLOW_PATHS = robots_cfg.get(
-            "disallowPaths", ["/.github/", "/.git/", "/blogData/"]
-        )
-        self.SITEMAP_URL = robots_cfg.get("sitemapUrl")
+        robots_cfg: dict[str, Any] = blog_config.get("robotsConfig", {})
+        self.SITE_URL: str | None = robots_cfg.get("siteUrl")
+        self.ALLOW_PATHS: list[str] = robots_cfg.get("allowPaths", ["/"])
+        self.DISALLOW_PATHS: list[str] = robots_cfg.get("disallowPaths", ["/.github/", "/.git/", "/blogData/"])
+        self.SITEMAP_URL: str | None = robots_cfg.get("sitemapUrl")
 
-        self.ISSUE_TITLE = os.getenv("ISSUE_TITLE", "")
-        self.ISSUE_BODY = os.getenv("ISSUE_BODY") or "(无内容)"
-        self.ISSUE_DATE = os.getenv("ISSUE_DATE", "")
-        self.ISSUE_AUTHOR = os.getenv("ISSUE_AUTHOR", "")
-        self.ISSUE_LABELS = json.loads(os.getenv("ISSUE_LABELS", "[]"))
-        self.ISSUE_ID = os.getenv("ISSUE_ID", "")
-        self.ISSUE_ACTION = os.getenv("ISSUE_ACTION", "opened")
+        self.ISSUE_TITLE: str = os.getenv("ISSUE_TITLE", "")
+        self.ISSUE_BODY: str = os.getenv("ISSUE_BODY") or "(无内容)"
+        self.ISSUE_DATE: str = os.getenv("ISSUE_DATE", "")
+        self.ISSUE_AUTHOR: str = os.getenv("ISSUE_AUTHOR", "")
+        self.ISSUE_LABELS: list[str] = json.loads(os.getenv("ISSUE_LABELS", "[]"))
+        self.ISSUE_ID: str = os.getenv("ISSUE_ID", "")
+        self.ISSUE_ACTION: str = os.getenv("ISSUE_ACTION", "opened")
 
-        self._pages_config = pages_config
+        self._pages_config: dict[str, Any] = pages_config
 
-    def _load_json(self, path: str) -> dict:
+    def _load_json(self, path: str) -> dict[str, Any]:
         full_path = os.path.join(self.WORKSPACE, path)
         if os.path.exists(full_path):
             with open(full_path, "r", encoding="utf-8") as f:
@@ -201,10 +199,10 @@ class Config:
         return {}
 
     @property
-    def pages_config(self) -> dict:
+    def pages_config(self) -> dict[str, Any]:
         return self._pages_config
 
-    def save_pages_config(self, config_data: dict) -> None:
+    def save_pages_config(self, config_data: dict[str, Any]) -> None:
         full_path = os.path.join(self.WORKSPACE, self.PAGES_CONFIG_PATH)
         _write_text(full_path, json.dumps(config_data, ensure_ascii=False, indent=4))
 
@@ -226,10 +224,6 @@ def truncate(text: str, max_len: int = 150) -> str:
     return text[:max_len] + "..." if len(text) > max_len else text
 
 
-# 生成文章链接（列表页卡片跳转）
-def get_link(target_id: str, depth: int = 0) -> str:
-    prefix = "../" * depth
-    return f"{prefix}article/{target_id}.html"
 
 
 # 计算页面深度的工具函数
@@ -246,16 +240,16 @@ def _get_page_depth(file_path: str, workspace: str) -> int:
 # 对列表页 HTML 进行卡片增删改查
 class HTMLProcessor:
     def __init__(self, path: str, workspace: str = "") -> None:
-        self.path = path
-        self.depth = _get_page_depth(path, workspace) if workspace else 0
-        self.html = _read_text(path)
+        self.path: str = path
+        self.depth: int = _get_page_depth(path, workspace) if workspace else 0
+        self.html: str = _read_text(path)
 
     def save(self) -> None:
         _write_text(self.path, self.html)
 
     def find_card(self, issue_id: str) -> Optional[Tuple[int, int]]:
-        link = get_link(issue_id, self.depth)
-        start = self.html.find(f'<a href="{link}">')
+        onclick = f"qingBlogInstance.navigation('/article/{issue_id}.html')"
+        start = self.html.find(onclick)
         if start != -1:
             li_start = self.html.rfind(CARD_LI_PREFIX, 0, start)
             li_end = self.html.find(CARD_LI_SUFFIX, start)
@@ -273,14 +267,13 @@ class HTMLProcessor:
         return True
 
     @staticmethod
-    def _gen_tags(labels: List[str], depth: int = 0) -> str:
-        items = []
-        prefix = "../" * depth
+    def gen_tags(labels: List[str], depth: int = 0) -> str:
+        items: list[str] = []
         for l in labels[:3]:
-            href = f"{prefix}tags/{l}/"
             items.append(
                 "<li class=\"article-tag__list-item\">"
-                f"<a class=\"article-tag__item\" href=\"{href}\">"
+                "<a class=\"article-tag__item\" href=\"#\" "
+                f"onclick=\"window.qingBlogInstance.navigation('/tags/{l}/')\">"
                 f"<span>{l}</span>"
                 "</a>"
                 "</li>"
@@ -290,9 +283,10 @@ class HTMLProcessor:
     def _gen_card(
         self, title: str, date: str, content: str, issue_id: str, labels: List[str]
     ) -> str:
-        link, tags = get_link(issue_id, self.depth), self._gen_tags(labels, self.depth)
+        tags = self.gen_tags(labels, self.depth)
         return (
-            f"<li><article class=\"card\"><a href=\"{link}\">"
+            f"<li><article class=\"card\"><a href=\"#\" "
+            f"onclick=\"window.qingBlogInstance.navigation('/article/{issue_id}.html')\">"
             f"<header class=\"card__header\"><h2>{title}</h2></header>"
             "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
             f"<p>{content}</p>"
@@ -308,10 +302,7 @@ class HTMLProcessor:
         )
 
     def count_cards(self) -> int:
-        # 兼容历史结构 <li><a ...> 与当前结构 <li><article ...><a ...>
-        count_article = self.html.count('<article class="card">')
-        count_legacy = self.html.count('<li><a href="')
-        return max(count_article, count_legacy)
+        return self.html.count('<article class="card">')
 
     def add_or_update(
         self,
@@ -352,37 +343,33 @@ class HTMLProcessor:
 # 负责维护页数、标签文章统计等运行态数据。
 class PagesConfigManager:
     def __init__(self, cfg: Config) -> None:
-        self.cfg = cfg
+        self.cfg: Config = cfg
 
     def update_max_article_page_num(self, total_pages: int) -> None:
         config = self.cfg.pages_config
-        if "maxPageNum" not in config:
-            config["maxPageNum"] = {}
-        config["maxPageNum"]["maxArticlePageNum"] = total_pages
+        max_page_num: dict[str, int] = config.setdefault("maxPageNum", {})
+        max_page_num["maxArticlePageNum"] = total_pages
         self.cfg.save_pages_config(config)
         print(f"[成功] pagesConfig.json 中 maxArticlePageNum 已更新为：{total_pages}")
 
     def update_tag_page_nums(self, tag_page_nums: Dict[str, int]) -> None:
         config = self.cfg.pages_config
-        if "maxPageNum" not in config:
-            config["maxPageNum"] = {}
-        if "maxTagPageNums" not in config["maxPageNum"]:
-            config["maxPageNum"]["maxTagPageNums"] = {}
-        config["maxPageNum"]["maxTagPageNums"].update(tag_page_nums)
+        max_page_num = config.setdefault("maxPageNum", {})
+        target: dict[str, int] = max_page_num.setdefault("maxTagPageNums", {})
+        target.update(tag_page_nums)
         self.cfg.save_pages_config(config)
         print(f"[成功] pagesConfig.json 中 maxTagPageNums 已更新：{tag_page_nums}")
 
     def update_tags_article_total(self, tag: str, delta: int) -> None:
         config = self.cfg.pages_config
-        if "tagsArticleTotal" not in config:
-            config["tagsArticleTotal"] = {}
-        current = config["tagsArticleTotal"].get(tag, 0)
+        tag_total: dict[str, int] = config.setdefault("tagsArticleTotal", {})
+        current = tag_total.get(tag, 0)
         new_total = max(0, current + delta)
         if new_total > 0:
-            config["tagsArticleTotal"][tag] = new_total
+            tag_total[tag] = new_total
         else:
-            if tag in config["tagsArticleTotal"]:
-                del config["tagsArticleTotal"][tag]
+            if tag in tag_total:
+                del tag_total[tag]
         self.cfg.save_pages_config(config)
         print(
             f"[成功] pagesConfig.json 中 {tag} 标签文章数已更新：{current} → {new_total}"
@@ -400,8 +387,8 @@ class PagesConfigManager:
 # =============================================================================
 class PageManager:
     def __init__(self, workspace: str) -> None:
-        self.workspace = workspace
-        self.pages_dir = os.path.join(workspace, "pages")
+        self.workspace: str = workspace
+        self.pages_dir: str = os.path.join(workspace, "pages")
         os.makedirs(self.pages_dir, exist_ok=True)
 
     def get_page_path(self, page_num: int) -> str:
@@ -442,8 +429,8 @@ class PageManager:
         return 0
 
     @staticmethod
-    def _parse_tag_dict(existing_tags_str: str) -> dict:
-        tag_dict = {}
+    def _parse_tag_dict(existing_tags_str: str) -> dict[str, str]:
+        tag_dict: dict[str, str] = {}
         tag_lines = existing_tags_str.strip().split("\n")
         for line in tag_lines:
             line = line.strip().rstrip(",")
@@ -456,7 +443,7 @@ class PageManager:
         return tag_dict
 
     @staticmethod
-    def _build_tag_str(tag_dict: dict, indent: int = 2) -> str:
+    def _build_tag_str(tag_dict: dict[str, int], indent: int = 2) -> str:
         tag_entries = [f"'{tag}': {num}" for tag, num in tag_dict.items()]
         indent_str = " " * indent
         replacement = "{"
@@ -466,7 +453,7 @@ class PageManager:
         return replacement
 
     @staticmethod
-    def _update_tag_dict(existing_dict: dict, tag_updates: dict) -> dict:
+    def _update_tag_dict(existing_dict: dict[str, str], tag_updates: dict[str, int]) -> dict[str, str]:
         new_dict = existing_dict.copy()
         for tag, num in tag_updates.items():
             if num > 0:
@@ -481,8 +468,8 @@ class PageManager:
 # =============================================================================
 class TagManager:
     def __init__(self, workspace: str) -> None:
-        self.workspace = workspace
-        self.tags_dir = os.path.join(workspace, "tags")
+        self.workspace: str = workspace
+        self.tags_dir: str = os.path.join(workspace, "tags")
 
     def _get_tag_page_path(self, tag_name: str, page_num: int = 1) -> str:
         if page_num == 1:
@@ -520,8 +507,8 @@ class TagManager:
         all_labels: List[str],
         op: str = "add",
         max_cards: int = 20,
-    ) -> dict:
-        tag_page_nums = {}
+    ) -> dict[str, int]:
+        tag_page_nums: dict[str, int] = {}
         for label in target:
             if op == "add":
                 self.create_page(label)
@@ -579,7 +566,7 @@ class TagManager:
 def escape_special_chars(md: str) -> str:
     block_pat = re.compile(r'\\\[[\s\S]*?\\\]')
     inline_pat = re.compile(r'\\\([\s\S]*?\\\)')
-    store = {}
+    store: dict[str, str] = {}
     idx = 0
 
     def save(m: re.Match[str]) -> str:
@@ -593,7 +580,7 @@ def escape_special_chars(md: str) -> str:
     md = inline_pat.sub(save, md)
 
     lines = md.split("\n")
-    result = []
+    result: list[str] = []
     for line in lines:
         stripped = line.lstrip()
         indent = line[: len(line) - len(stripped)]
@@ -624,7 +611,7 @@ def md_to_html(md: str) -> str:
         md,
         extensions=MD_EXTENSIONS,
         extension_configs=MD_EXTENSION_CONFIGS,
-        output_format="html5",
+        output_format="html",
     )
     soup = BeautifulSoup(html, "html.parser")
     for pre in soup.select("td.code pre"):
@@ -640,8 +627,8 @@ def md_to_html(md: str) -> str:
 # 生成、删除、查询文章详情页
 class ArticleManager:
     def __init__(self, workspace: str, cfg: Optional[Config] = None) -> None:
-        self.pages_dir = os.path.join(workspace, "article")
-        self.cfg = cfg
+        self.pages_dir: str = os.path.join(workspace, "article")
+        self.cfg: Config | None = cfg
         os.makedirs(self.pages_dir, exist_ok=True)
 
     def _path(self, issue_id: str) -> str:
@@ -689,13 +676,15 @@ class ArticleManager:
         except ValueError:
             pass
         is_update = self.exists(issue_id)
-        tags = HTMLProcessor._gen_tags(labels, depth=1)
+        tags = HTMLProcessor.gen_tags(labels, depth=1)
+        tag_display = "inline-block" if tags.strip() else "none"
         html = ARTICLE_PAGE_TEMPLATE.format(
             title=title,
             author=author,
             date=date,
             content_html=md_to_html(content),
             tags_html=tags,
+            tag_display=tag_display,
             prefix="../",
         )
         _write_text(self._path(issue_id), html)
@@ -709,15 +698,15 @@ class ArticleManager:
 # 自动生成网站地图 sitemap.xml
 class SitemapGenerator:
     def __init__(self, workspace: str, cfg: Config) -> None:
-        self.workspace = workspace
-        self.cfg = cfg
+        self.workspace: str = workspace
+        self.cfg: Config = cfg
 
     def scan_html_files(
         self, directory: str, exclude_dirs: Optional[List[str]] = None
     ) -> List[str]:
         if exclude_dirs is None:
             exclude_dirs = []
-        html_files = []
+        html_files: list[str] = []
         for root, dirs, files in os.walk(directory):
             dirs[:] = [d for d in dirs if d not in exclude_dirs]
             for file in files:
@@ -737,7 +726,7 @@ class SitemapGenerator:
 
     def generate(self) -> None:
         print("\n[信息] 开始生成 sitemap.xml...")
-        urls = []
+        urls: list[dict[str, str]] = []
         static_pages = ["/", "/article/", "/tags/", "/data/", "/about/"]
         for page in static_pages:
             full_path = (
@@ -755,9 +744,8 @@ class SitemapGenerator:
                     }
                 )
         pages_config = self.cfg.pages_config
-        max_article_page = pages_config.get("maxPageNum", {}).get(
-            "maxArticlePageNum", 1
-        )
+        max_page_num: dict[str, Any] = pages_config.get("maxPageNum", {})
+        max_article_page: int = max_page_num.get("maxArticlePageNum", 1)
         for i in range(2, max_article_page + 1):
             page_path = f"/pages/{i}.html"
             full_path = os.path.join(self.workspace, "pages", f"{i}.html")
@@ -770,7 +758,7 @@ class SitemapGenerator:
                         "priority": "0.7",
                     }
                 )
-        max_tag_page_nums = pages_config.get("maxPageNum", {}).get("maxTagPageNums", {})
+        max_tag_page_nums: dict[str, int] = max_page_num.get("maxTagPageNums", {})
         for tag, page_count in max_tag_page_nums.items():
             for i in range(1, int(page_count) + 1):
                 if i == 1:
@@ -814,8 +802,8 @@ class SitemapGenerator:
 # 生成 robots.txt
 class RobotsGenerator:
     def __init__(self, workspace: str, cfg: Config) -> None:
-        self.workspace = workspace
-        self.cfg = cfg
+        self.workspace: str = workspace
+        self.cfg: Config = cfg
 
     def generate(self) -> None:
         print("\n[信息] 开始生成 robots.txt...")
@@ -841,13 +829,13 @@ class RobotsGenerator:
 # =============================================================================
 class BlogGenerator:
     def __init__(self) -> None:
-        self.cfg = Config()
-        self.article = ArticleManager(self.cfg.WORKSPACE, self.cfg)
-        self.tag = TagManager(self.cfg.WORKSPACE)
-        self.page = PageManager(self.cfg.WORKSPACE)
-        self.pages_config_mgr = PagesConfigManager(self.cfg)
-        self.sitemap_gen = SitemapGenerator(self.cfg.WORKSPACE, self.cfg)
-        self.robots_gen = RobotsGenerator(self.cfg.WORKSPACE, self.cfg)
+        self.cfg: Config = Config()
+        self.article: ArticleManager = ArticleManager(self.cfg.WORKSPACE, self.cfg)
+        self.tag: TagManager = TagManager(self.cfg.WORKSPACE)
+        self.page: PageManager = PageManager(self.cfg.WORKSPACE)
+        self.pages_config_mgr: PagesConfigManager = PagesConfigManager(self.cfg)
+        self.sitemap_gen: SitemapGenerator = SitemapGenerator(self.cfg.WORKSPACE, self.cfg)
+        self.robots_gen: RobotsGenerator = RobotsGenerator(self.cfg.WORKSPACE, self.cfg)
 
     def _log(self) -> None:
         date = format_date(self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET)
@@ -958,7 +946,7 @@ class BlogGenerator:
         date = format_date(self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET)
         self._log()
         is_new = not self.article.exists(self.cfg.ISSUE_ID)
-        old = [] if is_new else self.article.extract_labels(self.cfg.ISSUE_ID)
+        old: list[str] = [] if is_new else self.article.extract_labels(self.cfg.ISSUE_ID)
         if not is_new:
             print(f"[信息] 旧标签：{', '.join(old) if old else '无'}")
         self.article.generate(
@@ -998,7 +986,7 @@ class BlogGenerator:
             to_add = [l for l in self.cfg.ISSUE_LABELS if l not in old]
             to_remove = [l for l in old if l not in self.cfg.ISSUE_LABELS]
             to_keep = [l for l in self.cfg.ISSUE_LABELS if l in old]
-            tag_page_nums = {}
+            tag_page_nums: dict[str, int] = {}
             if to_remove:
                 remove_nums = self.tag.sync(
                     self.cfg.ISSUE_ID,
