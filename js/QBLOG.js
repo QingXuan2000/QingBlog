@@ -67,6 +67,7 @@ class QingBlog {
       this.initMeData();
       this.addAboutCard();
       this.initFriendLinks();
+      this.initFriendLinks();
 
       // 绑定窗口resize事件
       window.addEventListener("resize", this.debounceSetNavHeight);
@@ -180,7 +181,6 @@ class QingBlog {
 
   // ========== 公共组件渲染 ==========
   dynamicComponentBox() {
-    const base = this._getBase();
     const pathSegments = window.location.pathname.split("/").filter(Boolean);
     const pageName = pathSegments[0];
     const needPaginationPages = ["", "index.html", "article", "pages", "tags"];
@@ -205,6 +205,7 @@ class QingBlog {
       </div>
       <div class="overlay" aria-hidden="true"></div>
       <button id="back-to-top" aria-label="返回顶部"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
+      <button id="back-to-top" aria-label="返回顶部"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
       <header id="page-header">
           <nav id="navbar" aria-label="主导航">
               ${this.resizeLogo(35, 35)}
@@ -216,6 +217,7 @@ class QingBlog {
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/tags/')"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/about/')"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
+                  <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
               </ul>
           </nav>
@@ -246,6 +248,8 @@ class QingBlog {
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
                       <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/about/')"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
+                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
+                      <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
                       <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
                   </ul>
@@ -291,6 +295,7 @@ class QingBlog {
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/tags/')"><i class="fa fa-tags"></i>&nbsp;标签</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/about/')"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
+            <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
           </ul>
         </nav>

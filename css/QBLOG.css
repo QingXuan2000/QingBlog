@@ -725,6 +725,7 @@ p {
 
 .divider {
     display: block;
+    display: block;
     background: var(--divider-color);
     backdrop-filter: var(--backdrop-blur);
     flex-shrink: 0;
@@ -830,6 +831,7 @@ nav li {
     margin: 1rem;
     padding: 2rem;
     border-radius: 1rem;
+    box-shadow: var(--box-shadow-color) 0 0px 10px 0px;
     box-shadow: var(--box-shadow-color) 0 0px 10px 0px;
     border: 1px solid var(--border-color);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -970,6 +972,7 @@ nav li {
     border: 1px solid var(--border-color);
     color: var(--text-color);
     font-size: 2rem;
+    font-size: 2rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1027,6 +1030,7 @@ nav li {
     box-shadow: var(--box-shadow-color) 0 4px 20px 0px;
     backdrop-filter: var(--backdrop-blur);
     background: var(--surface-color);
+    display: none;
     display: none;
     place-content: center;
     margin-left: 0.5rem;
@@ -1186,6 +1190,7 @@ nav li {
     justify-content: center;
     align-items: center;
     margin-top: 10vh;
+    margin-top: 10vh;
     padding: 3rem 1rem 2rem 1rem;
     background: var(--surface-color);
     border-top: 1px solid var(--border-color);
@@ -1310,6 +1315,14 @@ nav li {
 
 .social-link:active {
     transform: translateY(0);
+}
+
+/* ------------------------------------------------------------- */
+/* Loading Logo */
+/* ------------------------------------------------------------- */
+
+.loading__graphic-svg {
+    flex-shrink: 0;
 }
 
 /* ------------------------------------------------------------- */
@@ -1535,6 +1548,7 @@ body.light-theme .loading__bar {
 
 #pagination-controls #input-page-num-wrapper #go-to-page-btn,
 #pagination-controls #input-page-num-wrapper #go-to-page-btn:hover {
+#pagination-controls #input-page-num-wrapper #go-to-page-btn:hover {
     transform: rotateZ(90deg);
 }
 
@@ -1637,6 +1651,7 @@ input::placeholder {
 }
 
 #pagination-controls #input-page-num-wrapper #go-to-page-btn:active {
+    transform: translateY(2px) rotateZ(90deg);
     transform: translateY(2px) rotateZ(90deg);
     box-shadow:
         inset 0 3px 6px var(--box-shadow-color),
@@ -2050,6 +2065,10 @@ body:has(.about-card__chart) {
         grid-template-columns: 1fr;
     }
 
+    .friend-links__grid {
+        grid-template-columns: 1fr;
+    }
+
     .hero__content h1::after {
         border-bottom: 10px solid var(--text-color);
         border-right: 10px solid var(--text-color);
@@ -2062,6 +2081,7 @@ body:has(.about-card__chart) {
 }
 
 @media (max-width: 640px) {
+
 
     #sidebar-toggle {
         display: grid;
@@ -2112,6 +2132,14 @@ body:has(.about-card__chart) {
 
     #pagination-controls {
         flex-direction: column;
+    }
+
+    .friend-links__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .friend-links__card {
+        padding: 1rem;
     }
 
     .friend-links__grid {
