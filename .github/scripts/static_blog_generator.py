@@ -272,10 +272,10 @@ class HTMLProcessor:
         for l in labels[:3]:
             items.append(
                 "<li class=\"article-tag__list-item\">"
-                "<a class=\"article-tag__item\" href=\"#\" "
+                "<span class=\"article-tag__item\" role=\"link\" tabindex=\"0\" "
                 f"onclick=\"window.qingBlogInstance.navigation('/tags/{l}/')\">"
                 f"<span>{l}</span>"
-                "</a>"
+                "</span>"
                 "</li>"
             )
         return "".join(items)
@@ -285,7 +285,7 @@ class HTMLProcessor:
     ) -> str:
         tags = self.gen_tags(labels, self.depth)
         return (
-            f"<li><article class=\"card\"><a href=\"#\" "
+            f"<li><article class=\"card\" "
             f"onclick=\"window.qingBlogInstance.navigation('/article/{issue_id}.html')\">"
             f"<header class=\"card__header\"><h2>{title}</h2></header>"
             "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
@@ -298,7 +298,7 @@ class HTMLProcessor:
             "</ul>"
             "</nav>"
             f"<p>发布日期：<time datetime=\"{date}\">{date}</time></p></footer>"
-            "</a></article></li>"
+            "</article></li>"
         )
 
     def count_cards(self) -> int:
@@ -677,7 +677,7 @@ class ArticleManager:
             pass
         is_update = self.exists(issue_id)
         tags = HTMLProcessor.gen_tags(labels, depth=1)
-        tag_display = "inline-block" if tags.strip() else "none"
+        tag_display = "flex" if tags.strip() else "none"
         html = ARTICLE_PAGE_TEMPLATE.format(
             title=title,
             author=author,

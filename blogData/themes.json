@@ -1,6 +1,11 @@
 {
-    "dark": {
-        "--primary-color": "#d9d9deb8",
+    "深色主题": {
+        "swatch": {
+            "primary": "#d3d3dc",
+            "secondary": "rgba(20, 20, 20, 1)",
+            "tertiary": "rgba(60, 60, 70, 1)"
+        },
+        "--primary-color": "#d3d3dc",
         "--text-color": "rgba(200, 200, 200, 1)",
         "--text-shadow-color": "rgba(0, 0, 0, 0.5)",
         "--text-secondary-color": "rgba(160, 160, 160, 1)",
@@ -13,8 +18,13 @@
         "--divider-color": "rgba(255, 255, 255, 0.15)",
         "--backdrop-blur": "blur(0.6em)"
     },
-    "light": {
-        "--primary-color": "#2c2c2db8",
+    "浅色主题": {
+        "swatch": {
+            "primary": "#424245",
+            "secondary": "rgba(233, 233, 237, 1)",
+            "tertiary": "rgba(210, 210, 215, 1)"
+        },
+        "--primary-color": "#424245",
         "--text-color": "rgba(44, 44, 44, 1)",
         "--text-shadow-color": "rgba(144, 144, 144, 1)",
         "--text-secondary-color": "rgba(85, 85, 85, 1)",
