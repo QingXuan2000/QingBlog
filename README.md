@@ -8,171 +8,180 @@
 ![GitHub issues](https://img.shields.io/github/issues/QingXuan2000/QingBlog?style=for-the-badge)
 ![GitHub Workflow](https://img.shields.io/github/actions/workflow/status/QingXuan2000/QingBlog/qingblog-build.yml?style=for-the-badge)
 
-[![Star History Chart](https://api.star-history.com/svg?repos=QingXuan2000/QingBlog&type=Date)](https://star-history.com/#QingXuan2000/QingBlog&Date)
-
 🌐 **在线演示**: [https://qingxuan2000.github.io/](https://qingxuan2000.github.io/)
 
 📖 **QingBlog Wiki**: [https://github.com/QingXuan2000/QingBlog/wiki/](https://github.com/QingXuan2000/QingBlog/wiki/)
 
 </div>
 
-## 📖 项目简介
+## 项目简介
 
 QingBlog 是一个以 **GitHub Issues 作为内容源** 的静态博客方案：你在 Issue 里写作，GitHub Actions 会自动把内容渲染成文章页面并部署到 GitHub Pages。无需服务器与数据库，适合把写作与代码托管统一在同一套工作流里。
 
-## ✨ 核心特性
+## 核心特性
 
-- 🚀 **一键部署**：GitHub Pages 免费托管，Actions 自动构建与提交
-- 📝 **Issue 即文章**：创建/编辑/删除 Issue 后自动同步到站点
-- 🔒 **作者校验**：仅 `targetAuthor` 的 Issue 会被发布，避免被“投喂内容”
-- 📄 **分页 + 标签**：首页/文章列表/标签页均支持分页，自动生成标签目录与统计
-- 💻 **写作体验**：Markdown 渲染、代码高亮、公式（MathJax）、基础 SEO（sitemap/robots）
-- 🎨 **前端体验**：响应式布局、深浅主题切换与一套现代化 UI
+- **一键部署**：GitHub Pages 免费托管，Actions 自动构建与提交
+- **Issue 即文章**：创建/编辑/删除 Issue 后自动同步到站点
+- **作者校验**：仅 `targetAuthor` 的 Issue 会被发布，避免被"投喂内容"
+- **分页 + 标签**：首页/文章列表/标签页均支持分页，自动生成标签目录与统计
+- **标签云 + 数据可视化**：标签云页与 ECharts 南丁格尔玫瑰图展示文章分布
+- **词云**：关于页展示作者技能标签词云
+- **代码复制**：文章代码块带一键复制按钮
+- **Markdown 渲染**：代码高亮、任务列表、数学公式（MathJax admonition 等）
+- **SEO**：自动生成 sitemap.xml / robots.txt
+- **响应式布局**：适配桌面与移动端，侧边栏导航
+- **主题切换**：多主题支持，可跟随系统主题偏好
+- **加载动画**：可选的启动加载动画（SVG Logo 动画）
+- **卡片滚动动画**：文章列表卡片滚动进入视口时渐入
+- **动态页面标题**：页面可见性变化时自动切换标题文案
+- **文章元信息**：文章页显示字数、阅读时间、最后更新时间
+- **友情链接**：独立友情链接页面，通过 blogConfig 配置
+- **404 页面**：自定义 404 错误页
 
-## 🛠️ 技术栈
+## 技术栈
 
 ### 前端
 
-- **HTML/CSS/JavaScript** - 静态页面与交互
-- **Font Awesome** - 图标
-- **MathJax** - 公式渲染
-- **ECharts** - 数据可视化（可选）
+- **HTML/CSS/JavaScript** - 静态页面与交互，ES6 Class 面向对象架构
+- **Font Awesome** - 图标库
+- **MathJax** - 公式渲染（客户端渲染，通过 tex-mml-chtml.js）
+- **ECharts** - 数据可视化（南丁格尔玫瑰图 + 词云）
 
 ### 自动化
 
 - **Python 3.12** - 构建脚本
 - **GitHub Actions** - 触发构建、自动提交
-- **Python-Markdown / PyMdown Extensions / Pygments / BeautifulSoup4** - 渲染与页面处理
+- **Python-Markdown / PyMdown Extensions / Pygments / BeautifulSoup4** - Markdown 渲染与页面处理
 - **GitHub Pages** - 部署托管
 
-## 📁 项目结构
+## 项目结构
 
 ```
 QingBlog/
 ├── .github/
 │   ├── workflows/
-│   │   └── qingblog-build.yml    # GitHub Actions 工作流配置
+│   │   └── qingblog-build.yml         # GitHub Actions 工作流
 │   └── scripts/
-│       ├── static_blog_generator.py # 核心构建脚本（Issue → 页面）
-│       └── requirements.txt         # Python 依赖
+│       ├── static_blog_generator.py    # 核心构建脚本（Issue → 页面）
+│       └── requirements.txt            # Python 依赖
 │
-├── blogData/                     # 博客配置目录
-│   ├── blogConfig.json           # 博客核心配置（作者信息、构建设置）
-│   ├── pagesConfig.json          # 分页配置（页数、标签统计）
-│   └── themes.json               # 主题配置
+├── blogData/                           # 博客配置目录
+│   ├── blogConfig.json                 # 博客核心配置
+│   ├── pagesConfig.json                # 分页与标签统计数据
+│   └── themes.json                     # 主题配置
 │
 ├── css/
-│   ├── QBLOG.css                 # 主样式文件（主题变量、布局）
-│   ├── blogArticle.css           # 文章页样式
-│   └── font-awesome.min.css      # Font Awesome 压缩版
+│   ├── QBLOG.css                       # 主样式（主题变量、布局、组件）
+│   ├── blogArticle.css                 # 文章页样式
+│   └── font-awesome.min.css            # Font Awesome
 │
 ├── js/
-│   ├── QBLOG.js                  # 前端交互脚本（QingBlog 类）
-│   ├── echarts.min.js            # ECharts 图表库
-│   └── echarts-wordcloud.min.js  # ECharts 词云插件
+│   ├── QBLOG.js                        # 前端核心脚本（QingBlog 类）
+│   ├── echarts.min.js                  # ECharts 图表库
+│   ├── echarts-wordcloud.min.js        # ECharts 词云插件
+│   └── tex-mml-chtml.js               # MathJax 渲染引擎
 │
-├── article/                      # 文章页面目录
-│   └── index.html                # 文章列表页
+├── article/                            # 文章详情页
+│   └── index.html                      # 文章列表页
 │
-├── tags/                         # 标签系统目录
-│   └── index.html                # 标签云页面
+├── tags/                               # 标签系统
+│   └── index.html                      # 标签云页
 │
-├── pages/                        # 分页页面目录
-│   └── .pagesDir                 # 分页标识文件
+├── pages/                              # 分页页面
+│   └── .pagesDir
 │
-├── data/                         # 文章数据页面
-│   └── index.html                # 数据可视化页面
+├── data/                               # 数据统计页
+│   └── index.html
 │
-├── about/                        # 关于我页面
-│   └── index.html                # 个人介绍页面
+├── about/                              # 关于我
+│   └── index.html
 │
-├── fonts/                        # 字体文件
-│   ├── 江城圆体/                # 江城圆体字体（多字重 200W-700W）
+├── links/                              # 友情链接
+│   └── index.html
+│
+├── fonts/                              # 字体文件
+│   ├── 江城圆体/                       # 江城圆体字体（多字重 200W-700W）
 │   ├── This-July.ttf
 │   └── fontawesome-webfont.woff2
 │
-├── img/                          # 图片资源
+├── img/
 │   ├── Avatar.png
-│   └── logo.svg                  # 项目 Logo
+│   └── logo.svg                        # 项目 Logo
 │
-├── index.html                    # 首页
-├── favicon.ico                   # 网站图标
-├── LICENSE                       # GPL v3 许可证
-└── README.md                     # 项目说明
+├── index.html                          # 首页
+├── 404.html                            # 自定义 404 页面
+├── favicon.ico
+├── LICENSE                             # GPL v3
+└── README.md
 ```
 
-## 🚀 快速开始
+## 快速开始
 
-### 1) Fork + 开启 Pages
+### 1. Fork + 开启 Pages
 
-Fork 本仓库到你的账号下，然后在仓库 **Settings → Pages** 中把站点源设置为 **main 分支 /(root)**。
+Fork 本仓库到你的账号下，然后在仓库 **Settings → Pages** 中把站点源设置为 **main 分支 / (root)**。
 
-### 2) 允许工作流写入仓库
+### 2. 允许工作流写入仓库
 
-在 **Settings → Actions → General → Workflow permissions** 里选择 **Read and write permissions**，否则自动提交生成结果会失败。
+在 **Settings → Actions → General → Workflow permissions** 里选择 **Read and write permissions**，否则自动提交会失败。
 
-### 3) 配置你的博客信息
+### 3. 配置博客信息
 
-编辑 `blogData/blogConfig.json`，通常你只需要关心这些字段：
+编辑 `blogData/blogConfig.json`，主要字段：
 
-- `blogInfo.blogName`: 博客名称（4 字英文为宜，与模板样式更匹配）
-- `author.targetAuthor`: 允许发布文章的 GitHub 用户名（重要）
-- `buildConfig.utcOffset`: 时区偏移（默认 `8`，北京时间）
-- `buildConfig.articlesPerPage`: 每页文章数量
-- `buildConfig.showLoadingAnimation`: 每次加载是否显示开启动画（默认 `true`）
-- `robotsConfig.siteUrl` / `robotsConfig.sitemapUrl`: 用于 SEO（可选，但建议配置）
+| 字段 | 说明 |
+|------|------|
+| `blogInfo.blogName` | 博客名称 |
+| `blogInfo.yearOfWriting` | 开始写作年份 |
+| `blogInfo.repositoryName` | 仓库名（用于子路径部署） |
+| `blogInfo.siteEstablishmentDate` | 建站日期（用于计算运行天数） |
+| `author.targetAuthor` | 允许发布文章的 GitHub 用户名 |
+| `author.introShort` | 标语（显示在侧边栏） |
+| `author.introDetail` | 详细介绍（显示在关于页） |
+| `author.socialMediaPlatform` | 社交平台链接 |
+| `author.authorTags` | 技能标签（用于关于页词云） |
+| `buildConfig.utcOffset` | 时区偏移，默认 8 |
+| `buildConfig.articlesPerPage` | 每页文章数 |
+| `buildConfig.showLoadingAnimation` | 是否显示加载动画 |
+| `friendLinks` | 友情链接列表 |
+| `robotsConfig` | SEO 配置（siteUrl，sitemapUrl 等） |
 
-### 4) 发布文章
+### 4. 配置主题（可选）
 
-在你的仓库 **Issues** 新建 Issue（支持 Markdown）。工作流会在 `opened/edited/deleted/reopened` 时触发，生成页面并自动提交到仓库，Pages 随后完成部署。
+编辑 `blogData/themes.json`，可自定义 CSS 变量色板。页面右上角调色盘按钮可切换主题。
 
-## 🔧 工作原理
+### 5. 发布文章
+
+在你的仓库 **Issues** 新建 Issue（支持 Markdown）。工作流会在 `opened / edited / deleted / reopened` 时触发，自动构建并部署。
+
+## 工作原理
 
 ```
-┌─────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│  创建 Issue  │────▶│  GitHub Actions │────▶│ static_blog_generator.py │
-│  或编辑     │     │  触发工作流      │     │   执行脚本       │
-└─────────────┘     └─────────────────┘     └────────┬────────┘
-                                                      │
-            ┌────────────────────────────────────────┘
-            ▼
-   ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-   │  验证作者身份    │────▶│ Markdown 转 HTML │────▶│ 生成文章页面    │
-   │ (targetAuthor)  │     │  (含代码高亮)    │     │ article/{id}.html │
-   └─────────────────┘     └─────────────────┘     └────────┬────────┘
-                                                             │
-   ┌─────────────────────────────────────────────────────────┘
-   ▼
-   ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-   │  更新首页卡片    │────▶│  更新标签系统   │────▶│  更新JSON配置   │
-   │  更新列表页     │     │  标签页/统计    │     │  pagesConfig.json│
-   └─────────────────┘     └─────────────────┘     └────────┬────────┘
-                                                             │
-   ┌─────────────────────────────────────────────────────────┘
-   ▼
-   ┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-   │  生成SEO文件    │────▶│  Git自动提交    │────▶│ GitHub Pages 部署│
-   │ sitemap.xml    │     │  更改到仓库      │     │  静态站点       │
-   │ robots.txt     │     │                 │     │                │
-   └─────────────────┘     └─────────────────┘     └─────────────────┘
+创建/编辑/删除 Issue
+        │
+        ▼
+  GitHub Actions 触发
+        │
+        ▼
+  static_blog_generator.py
+    ├── 校验作者 (targetAuthor)
+    ├── Markdown → HTML（代码高亮、任务列表、公式等）
+    ├── 生成文章页 article/{id}.html
+    ├── 更新首页卡片 / 分页页 / 文章列表页
+    ├── 同步标签系统（新增/更新/删除标签页）
+    ├── 更新统计配置（文章数、字数、标签计数等）
+    ├── 生成 sitemap.xml / robots.txt
+    └── Git 自动提交并推送
+        │
+        ▼
+  GitHub Pages 部署
 ```
 
-### 详细流程
-
-1. **触发**：Issue 被创建/编辑/删除/重新打开时触发工作流
-2. **校验**：只处理作者为 `targetAuthor` 的 Issue
-3. **渲染**：Markdown → HTML（含代码高亮等扩展能力）
-4. **生成**：输出文章页、列表页、分页页、标签页及统计配置
-5. **SEO**：生成 `sitemap.xml` 与 `robots.txt`（依赖 `robotsConfig`）
-6. **提交**：自动提交生成结果并推送，Pages 完成部署
-
-## 💻 本地运行（可选）
-
-本项目默认通过 GitHub Actions 运行构建脚本；如果你想在本地调试生成逻辑，可以用环境变量模拟 Actions 传入的 Issue 信息。
+## 本地运行（可选）
 
 ### 前置条件
 
-- 安装 Python 3.12（或与工作流一致的版本）
+- Python 3.12
 - 安装依赖：
 
 ```bash
@@ -195,170 +204,84 @@ $env:PAGES_CONFIG_PATH="blogData/pagesConfig.json"
 python .github/scripts/static_blog_generator.py
 ```
 
-> 提示：若 `ISSUE_AUTHOR` 不等于 `blogData/blogConfig.json` 中的 `author.targetAuthor`，脚本可能会跳过生成（用于避免他人 Issue 被发布）。
+> 若 `ISSUE_AUTHOR` 不等于 `author.targetAuthor`，脚本会跳过生成。
 
-## 📝 Markdown 支持
+## Markdown 支持
 
-QingBlog 通过 `Python-Markdown` + `PyMdown Extensions` 提供增强的 Markdown 渲染能力（以写作友好为目标）：
+通过 `Python-Markdown` + `PyMdown Extensions` 提供增强渲染：
 
 - 标准 Markdown（标题、列表、链接、图片等）
-- 代码块语法高亮（Pygments）
-- 表格/脚注/目录（TOC）/任务列表
-- 数学公式（LaTeX，MathJax）
-- 常用扩展（如 admonition、details、tabbed 等，按需使用）
+- 代码块语法高亮（Pygments，带行号）
+- 表格 / 脚注 / TOC / 任务列表（可点击）
+- 数学公式（LaTeX，通过 MathJax 客户端渲染）
+- Admonition / Details / Tabbed / Emoji / Magiclink 等扩展
 
-## 🏷️ 标签系统
+## 标签系统
 
-QingBlog 拥有完善的智能标签系统，让文章分类管理更加便捷：
+- **自动提取**：从 Issue 标签自动提取，每篇文章最多显示 3 个标签
+- **独立标签页**：每个标签生成独立页面 `tags/{标签名}/`
+- **标签分页**：标签文章超过每页限制时自动分页
+- **智能计数**：新增/删除文章时自动增减标签计数，归零时自动移除
+- **标签云**：`tags/index.html` 展示所有标签及其文章数
 
-### 标签功能特性
+## 数据可视化
 
-- **自动标签提取**：从 Issue 标签自动提取，一篇文章最多显示 3 个标签
-- **独立标签页面**：每个标签自动生成独立目录和页面 `tags/{标签名}/index.html`
-- **标签页分页**：标签页同样支持分页功能，自动创建 `tags/{标签名}/{page}.html`
-- **智能计数管理**：
-  - 新增文章时自动增加标签计数
-  - 删除文章时自动减少标签计数
-  - 计数归零时自动移除标签
-- **自动清理**：自动删除空标签页面和目录
-- **双向同步**：文章更新时自动同步到相关标签页面
-- **JSON 配置同步**：标签统计数据保存在 `pagesConfig.json` 中
+- **文章统计**：`data/` 页面展示南丁格尔玫瑰图（文章标签分布）
+- **站点统计表**：展示文章总数、标签数、总字数、运行天数
+- **个人词云**：`about/` 页面展示作者技能标签词云
 
-### 使用方式
+## 前端架构
 
-1. 创建 Issue 时添加 GitHub 标签
-2. 系统自动生成标签页面和统计
-3. 点击文章标签或访问标签云页面浏览同类型文章
-
-## 🎨 自定义主题
-
-主题配置位于 [`blogData/themes.json`](blogData/themes.json)，每个主题以中文命名，包含色板元数据和 CSS 变量：
-
-```json
-{
-    "深色主题": {
-        "swatch": {
-            "primary": "#d3d3dc",
-            "secondary": "rgba(20, 20, 20, 1)",
-            "tertiary": "rgba(60, 60, 70, 1)"
-        },
-        "--primary-color": "#d3d3dc",
-        "--text-color": "rgba(200, 200, 200, 1)",
-        "--bg-color": "linear-gradient(180deg, rgba(20, 20, 20, 1), ...)",
-        "--hero-bg-color": "rgba(10, 10, 10, 1)"
-    },
-    "浅色主题": {
-        "swatch": { ... },
-        ...
-    }
-}
-```
-
-- `swatch` 定义主题卡片的色块预览（三色），用于主题选择弹窗
-- 其他字段为 CSS 自定义属性，加载时动态注入到 `:root`
-- 可自行增删主题，页面右上角的调色盘按钮会打开主题选择弹窗，支持"跟随系统"、点选切换
-
-## 📊 数据可视化
-
-QingBlog 集成了 ECharts 数据可视化库，提供文章数据的可视化展示：
-
-- 📈 **文章统计图表**：展示文章数量、标签分布等数据
-- 🏷️ **标签云图**：词云形式展示热门标签
-
-数据配置位于 [`blogData/blogConfig.json`](blogData/blogConfig.json) 的 `author.authorTags` 中。
-
-## 🔍 前端架构
-
-### QingBlog 类设计
-
-QingBlog 采用面向对象编程设计，核心类包含：
+QingBlog 前端采用面向对象设计，核心 `QingBlog` 类（[js/QBLOG.js](js/QBLOG.js)）管理所有功能：
 
 ```javascript
 class QingBlog {
-  // 静态配置
-  static alertColors = { /* 弹窗颜色 */ };
-  
-  // 实例属性
-  blogConfig = {};
-  pagesConfig = {};
-  themes = {};
-  
-  // 核心方法
-  async init() { /* 初始化所有功能 */ }
-  async loadConfigs() { /* 加载配置文件 */ }
-  initThemeModal() { /* 主题选择弹窗（Modal + 卡片渲染） */ }
-  initPagination() { /* 分页控件 */ }
-  showAlert() { /* 弹窗提示 */ }
+  async init()                    // 初始化所有功能模块
+  async loadConfigs()             // 加载 JSON 配置
+  navigation(href)                // SPA 风格页面导航
+  showAlert(color, message)       // 全局提示框
+
+  // 功能模块
+  initLoadingAnimation()          // 启动加载动画
+  initThemeModal()                // 主题选择弹窗
+  initSidebar()                   // 侧边栏导航
+  initPagination()                 // 分页控件
+  initBackToTop()                 // 回到顶部按钮
+  initWebTitle()                  // 动态页面标题（可见性变化）
+  initCopyButtons()               // 代码复制按钮
+  initCardScrollAnimation()       // 卡片滚动渐入动画
+  initLazyLoadImages()            // 图片懒加载
+  initArticleData()               // 数据页 ECharts 图表
+  initMeData()                    // 关于页词云
+  initFriendLinks()               // 友情链接
+  initArticleInfo()               // 文章更新时间
+  addTagToPages()                 // 标签云渲染
 }
 ```
 
-### 可复用 Modal 组件
+可复用 `Modal` 类封装模态框通用逻辑（动画、遮罩、Escape 关闭、滚动锁定）。
 
-模态框通用逻辑（动画、遮罩、Escape 关闭、滚动锁定）由独立 `Modal` 类封装，可传入不同的面板动画名复用：
-
-```javascript
-const modal = new Modal(overlayEl, panelEl, {
-  panelShowAnim: "showThemeModalAnimation",
-  panelHideAnim: "hideThemeModalAnimation"
-});
-modal.show();
-modal.hide();
-```
-
-### 配置系统
-
-前端通过 `_getBase()` 计算相对路径后异步加载 JSON 配置文件：
-
-```javascript
-async loadConfigs() {
-  const base = this._getBase();
-  this.blogConfig = await this.getConfig(`${base}/blogData/blogConfig.json`);
-  this.pagesConfig = await this.getConfig(`${base}/blogData/pagesConfig.json`);
-  this.themes = await this.getConfig(`${base}/blogData/themes.json`);
-}
-```
-
-## 🛡️ 安全说明
+## 安全说明
 
 - 只有 `targetAuthor` 指定的用户创建的 Issue 才会被发布
-- 这防止了他人在你的博客上发表文章
 - 建议将仓库设置为需要审核的 Fork 工作流
 
-## 📚 Wiki 文档
+## Wiki 文档
 
-QingBlog 提供了完整的 Wiki 文档，包含以下章节：
+完整 Wiki 文档在 [GitHub Wiki](https://github.com/QingXuan2000/QingBlog/wiki/)，涵盖安装、配置、开发、API、FAQ 等。
 
-- 📖 [首页](https://github.com/QingXuan2000/QingBlog/wiki/) - Wiki 概览
-- 🚀 [安装指南](https://github.com/QingXuan2000/QingBlog/wiki/Installation-Guide) - 快速上手教程
-- ⚙️ [核心功能](https://github.com/QingXuan2000/QingBlog/wiki/Core-Features) - 功能详细介绍
-- 🎨 [前端参考](https://github.com/QingXuan2000/QingBlog/wiki/Frontend-Reference) - 前端开发文档
-- 🏗️ [技术架构](https://github.com/QingXuan2000/QingBlog/wiki/Technical-Architecture) - 架构设计说明
-- 📦 [部署配置](https://github.com/QingXuan2000/QingBlog/wiki/Deployment-Configuration) - 部署相关配置
-- ✅ [配置检查清单](https://github.com/QingXuan2000/QingBlog/wiki/Configuration-Checklist) - 配置验证清单
-- 📖 [使用指南](https://github.com/QingXuan2000/QingBlog/wiki/Usage-Guide) - 日常使用教程
-- 🔌 [API 文档](https://github.com/QingXuan2000/QingBlog/wiki/API-Documentation) - API 接口文档
-- ❓ [常见问题](https://github.com/QingXuan2000/QingBlog/wiki/FAQ) - FAQ 问题解答
-- 🤝 [贡献指南](https://github.com/QingXuan2000/QingBlog/wiki/Contributing-Guide) - 如何参与贡献
-- 📝 [更新日志](https://github.com/QingXuan2000/QingBlog/wiki/Changelog) - 版本更新记录
-- 📜 [许可证](https://github.com/QingXuan2000/QingBlog/wiki/License.md) - 许可证说明
+## 许可证
 
-## 🤝 贡献
+本项目采用 [GNU General Public License v3.0](LICENSE)。
 
-欢迎提交 Issue 和 Pull Request！
-
-详细的贡献指南请参阅 [贡献指南](https://github.com/QingXuan2000/QingBlog/wiki/Contributing-Guide)。
-
-## 📄 许可证
-
-本项目采用 [GNU General Public License v3.0](LICENSE) 许可证。
-
-## 👨‍💻 作者
+## 作者
 
 - **QingXuanJun** - [GitHub](https://github.com/QingXuan2000)
 
-## 🌟 致谢
+## 致谢
 
 - [Font Awesome](https://fontawesome.com/) - 图标库
-- [GitHub](https://github.com/) - 托管和 CI/CD 服务
-- [Python Markdown](https://python-markdown.github.io/) - Markdown 转换库
-- [ECharts](https://echarts.apache.org/) - 数据可视化库
+- [GitHub](https://github.com/) - 托管和 CI/CD
+- [Python Markdown](https://python-markdown.github.io/) - Markdown 转换
+- [ECharts](https://echarts.apache.org/) - 数据可视化
+- [MathJax](https://www.mathjax.org/) - 公式渲染
