@@ -63,20 +63,29 @@ ARTICLE_PAGE_TEMPLATE: str = (
     "<meta name=\"description\"content=\"{title}\"/>"
     "<link rel=\"shortcut icon\"href=\"{prefix}favicon.ico\"type=\"image/x-icon\"/>"
     "<title>{title}</title>"
+    "{script_vars}"
     "<link rel=\"stylesheet\"href=\"{prefix}css/blogArticle.css\">"
     "<link rel=\"stylesheet\"href=\"{prefix}css/QBLOG.css\"/>"
     "<link rel=\"stylesheet\"href=\"{prefix}css/font-awesome.min.css\"/>"
     "</head><body><main class=\"card__wrapper\"><article class=\"card\">"
-    "<header class=\"card__header\"><h1>{title}</h1><p>作者：{author}</p>"
-    "<p>发布日期：<time datetime=\"{date}\">{date}</time></p></header>"
+    "<header class=\"card__header\"><h1>{title}</h1><div><span class=\"card\"><i class=\"fa fa-user\"></i></span>&nbsp;{author}</div>"
+    "<div><span class=\"card\"><i class=\"fa fa-calendar\"></i></span>&nbsp;<time datetime=\"{date}\">{date}</time></div>"
+    "{word_count_display}"
+    "{tag_header_display}</header>"
     "<div class=\"divider\"style=\"height:1px;width:100%;margin:1rem 0\"></div>"
     "<div class=\"card__content article-content\">{content_html}</div>"
-    "<footer class=\"article-footer\">"
-    "<nav class=\"article-tag\" style=\"display: {tag_display};\" aria-label=\"文章标签\">"
-    "<span class=\"article-tag__label\">文章标签：</span>"
-    "<ul class=\"article-tag__list\">{tags_html}</ul>"
-    "</nav>"
-    "</footer></article></main>"
+    "</article>"
+    "<div class=\"card article-license\">"
+    "<div class=\"article-footer__icon\"><i class=\"fa fa-creative-commons\"></i></div>"
+    "<div class=\"article-license__text\">"
+    "本文采用 <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/\">CC BY-NC-SA 4.0</a>"
+    " 许可协议，转载请注明出处。"
+    "</div>"
+    "</div>"
+    "<div class=\"card article-last-updated\">"
+    "<div class=\"article-footer__icon\"><i class=\"fa fa-clock-o\"></i></div>"
+    "<div class=\"article-last-updated__info\"><span></span><span></span></div>"
+    "</div></main>"
     "<script src=\"{prefix}js/QBLOG.js\"></script>"
     "<script>\n"
     "window.MathJax = {{\n"
@@ -189,6 +198,7 @@ class Config:
         self.ISSUE_ID: str = os.getenv("ISSUE_ID", "")
         self.ISSUE_ACTION: str = os.getenv("ISSUE_ACTION", "opened")
 
+        self._blog_config: dict[str, Any] = blog_config
         self._pages_config: dict[str, Any] = pages_config
 
     def _load_json(self, path: str) -> dict[str, Any]:
@@ -202,8 +212,16 @@ class Config:
     def pages_config(self) -> dict[str, Any]:
         return self._pages_config
 
+    @property
+    def blog_config(self) -> dict[str, Any]:
+        return self._blog_config
+
     def save_pages_config(self, config_data: dict[str, Any]) -> None:
         full_path = os.path.join(self.WORKSPACE, self.PAGES_CONFIG_PATH)
+        _write_text(full_path, json.dumps(config_data, ensure_ascii=False, indent=4))
+
+    def save_blog_config(self, config_data: dict[str, Any]) -> None:
+        full_path = os.path.join(self.WORKSPACE, self.BLOG_CONFIG_PATH)
         _write_text(full_path, json.dumps(config_data, ensure_ascii=False, indent=4))
 
 
@@ -380,6 +398,44 @@ class PagesConfigManager:
         config["tagsArticleTotal"] = tag_totals
         self.cfg.save_pages_config(config)
         print(f"[成功] pagesConfig.json 中 tagsArticleTotal 已同步：{tag_totals}")
+
+    def update_article_word_count(self, delta: int) -> None:
+        config = self.cfg.blog_config
+        blog_info = config.setdefault("blogInfo", {})
+        blog_stats = blog_info.setdefault("blogStatistics", {})
+        current = blog_stats.get("blogArticleWordCount", 0)
+        new_total = max(0, current + delta)
+        blog_stats["blogArticleWordCount"] = new_total
+        self.cfg.save_blog_config(config)
+        print(f"[成功] blogArticleWordCount 已更新：{current} → {new_total}")
+
+    def update_article_count(self, delta: int) -> None:
+        config = self.cfg.blog_config
+        blog_info = config.setdefault("blogInfo", {})
+        blog_stats = blog_info.setdefault("blogStatistics", {})
+        current = blog_stats.get("blogArticleCount", 0)
+        new_total = max(0, current + delta)
+        blog_stats["blogArticleCount"] = new_total
+        self.cfg.save_blog_config(config)
+        print(f"[成功] blogArticleCount 已更新：{current} → {new_total}")
+
+    def refresh_statistics(self) -> None:
+        """轻量刷新统计：从运行时参数和现有配置中推导，无需解析 HTML。"""
+        config = self.cfg.blog_config
+        blog_info = config.setdefault("blogInfo", {})
+        blog_stats = blog_info.setdefault("blogStatistics", {})
+
+        if self.cfg.ISSUE_DATE:
+            blog_stats["blogLastActivity"] = format_date(
+                self.cfg.ISSUE_DATE, self.cfg.UTC_OFFSET
+            )
+
+        self.cfg.save_blog_config(config)
+        print(
+            f"[成功] 博客统计已刷新：{blog_stats.get('blogArticleCount', 0)} 篇文章，"
+            f"{blog_stats.get('blogArticleWordCount', 0)} 字，"
+            f"最后活动：{blog_stats.get('blogLastActivity', '')}"
+        )
 
 
 # =============================================================================
@@ -660,6 +716,25 @@ class ArticleManager:
                 }
             )
 
+    def extract_publish_date(self, issue_id: str) -> str | None:
+        path = self._path(issue_id)
+        if not os.path.exists(path):
+            return None
+        with open(path, "r", encoding="utf-8") as f:
+            soup = BeautifulSoup(f.read(), "html.parser")
+            time_tag = soup.select_one(".card__header time")
+            if time_tag:
+                return time_tag.get_text(strip=True)
+        return None
+
+    def extract_word_count(self, issue_id: str) -> int:
+        path = self._path(issue_id)
+        if not os.path.exists(path):
+            return 0
+        with open(path, "r", encoding="utf-8") as f:
+            match = re.search(r'(\d+)字', f.read())
+            return int(match.group(1)) if match else 0
+
     def generate(
         self,
         issue_id: str,
@@ -668,6 +743,7 @@ class ArticleManager:
         date: str,
         content: str,
         labels: List[str],
+        last_updated: str | None = None,
     ) -> None:
         try:
             date = datetime.strptime(date, "%Y年%m月%d日 %H:%M:%S").strftime(
@@ -676,16 +752,45 @@ class ArticleManager:
         except ValueError:
             pass
         is_update = self.exists(issue_id)
-        tags = HTMLProcessor.gen_tags(labels, depth=1)
-        tag_display = "flex" if tags.strip() else "none"
+        wordCount = len(re.sub(r'\s', '', content))
+        tag_links: list[str] = []
+        for l in labels[:3]:
+            tag_links.append(
+                f"<span class=\"article-header-tag\" role=\"link\" tabindex=\"0\" "
+                f"onclick=\"window.qingBlogInstance.navigation('/tags/{l}/')\">{l}</span>"
+            )
+        tag_header_display = (
+            f"<div><span class=\"card\"><i class=\"fa fa-tag\"></i></span>&nbsp;"
+            f"{' / '.join(tag_links)}</div>"
+        ) if tag_links else ""
+        read_time = (wordCount + 250 - 1) // 250 if wordCount else 0
+        word_count_display = (
+            f"<div class=\"card__header-meta-right\">"
+            f"<div><span class=\"card\"><i class=\"fa fa-file-text-o\"></i></span>&nbsp;{wordCount}字</div>"
+            f"<div><span class=\"card\"><i class=\"fa fa-clock-o\"></i></span>&nbsp;{read_time}分钟</div>"
+            f"</div>"
+        )
+        update_str = last_updated if last_updated is not None else date
+        try:
+            iso_date = datetime.strptime(update_str, "%Y年%m月%d日 %H:%M").strftime(
+                "%Y-%m-%dT%H:%M:%S+08:00"
+            )
+        except ValueError:
+            iso_date = update_str
+        scriptVars = (
+            f"<script>"
+            f"const lastUpdatedDate = '{iso_date}'; "
+            f"</script>"
+        )
         html = ARTICLE_PAGE_TEMPLATE.format(
             title=title,
             author=author,
             date=date,
             content_html=md_to_html(content),
-            tags_html=tags,
-            tag_display=tag_display,
             prefix="../",
+            script_vars=scriptVars,
+            word_count_display=word_count_display,
+            tag_header_display=tag_header_display,
         )
         _write_text(self._path(issue_id), html)
         print(f"[成功] 文章已{'更新' if is_update else '生成'}：{self._path(issue_id)}")
@@ -916,8 +1021,11 @@ class BlogGenerator:
     def handle_delete(self) -> None:
         print(f"\n[操作] 删除文章：ID {self.cfg.ISSUE_ID}")
         old = self.article.extract_labels(self.cfg.ISSUE_ID)
+        old_word_count = self.article.extract_word_count(self.cfg.ISSUE_ID)
         print(f"[信息] 旧标签：{', '.join(old) if old else '无'}")
         self.article.delete(self.cfg.ISSUE_ID)
+        self.pages_config_mgr.update_article_word_count(-old_word_count)
+        self.pages_config_mgr.update_article_count(-1)
         self._remove_card_from_all_pages(self.cfg.ISSUE_ID)
         idx = os.path.join(self.cfg.WORKSPACE, "article", "index.html")
         p = HTMLProcessor(idx, self.cfg.WORKSPACE)
@@ -949,14 +1057,24 @@ class BlogGenerator:
         old: list[str] = [] if is_new else self.article.extract_labels(self.cfg.ISSUE_ID)
         if not is_new:
             print(f"[信息] 旧标签：{', '.join(old) if old else '无'}")
+        publish_date = (
+            self.article.extract_publish_date(self.cfg.ISSUE_ID)
+            if not is_new else date
+        ) or date
+        old_count = self.article.extract_word_count(self.cfg.ISSUE_ID) if not is_new else 0
         self.article.generate(
             self.cfg.ISSUE_ID,
             self.cfg.ISSUE_TITLE,
             self.cfg.ISSUE_AUTHOR,
-            date,
+            publish_date,
             self.cfg.ISSUE_BODY,
             self.cfg.ISSUE_LABELS,
+            last_updated=date,
         )
+        new_count = len(re.sub(r'\s', '', self.cfg.ISSUE_BODY))
+        self.pages_config_mgr.update_article_word_count(new_count - old_count)
+        if is_new:
+            self.pages_config_mgr.update_article_count(1)
         self._update_indices(
             self.cfg.ISSUE_TITLE,
             date,
@@ -1042,6 +1160,7 @@ class BlogGenerator:
             self.handle_delete()
         else:
             self.handle_create_update()
+        self.pages_config_mgr.refresh_statistics()
         self.sitemap_gen.generate()
         self.robots_gen.generate()
 

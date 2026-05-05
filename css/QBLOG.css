@@ -925,7 +925,7 @@ nav li {
     border: 1px solid var(--surface-border-color);
     color: var(--text-color);
     padding: 0.2rem 0.6rem;
-    border-radius: 100rem;
+    border-radius: 10px;
     font-size: 0.8em;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1251,7 +1251,8 @@ nav li {
 }
 
 .footer__links a:hover {
-    transform: translateX(5px);
+    color: var(--primary-color);
+    transform: scale(1.05);
 }
 
 .footer__bottom {
@@ -2037,6 +2038,26 @@ body:has(.about-card__chart) {
 }
 
 /* ------------------------------------------------------------- */
+/* 下划线悬停动画 */
+/* ------------------------------------------------------------- */
+
+.article-license__text a,
+.article-header-tag {
+    cursor: pointer;
+
+    transition: background-size 0.2s ease-in-out;
+
+    background: linear-gradient(var(--primary-color), var(--primary-color)) no-repeat right bottom;
+    background-size: 0 1px;
+}
+
+.article-license__text a:hover,
+.article-header-tag:hover {
+    background-position-x: left;
+    background-size: 100% 1px;
+}
+
+/* ------------------------------------------------------------- */
 /* 媒体查询 */
 /* ------------------------------------------------------------- */
 
@@ -2142,11 +2163,6 @@ body:has(.about-card__chart) {
 
     .about-card__chart {
         height: 80vh;
-    }
-
-    .footer__links a:hover {
-        transform: scale(1.1);
-        filter: drop-shadow(0 0 10px var(--text-color));
     }
 
     #theme-modal {

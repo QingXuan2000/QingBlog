@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light dark">
-    <title>文章数据</title>
+    <title>数据统计</title>
     
     <meta name="description" content="文章数据统计" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -16,17 +16,84 @@
         .card-list {
             border-top: none;
         }
+        .data-stats__wrapper {
+            width: 794px;
+            max-width: 100%;
+            margin: 2rem auto;
+            background: var(--surface-color);
+            backdrop-filter: var(--backdrop-blur);
+            border-radius: 1rem;
+            box-shadow: var(--box-shadow-color) 0 0px 10px 0px;
+            border: 1px solid var(--border-color);
+            padding: 0;
+        }
+        .data-stats__title {
+            position: relative;
+            left: 1.8rem;
+            font-size: 1.3rem;
+            margin: 0.8rem 0;
+            opacity: 0.85;
+        }
+        .data-stats__title::before {
+            content: "";
+            position: absolute;
+            background: var(--primary-color);
+            border-radius: 999rem;
+            height: 55%;
+            width: 5px;
+            top: 50%;
+            left: -15px;
+            transform: translateY(-50%);
+        }
+        .data-stats__table {
+            border-collapse: collapse;
+            min-width: 320px;
+            width: 100%;
+            border-top: 1px solid var(--primary-color);
+        }
+        .data-stats__table tr:nth-child(even) td {
+            background: rgba(128, 128, 128, 0.1);
+        }
+        .data-stats__table tr:not(:last-child) td {
+            border-bottom: 1px solid var(--border-color, rgba(255,255,255,0.08));
+        }
+        .data-stats__table td {
+            padding: 1rem 1.5rem;
+        }
+        .data-stats__table td:first-child {
+            font-weight: 600;
+            text-align: left;
+            width: 40%;
+            opacity: 0.75;
+        }
+        .data-stats__table td:last-child {
+            text-align: right;
+            font-weight: 500;
+            font-size: 1.05rem;
+        }
     </style>
 
 </head>
 
 <body>
     <header id="title">
-        <h1>文章数据</h1>
+        <h1>数据统计</h1>
     </header>
 
     <main class="data-chart__wrapper">
         <div class="data-chart__pie" role="img" aria-label="文章标签占比饼图"></div>
+        <div class="data-stats__wrapper">
+            <h2 class="data-stats__title">博客数据统计</h2>
+            <table class="data-stats__table">
+                <tbody>
+                    <tr><td><i class="fa fa-file-text-o"></i> 文章</td><td class="data-stats__articles">0</td></tr>
+                    <tr><td><i class="fa fa-tag"></i> 标签</td><td class="data-stats__tags">0</td></tr>
+                    <tr><td><i class="fa fa-font"></i> 总字数</td><td class="data-stats__words">0</td></tr>
+                    <tr><td><i class="fa fa-clock-o"></i> 运行时长</td><td class="data-stats__runtime">0</td></tr>
+                    <tr><td><i class="fa fa-calendar"></i> 最后活动</td><td class="data-stats__last-active">-</td></tr>
+                </tbody>
+            </table>
+        </div>
     </main>
 
     <script src="../js/echarts.min.js"></script>

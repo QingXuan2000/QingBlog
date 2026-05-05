@@ -3,10 +3,16 @@
         "blogName": "你的博客名称（4字英文）",
         "yearOfWriting": 2025,
         "currentYear": 2026,
-        "repositoryName": "你的仓库名称"
+        "repositoryName": "127.0.0.1:5500",
+        "siteEstablishmentDate": "",
+        "blogStatistics": {
+            "blogArticleWordCount": 0,
+            "blogArticleCount": 0,
+            "blogLastActivity": ""
+        }
     },
     "author": {
-        "targetAuthor": "你的GitHub名称",
+        "targetAuthor": "QingXuan2000",
         "introShort": "标语",
         "introDetail": "自我介绍",
         "socialMediaPlatform": {

@@ -63,11 +63,12 @@ class QingBlog {
       this.initCardScrollAnimation();
       this.initLazyLoadImages();
       this.initArticleData();
+      this.initDataStatsTable();
       this.addTagToPages();
       this.initMeData();
       this.addAboutCard();
       this.initFriendLinks();
-      this.initFriendLinks();
+      this.initArticleInfo();
 
       // 绑定窗口resize事件
       window.addEventListener("resize", this.debounceSetNavHeight);
@@ -216,9 +217,8 @@ class QingBlog {
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/')"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/article/')"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/tags/')"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
-                  <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
+                  <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;数据统计</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/about/')"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
-                  <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
                   <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
               </ul>
           </nav>
@@ -241,17 +241,15 @@ class QingBlog {
               <nav aria-label="侧边栏导航">
                   <ul>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/')"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;首页</a></li>
-                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
+                      <div class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></div>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/article/')"><i class="fa fa-book" aria-hidden="true"></i>&nbsp;文章</a></li>
-                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
+                      <div class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></div>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/tags/')"><i class="fa fa-tags" aria-hidden="true"></i>&nbsp;标签</a></li>
-                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
-                      <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
-                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
+                      <div class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></div>
+                      <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;数据统计</a></li>
+                      <div class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></div>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/about/')"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
-                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
-                      <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
-                      <li class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></li>
+                      <div class="sidebar__nav-divider" role="separator"><div class="sidebar__header-divider divider" style="width: 100%; height: 1px;" aria-hidden="true"></div></div>
                       <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
                   </ul>
               </nav>
@@ -294,9 +292,8 @@ class QingBlog {
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/')"><i class="fa fa-home"></i>&nbsp;首页</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/article/')"><i class="fa fa-book"></i>&nbsp;文章</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/tags/')"><i class="fa fa-tags"></i>&nbsp;标签</a></li>
-            <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;文章数据</a></li>
+            <li><a href="#" onclick="window.qingBlogInstance.navigation('/data/')"><i class="fa fa-database" aria-hidden="true"></i>&nbsp;数据统计</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/about/')"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;关于我</a></li>
-            <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
             <li><a href="#" onclick="window.qingBlogInstance.navigation('/links/')"><i class="fa fa-link" aria-hidden="true"></i>&nbsp;友情链接</a></li>
           </ul>
         </nav>
@@ -832,7 +829,7 @@ class QingBlog {
     document.querySelectorAll('img:not([loading])').forEach(img => img.loading = 'lazy');
   }
 
-  // ========== 文章数据图表生成 ==========
+  // ========== 数据统计图表生成 ==========
   initArticleData() {
     const chartDoms = document.querySelectorAll(".data-chart__pie");
     if (!chartDoms.length) return;
@@ -898,6 +895,38 @@ class QingBlog {
         chart.dispose();
       });
     });
+  }
+
+  // ========== 数据页统计表 ==========
+  initDataStatsTable() {
+    const table = document.querySelector('.data-stats__table');
+    if (!table) return;
+
+    const stats = this.blogConfig.blogInfo.blogStatistics || {};
+    const tagsTotal = this.pagesConfig.tagsArticleTotal || {};
+
+    const articleCount = stats.blogArticleCount || 0;
+    const tagCount = Object.keys(tagsTotal).length;
+    const wordCount = stats.blogArticleWordCount || 0;
+    const lastActivity = stats.blogLastActivity || '-';
+
+    const establishDate = this.blogConfig.blogInfo.siteEstablishmentDate;
+    let runtime = '-';
+    if (establishDate) {
+      const start = new Date(establishDate);
+      const now = new Date();
+      const diffMs = now - start;
+      const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const years = Math.floor(totalDays / 365);
+      const days = totalDays % 365;
+      runtime = years > 0 ? `${years} 年 ${days} 天` : `${days} 天`;
+    }
+
+    table.querySelector('.data-stats__articles').textContent = articleCount;
+    table.querySelector('.data-stats__tags').textContent = tagCount;
+    table.querySelector('.data-stats__words').textContent = wordCount.toLocaleString();
+    table.querySelector('.data-stats__runtime').textContent = runtime;
+    table.querySelector('.data-stats__last-active').textContent = lastActivity;
   }
 
   // ========== 关于图表生成 ==========
@@ -1035,6 +1064,64 @@ class QingBlog {
     const base = this.getAbsolutePath(href);
     // 页面间跳转添加 skipLoading 参数，使目标页跳过加载动画
     location.href = base + (base.includes("?") ? "&" : "?") + "skipLoading=true";
+  }
+
+  initArticleInfo() {
+    const initArticleLastUpdatedInfo = () => {
+      const articleLastUpdatedInfoDom = document.querySelector('.article-last-updated__info');
+      if (!articleLastUpdatedInfoDom) return;
+
+      const lastDate = new Date(lastUpdatedDate);
+      const currentDate = new Date();
+
+      let years = currentDate.getFullYear() - lastDate.getFullYear();
+      let months = currentDate.getMonth() - lastDate.getMonth();
+      let days = currentDate.getDate() - lastDate.getDate();
+
+      if (days < 0) {
+        months--;
+        const prevMonthDays = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0).getDate();
+        days += prevMonthDays;
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      const diffMs = currentDate - lastDate;
+      const diffMinutes = Math.floor(diffMs / (1000 * 60));
+      const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+      const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+      let timeText;
+      if (diffMinutes < 1) {
+        timeText = '刚刚';
+      } else if (diffMinutes < 60) {
+        timeText = `${diffMinutes} 分钟前`;
+      } else if (diffHours < 24) {
+        timeText = `${diffHours} 小时前`;
+      } else if (diffDays < 30) {
+        timeText = `${diffDays} 天前`;
+      } else if (years === 0 && months >= 1) {
+        timeText = `${months} 个月前`;
+      } else if (years === 1) {
+        timeText = '一年前';
+      } else if (years === 2) {
+        timeText = '两年前';
+      } else if (years === 3) {
+        timeText = '三年前';
+      } else if (years > 3) {
+        timeText = `${years} 年前`;
+      } else {
+        timeText = '刚刚';
+      }
+
+      const dateStr = `${lastDate.getFullYear()}年${lastDate.getMonth() + 1}月${lastDate.getDate()}日`;
+
+      articleLastUpdatedInfoDom.innerHTML = `<span>最后更新于 ${dateStr}，${timeText}</span><span>部分内容可能已过时</span>`;
+    };
+
+    initArticleLastUpdatedInfo();
   }
 
 }
