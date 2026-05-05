@@ -181,6 +181,7 @@ class QingBlog {
 
   // ========== 公共组件渲染 ==========
   dynamicComponentBox() {
+    const base = this._getBase();
     const pathSegments = window.location.pathname.split("/").filter(Boolean);
     const pageName = pathSegments[0];
     const needPaginationPages = ["", "index.html", "article", "pages", "tags"];
