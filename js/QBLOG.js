@@ -913,9 +913,10 @@ class QingBlog {
     const establishDate = this.blogConfig.blogInfo.siteEstablishmentDate;
     let runtime = '-';
     if (establishDate) {
-      const start = new Date(establishDate);
-      const now = new Date();
-      const diffMs = now - start;
+      const [y, m, d] = establishDate.split('-').map(Number);
+      const offsetMs = this.blogConfig.buildConfig.utcOffset * 3600000;
+      const start = Date.UTC(y, m - 1, d) - offsetMs;
+      const diffMs = Date.now() - start;
       const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
       const years = Math.floor(totalDays / 365);
       const days = totalDays % 365;

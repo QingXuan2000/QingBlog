@@ -3,8 +3,8 @@
         "blogName": "你的博客名称（4字英文）",
         "yearOfWriting": 2025,
         "currentYear": 2026,
-        "repositoryName": "127.0.0.1:5500",
-        "siteEstablishmentDate": "",
+        "repositoryName": "你的仓库名",
+        "siteEstablishmentDate": "建站日期（UTC格式）",
         "blogStatistics": {
             "blogArticleWordCount": 0,
             "blogArticleCount": 0,
