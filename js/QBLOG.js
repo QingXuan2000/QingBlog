@@ -921,7 +921,8 @@ class QingBlog {
     const establishDate = this.blogConfig.blogInfo.siteEstablishmentDate;
     let runtime = '-';
     if (establishDate) {
-      const [y, m, d] = establishDate.split('-').map(Number);
+      const dateStr = establishDate.split('T')[0];
+      const [y, m, d] = dateStr.split('-').map(Number);
       const offsetMs = this.blogConfig.buildConfig.utcOffset * 3600000;
       const start = Date.UTC(y, m - 1, d) - offsetMs;
       const diffMs = Date.now() - start;

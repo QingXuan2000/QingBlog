@@ -262,6 +262,7 @@
     font-family: "江城圆体";
 
     scroll-behavior: smooth;
+    word-break: break-all;
 }
 
 *:not(.article-content pre):not(.article-content pre code)::-webkit-scrollbar {
