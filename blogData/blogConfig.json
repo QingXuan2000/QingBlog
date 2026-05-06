@@ -1,9 +1,9 @@
 {
     "blogInfo": {
-        "blogName": "你的博客名称（4字英文）",
+        "blogName": "你的博客名称（推荐4字英文）",
         "yearOfWriting": 2025,
         "currentYear": 2026,
-        "repositoryName": "你的仓库名",
+        "repositoryName": "你的域名，不带www和协议",
         "siteEstablishmentDate": "建站日期（UTC格式）",
         "blogStatistics": {
             "blogArticleWordCount": 0,
@@ -12,7 +12,7 @@
         }
     },
     "author": {
-        "targetAuthor": "QingXuan2000",
+        "targetAuthor": "作者名（你的GitHub用户名）",
         "introShort": "标语",
         "introDetail": "自我介绍",
         "socialMediaPlatform": {
