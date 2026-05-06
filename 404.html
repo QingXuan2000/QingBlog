@@ -9,38 +9,175 @@
 
     <meta name="description" content="页面未找到" />
     <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="./css/QBLOG.css" />
-    <link rel="stylesheet" href="./css/font-awesome.min.css" />
+    <style>
+        :root {
+            /* 固定黑色主题（不做白色适配） */
+            --text: #fff;
+            --text2: rgba(255, 255, 255, 0.72);
+            --card: rgba(0, 0, 0, 0.84);
+            --border: rgba(255, 255, 255, 0.18);
+            --shadow: rgba(0, 0, 0, 0.72);
+            --bg: #000;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        @keyframes errorPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.04);
+                opacity: 0.85;
+            }
+        }
+
+        .error-page {
+            min-height: 100%;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .error-card {
+            text-align: center;
+            width: min(720px, 100%);
+            padding: clamp(22px, 3vw, 38px);
+            background: var(--card);
+            backdrop-filter: blur(14px);
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 60px var(--shadow);
+        }
+
+        .error-code {
+            font-size: clamp(5rem, 10vw, 9rem);
+            font-weight: 900;
+            line-height: 1;
+            color: var(--text);
+            letter-spacing: -0.04em;
+            text-shadow: 0 14px 40px rgba(0, 0, 0, 0.22);
+            margin: 0 0 0.4rem 0;
+            animation: errorPulse 2s ease-in-out infinite;
+        }
+
+        .error-card h2 {
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin: 0 0 0.65rem 0;
+        }
+
+        .error-card p {
+            font-size: 1rem;
+            color: var(--text2);
+            line-height: 1.6;
+            margin: 0 0 1.35rem 0;
+        }
+
+        .error-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .error-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1.2rem;
+            border-radius: 999px;
+            font-size: 1rem;
+            font-weight: 700;
+            background: transparent;
+            backdrop-filter: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+        }
+
+        .error-btn-primary {
+            background: var(--text);
+            color: var(--bg);
+            border-color: var(--text);
+        }
+
+        .error-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .error-btn:active {
+            transform: translateY(2px);
+            box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.25);
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
 
 </head>
 
 <body>
     <main class="error-page">
         <div class="error-card">
-            <div class="error-icon">
-                <i class="fa fa-map-signs"></i>
-            </div>
-
             <div class="error-code">404</div>
 
             <h2>页面未找到</h2>
-            <p>抱歉，您访问的页面不存在或已被移除。<br>请检查链接是否正确，或返回首页。</p>
+            <p>抱歉，您访问的页面不存在或已被移除。<br>请检查链接是否正确，或返回上页。</p>
 
             <div class="error-actions">
-                <a href="#" onclick="window.qingBlogInstance.navigation('/')" class="error-btn error-btn-secondary">
-                    <i class="fa fa-home"></i>
-                    返回首页
-                </a>
-                <a href="javascript:history.back()" class="error-btn error-btn-secondary">
-                    <i class="fa fa-arrow-left"></i>
+                <a href="#" id="go-back" class="error-btn error-btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M15 18 9 12l6-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
                     返回上页
                 </a>
             </div>
-
         </div>
     </main>
 
-    <script src="./js/QBLOG.js"></script>
+    <script>
+        (() => {
+            const parts = window.location.pathname.split("/").filter(Boolean);
+            const first = parts[0] || "";
+            const looksLikeFile = first.includes(".");
+            const siteBase = looksLikeFile ? "/" : `/${first}/`;
+
+            const qs = new URLSearchParams(window.location.search);
+            const withSkipLoading = (url) => {
+                const u = new URL(url, window.location.origin);
+                if (!qs.has("skipLoading")) u.searchParams.set("skipLoading", "true");
+                return u.pathname + (u.search ? u.search : "") + (u.hash ? u.hash : "");
+            };
+
+            const goBack = document.getElementById("go-back");
+            goBack?.addEventListener("click", (e) => {
+                e.preventDefault();
+                if (window.history.length > 1) window.history.back();
+                else window.location.href = withSkipLoading(siteBase);
+            });
+        })();
+    </script>
 </body>
 
 </html>
