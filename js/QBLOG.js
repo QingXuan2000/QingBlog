@@ -38,6 +38,13 @@ class QingBlog {
     this.themes = null;       // 主题配置
     this.root = document.documentElement; // HTML根元素
     this.body = document.body; // body元素
+    // 同步执行时由 QBLOG.js 自身 new QingBlog() 触发，可据此得到站点根（含 GitHub Pages 子路径 /RepoName/）
+    const cs = document.currentScript;
+    try {
+      this._siteRootHref = cs && cs.src ? new URL("../", cs.src).href : "";
+    } catch {
+      this._siteRootHref = "";
+    }
   }
 
   // ========== 公共初始化入口 ==========
@@ -84,6 +91,7 @@ class QingBlog {
 
   // ========== 配置加载 ==========
   _getBase() {
+    if (this._siteRootHref) return this._siteRootHref;
     const path = window.location.pathname;
     const cleaned = path.replace(/\/$/, "");
     const parts = cleaned.split("/").filter(Boolean);
@@ -93,10 +101,10 @@ class QingBlog {
   }
 
   async loadConfigs() {
-    const base = this._getBase();
-    this.blogConfig = await this.getConfig(`${base}/blogData/blogConfig.json`);
-    this.pagesConfig = await this.getConfig(`${base}/blogData/pagesConfig.json`);
-    this.themes = await this.getConfig(`${base}/blogData/themes.json`);
+    const blogDataBase = `${this._getBase()}blogData/`;
+    this.blogConfig = await this.getConfig(`${blogDataBase}blogConfig.json`);
+    this.pagesConfig = await this.getConfig(`${blogDataBase}pagesConfig.json`);
+    this.themes = await this.getConfig(`${blogDataBase}themes.json`);
 
     // 防抖导航栏高度更新
     this.debounceSetNavHeight = this.debounce(() => this.setNavHeightVariable());
@@ -1055,7 +1063,7 @@ class QingBlog {
     if (repositoryName === webHost) {
       return href;
     } else {
-      return `${repositoryName}${href}`;
+      return `/${repositoryName}${href}`;
     }
   }
 
