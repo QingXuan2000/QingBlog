@@ -596,6 +596,7 @@ class QingBlog {
       overlay.style.animation = "hideOverlayAnimation 0.5s forwards";
       setTimeout(() => {
         overlay.style.display = "none";
+        sidebar.style.display = "none";
         this.body.style.overflow = "auto";
       }, 500);
     };
