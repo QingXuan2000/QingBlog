@@ -121,7 +121,15 @@
     text-align: left;
     position: relative;
     left: 15px;
-    padding-right: 9rem;
+    font-size: clamp(2rem, 3vw + 1rem, var(--article-font-6xl));
+    color: var(--text-color);
+    font-weight: 800;
+    margin-top: var(--article-margin-xl);
+    margin-bottom: var(--article-margin-md);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+    text-wrap: balance;
 }
 
 .card__header-meta-right {
@@ -135,18 +143,6 @@
 
 .card__header-meta-right div:first-of-type {
     margin-right: 1rem;
-}
-
-.card__header h1 {
-    font-size: clamp(2rem, 3vw + 1rem, var(--article-font-6xl));
-    color: var(--text-color);
-    font-weight: 800;
-    margin-top: var(--article-margin-3xl);
-    margin-bottom: var(--article-margin-lg);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    overflow-wrap: anywhere;
-    text-wrap: balance;
 }
 
 .card__header h1::before {
