@@ -43,12 +43,10 @@
 
 @keyframes cardSlideUp {
     from {
-        opacity: 0;
         transform: translateY(30px);
     }
 
     to {
-        opacity: 1;
         transform: translateY(0);
     }
 }
@@ -834,8 +832,6 @@ nav li {
     box-shadow: var(--box-shadow-color) 0 0px 10px 0px;
     border: 1px solid var(--border-color);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0;
-    transform: translateY(30px);
     position: relative;
 }
 
