@@ -136,6 +136,23 @@ MD_EXTENSION_CONFIGS: dict[str, dict[str, bool | str]] = {
     "pymdownx.arithmatex": {"generic": True},
 }
 
+FRIEND_LINKS_TEMPLATE: str = (
+    "<!DOCTYPE html><html lang=\"zh-CN\"><head><meta charset=\"UTF-8\"/>"
+    "<meta name=\"viewport\"content=\"width=device-width, initial-scale=1.0\"/>"
+    "<meta name=\"color-scheme\"content=\"light dark\">"
+    "<title>友情链接</title>"
+    "<meta name=\"description\"content=\"友情链接\"/>"
+    "<link rel=\"shortcut icon\"href=\"{prefix}favicon.ico\"type=\"image/x-icon\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/QBLOG.css\"/>"
+    "<link rel=\"stylesheet\"href=\"{prefix}css/font-awesome.min.css\"/>"
+    "<style>.card-list{{border-top:none}}</style>"
+    "</head><body><header id=\"title\"><h1>友情链接</h1></header>"
+    "<main class=\"friend-links__wrapper\">"
+    "<div class=\"friend-links__grid\">{links_html}</div>"
+    "</main>"
+    "<script src=\"{prefix}js/QBLOG.js\"></script></body></html>"
+)
+
 COPY_BUTTON_HTML: str = (
     "<button type=\"button\" class=\"article-content__copy-btn\" aria-label=\"复制代码\">"
     "<i class=\"fa fa-copy\" aria-hidden=\"true\"></i>&nbsp;Copy</button>"
@@ -832,7 +849,7 @@ class SitemapGenerator:
     def generate(self) -> None:
         print("\n[信息] 开始生成 sitemap.xml...")
         urls: list[dict[str, str]] = []
-        static_pages = ["/", "/article/", "/tags/", "/data/", "/about/"]
+        static_pages = ["/", "/article/", "/tags/", "/data/", "/about/", "/links/"]
         for page in static_pages:
             full_path = (
                 os.path.join(self.workspace, page.lstrip("/"), "index.html")
@@ -929,6 +946,46 @@ class RobotsGenerator:
         print(f"[成功] robots.txt 已生成")
 
 
+# 生成友情链接页面（links/index.html）
+class FriendLinksGenerator:
+    def __init__(self, workspace: str, cfg: Config) -> None:
+        self.workspace: str = workspace
+        self.cfg: Config = cfg
+
+    def generate(self) -> None:
+        print("\n[信息] 开始生成友情链接页面...")
+        friend_links: list[dict[str, str]] = self.cfg.blog_config.get("friendLinks", [])
+        if not friend_links:
+            print("[信息] 无友情链接配置，跳过生成")
+            return
+
+        links_parts: list[str] = []
+        for link in friend_links:
+            name = link.get("name", "")
+            desc = link.get("description", "")
+            url = link.get("url", "#")
+            icon = link.get("icon", "")
+            links_parts.append(
+                "<div>"
+                f'<a href="{url}" target="_blank" rel="noopener noreferrer" class="friend-links__card">'
+                f'<div class="friend-links__card-icon" aria-hidden="true">{icon}</div>'
+                f'<div class="friend-links__card-info">'
+                f'<h3 class="friend-links__card-name">{name}</h3>'
+                f'<p class="friend-links__card-desc">{desc}</p>'
+                "</div>"
+                '<span class="sr-only">新窗口打开</span>'
+                "</a>"
+                "</div>"
+            )
+
+        html = FRIEND_LINKS_TEMPLATE.format(
+            prefix="../", links_html="\n".join(links_parts)
+        )
+        path = os.path.join(self.workspace, "links", "index.html")
+        _write_text(path, html)
+        print(f"[成功] 友情链接页面已生成，共 {len(friend_links)} 个链接：{path}")
+
+
 # =============================================================================
 # 主流程调度
 # =============================================================================
@@ -939,6 +996,7 @@ class BlogGenerator:
         self.tag: TagManager = TagManager(self.cfg.WORKSPACE)
         self.page: PageManager = PageManager(self.cfg.WORKSPACE)
         self.pages_config_mgr: PagesConfigManager = PagesConfigManager(self.cfg)
+        self.friend_link_gen: FriendLinksGenerator = FriendLinksGenerator(self.cfg.WORKSPACE, self.cfg)
         self.sitemap_gen: SitemapGenerator = SitemapGenerator(self.cfg.WORKSPACE, self.cfg)
         self.robots_gen: RobotsGenerator = RobotsGenerator(self.cfg.WORKSPACE, self.cfg)
 
@@ -1161,6 +1219,7 @@ class BlogGenerator:
         else:
             self.handle_create_update()
         self.pages_config_mgr.refresh_statistics()
+        self.friend_link_gen.generate()
         self.sitemap_gen.generate()
         self.robots_gen.generate()
 

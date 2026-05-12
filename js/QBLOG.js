@@ -215,7 +215,6 @@ class QingBlog {
       </div>
       <div class="overlay" aria-hidden="true"></div>
       <button id="back-to-top" aria-label="返回顶部"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
-      <button id="back-to-top" aria-label="返回顶部"><i class="fa fa-angle-up" aria-hidden="true"></i></button>
       <header id="page-header">
           <nav id="navbar" aria-label="主导航">
               ${this.resizeLogo(35, 35)}
